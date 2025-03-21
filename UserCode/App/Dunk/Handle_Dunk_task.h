@@ -8,7 +8,8 @@ extern "C" {
 
 #define Max_Extension_Angle 16  //轮腿电机从抬腿到伸腿的最大正转弧度
 #define Max_ThrowBall_Angle 18.9 //投球电机旋转总角度（已乘减速比）
-#define Encoder_VertPos 7.6       ////投篮臂垂直时编码器角度
+#define Encoder_VertPos 80       ////投篮臂垂直时编码器角度
+#define DegreetoRad     6.283
 
 
 
@@ -31,13 +32,14 @@ typedef struct{
     //站立
     uint8_t my_StatusTransition_cnt; //状态切换计数器
     uint8_t Found_LimitingPos_Flag; //是否找到底盘跳跃电机极限位置
+    bool Stood_Flag[3];             //三条腿伸直完成标志
     bool throw_delay_flag ;//站立后延时稳定标志位
     uint8_t Jump_Completed_Flag ;   //是否完成一次跳跃
     //投篮
     float Throwball_InitialPos[2]; //投球电机初始位置
     bool Foundthrow_InitialPos_Flag; //是否找到投球电机初始位置
     bool Time_TO_Jump ; //投球臂是否转动到跳跃时机
-    bool ThrowBall_Status ; //投球状态,1完成投球
+    uint8_t Throwball_Flag; //投球状态标志
 
     bool Buffer_flag ; //1开启
     bool BallHelp_flag ; //1 on

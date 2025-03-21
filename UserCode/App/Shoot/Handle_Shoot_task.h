@@ -29,6 +29,8 @@ typedef struct{
 }Shoot_Task_T ;                                
 
 extern osThreadId_t unitree_shoot_ctrl_TaskHandle;
+extern Shoot_Task_T my_Shoot_Task_T;
+
 void Handle_Shoot_TaskStart(void);
 
 #ifdef __cplusplus

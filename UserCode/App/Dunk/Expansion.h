@@ -1,3 +1,10 @@
+/*
+ * @Description: 
+ * @Author: Alex
+ * @Date: 2024-11-25 20:03:00
+ * @LastEditors: Alex
+ * @LastEditTime: 2025-03-10 21:41:33
+ */
 #ifndef EXPANSION_H
 #define EXPANSION_H
 
@@ -6,8 +13,9 @@
 #include "wtr_can.h"
 #include "Caculate.h"
 
-#define UP_ROTATION 28      //上层机构伸缩所需旋转圈数
-#define DOWN_ROTATION 34    //下层机构伸缩所需旋转圈数
+#define UP_ROTATION 1      //上层机构伸缩所需旋转圈数   10
+#define DOWN_ROTATION 10    //下层机构伸缩所需旋转圈数   14
+#define MX_CAN &hcan2
 
 typedef void (*__expand)(void);
 typedef void (*__contract)(void);

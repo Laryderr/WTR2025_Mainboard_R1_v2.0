@@ -101,49 +101,52 @@ void ThrowBall(void)
     }
 
     //开始摆臂
-    if(my_Dunk_Task_t.ThrowBall_Status == 0)
+    if(my_Dunk_Task_t.Throwball_Flag == 0)
     {
         /*unitree_DunkMotor_t[3].cmd.Pos = (my_Dunk_Task_t.Throwball_InitialPos - Max_ThrowBall_Angle);
         unitree_DunkMotor_t[3].cmd.K_P = 1.9;
         unitree_DunkMotor_t[3].cmd.K_W = 0.2;
         unitree_DunkMotor_t[3].cmd.W = -1;
         unitree_DunkMotor_Tff[3] = -15.5;*/
-        unitree_DunkMotor_t[3].cmd.T = -5;
-        unitree_DunkMotor_t[4].cmd.T = 5;
+        unitree_DunkMotor_t[3].cmd.T = -2;
+        unitree_DunkMotor_t[4].cmd.T = 2;
+        my_Dunk_Task_t.Throwball_Flag = 1;
     }
     //刹停力矩
-    if(unitree_DunkMotor_t[3].data.Pos <= (my_Dunk_Task_t.Throwball_InitialPos[0] - Max_ThrowBall_Angle*0.65) && 
-        unitree_DunkMotor_t[4].data.Pos >= (my_Dunk_Task_t.Throwball_InitialPos[1] + Max_ThrowBall_Angle*0.65))
+    if(encoderData.angle >= Encoder_VertPos + 130 && my_Dunk_Task_t.Throwball_Flag == 1)
     {
         unitree_DunkMotor_t[3].cmd.Pos = 0;
         unitree_DunkMotor_t[3].cmd.K_P = 0;
         unitree_DunkMotor_t[3].cmd.K_W = 0;
         unitree_DunkMotor_t[3].cmd.W = 0;
-        unitree_DunkMotor_Tff[3] = 0;
-        unitree_DunkMotor_t[3].cmd.T = 1.5;
+        unitree_DunkMotor_t[3].cmd.T = 2.5;
 
         unitree_DunkMotor_t[4].cmd.Pos = 0;
         unitree_DunkMotor_t[4].cmd.K_P = 0;
         unitree_DunkMotor_t[4].cmd.K_W = 0;
         unitree_DunkMotor_t[4].cmd.W = 0;
-        unitree_DunkMotor_Tff[4] = 0;
-        unitree_DunkMotor_t[4].cmd.T = -1.5;
-        my_Dunk_Task_t.ThrowBall_Status = 1;
+        unitree_DunkMotor_t[4].cmd.T = 0;
+        my_Dunk_Task_t.Throwball_Flag = 2;
     }
     //下降控制
-    if (my_Dunk_Task_t.ThrowBall_Status == 1 && unitree_DunkMotor_t[3].data.Pos >= my_Dunk_Task_t.Throwball_InitialPos[0]-Max_ThrowBall_Angle*0.5
-        && unitree_DunkMotor_t[4].data.Pos <= my_Dunk_Task_t.Throwball_InitialPos[1] + Max_ThrowBall_Angle*0.5)
+    if (my_Dunk_Task_t.Throwball_Flag == 2 && encoderData.angle <= Encoder_VertPos + 100)
     {
-        unitree_DunkMotor_t[3].cmd.Pos = 0;
+        unitree_DunkMotor_t[3].cmd.Pos = my_Dunk_Task_t.Throwball_InitialPos[0];
         unitree_DunkMotor_t[3].cmd.K_P = 0;
         unitree_DunkMotor_t[3].cmd.K_W = 0.2;
         unitree_DunkMotor_t[3].cmd.W = 0.1;
+        unitree_DunkMotor_t[3].cmd.T = 0;
 
         unitree_DunkMotor_t[4].cmd.Pos = 0;
         unitree_DunkMotor_t[4].cmd.K_P = 0;
-        unitree_DunkMotor_t[4].cmd.K_W = 0.2;
-        unitree_DunkMotor_t[4].cmd.W = -0.1;
+        unitree_DunkMotor_t[4].cmd.K_W = 0;
+        unitree_DunkMotor_t[4].cmd.W = 0;
+        unitree_DunkMotor_t[4].cmd.T = 0;
         //unitree_DunkMotor_t[3].cmd.T = - 0.6;
+        if(encoderData.angle <= Encoder_VertPos + 10)
+        {
+            my_Dunk_Task_t.Throwball_Flag = 3;
+        }
     }
 
     osDelay(2);
@@ -210,13 +213,18 @@ void Handle_Dunk_Task(void *argument)
     }
     //标志初始化
     my_Dunk_Task_t.my_Dunk_Status = DUNK_IDLE;
-    my_Dunk_Task_t.ThrowBall_Status = 0;
+    my_Dunk_Task_t.Throwball_Flag = 0;
     my_Dunk_Task_t.Time_TO_Jump = 0;
     my_Dunk_Task_t.my_StatusTransition_cnt = 0;
     my_Dunk_Task_t.Found_LimitingPos_Flag = 0;
     my_Dunk_Task_t.Foundthrow_InitialPos_Flag = 0;
     my_Dunk_Task_t.Jump_Completed_Flag = 0;
     my_Dunk_Task_t.throw_delay_flag = 0;
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        my_Dunk_Task_t.Stood_Flag[i] = 0;
+    }
+    
 
     //检测抬腿极限位置
     if (my_Dunk_Task_t.Found_LimitingPos_Flag == 0)
@@ -247,7 +255,7 @@ void Handle_Dunk_Task(void *argument)
     //检测投球初始位置
     if (my_Dunk_Task_t.Foundthrow_InitialPos_Flag == 0)
     {
-        for (uint8_t i = 3; i < 5; i++)
+        /*for (uint8_t i = 3; i < 5; i++)
         {
             unitree_DunkMotor_t[i].cmd.Pos = 0;
             unitree_DunkMotor_t[i].cmd.K_P = 0;
@@ -265,12 +273,15 @@ void Handle_Dunk_Task(void *argument)
         my_Dunk_Task_t.Throwball_InitialPos[0] = my_Dunk_Task_t.Throwball_InitialPos[0]/10;
         my_Dunk_Task_t.Throwball_InitialPos[1] = my_Dunk_Task_t.Throwball_InitialPos[1]/10;
 
-        //my_Dunk_Task_t.Throwball_InitialPos = (Encoder_VertPos - my_Dunk_Task_t.Encoder_InitialPos) + my_Dunk_Task_t.Throwball_InitialPos;
+        my_Dunk_Task_t.Throwball_InitialPos[0] = (Encoder_VertPos - my_Dunk_Task_t.Encoder_InitialPos)/DegreetoRad*UNITREE_REDUCTION_RATE + my_Dunk_Task_t.Throwball_InitialPos[0];
+        my_Dunk_Task_t.Throwball_InitialPos[1] = (Encoder_VertPos - my_Dunk_Task_t.Encoder_InitialPos)/DegreetoRad*UNITREE_REDUCTION_RATE + my_Dunk_Task_t.Throwball_InitialPos[1];*/
+        my_Dunk_Task_t.Throwball_InitialPos[0] = my_Shoot_Task_T.Shootball_InitialPos[0];
+        my_Dunk_Task_t.Throwball_InitialPos[1] = my_Shoot_Task_T.Shootball_InitialPos[1];
 
-        if (my_Dunk_Task_t.Throwball_InitialPos[0] != 0&&my_Dunk_Task_t.Throwball_InitialPos[1] != 0)
+        /*if (my_Dunk_Task_t.Throwball_InitialPos[0] != 0&&my_Dunk_Task_t.Throwball_InitialPos[1] != 0)
         {
             my_Dunk_Task_t.Foundthrow_InitialPos_Flag = 1;
-        }else Error_Handler();
+        }else Error_Handler();*/
     }
 
     for (; ;)
@@ -285,7 +296,7 @@ void Handle_Dunk_Task(void *argument)
         {
             my_Dunk_Task_t.my_Dunk_Status = DUNK_IDLE;
         }
-        if(MyRemote_Data.btn_RightCrossMid)
+        if(MyRemote_Data.btn_RightCrossMid == 1)
         {
             my_Dunk_Task_t.my_Dunk_Status = DUNK_TEST;
         }
@@ -309,13 +320,13 @@ void Handle_Dunk_Task(void *argument)
                 
                 //投球电机保持垂下
                 unitree_DunkMotor_t[3].cmd.Pos = my_Dunk_Task_t.Throwball_InitialPos[0];
-                unitree_DunkMotor_t[3].cmd.K_P = 0.1;
+                unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
-                unitree_DunkMotor_t[4].cmd.Pos = my_Dunk_Task_t.Throwball_InitialPos[1];
-                unitree_DunkMotor_t[4].cmd.K_P = 0.1;
+                unitree_DunkMotor_t[4].cmd.Pos = 0;
+                unitree_DunkMotor_t[4].cmd.K_P = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.T = 0;
@@ -324,7 +335,12 @@ void Handle_Dunk_Task(void *argument)
                 //标志量置零
                 my_Dunk_Task_t.Jump_Completed_Flag = 0;
                 my_Dunk_Task_t.Time_TO_Jump = 0;
-                my_Dunk_Task_t.ThrowBall_Status = 0;
+                my_Dunk_Task_t.Throwball_Flag = 0;
+                my_Dunk_Task_t.throw_delay_flag = 0;
+                for (uint8_t i = 0; i < 3; i++)
+                {
+                    my_Dunk_Task_t.Stood_Flag[i] = 0;
+                }
                 
                 BufferOff();
                 break;
@@ -335,49 +351,79 @@ void Handle_Dunk_Task(void *argument)
                 unitree_DunkMotor_t[1].cmd.T = -1.3 ;
                 unitree_DunkMotor_t[1].cmd.W = 0;*/
                 BufferOn();
-                if(my_Dunk_Task_t.ThrowBall_Status == 0)
+                //开始摆臂
+                if(my_Dunk_Task_t.Throwball_Flag == 0)
                 {
-                    unitree_DunkMotor_t[3].cmd.Pos = (my_Dunk_Task_t.Throwball_InitialPos[0] - Max_ThrowBall_Angle);
+                    /*unitree_DunkMotor_t[3].cmd.Pos = (my_Dunk_Task_t.Throwball_InitialPos - Max_ThrowBall_Angle);
                     unitree_DunkMotor_t[3].cmd.K_P = 1.9;
                     unitree_DunkMotor_t[3].cmd.K_W = 0.2;
                     unitree_DunkMotor_t[3].cmd.W = -1;
-                    unitree_DunkMotor_Tff[3] = -15.5;
-                    unitree_DunkMotor_t[3].cmd.T = unitree_DunkMotor_Tff[3] + unitree_DunkMotor_t[3].cmd.K_P * (unitree_DunkMotor_t[3].cmd.Pos - 
-                    unitree_DunkMotor_t[3].data.Pos) + unitree_DunkMotor_t[3].cmd.K_W * (unitree_DunkMotor_t[3].cmd.W - unitree_DunkMotor_t[3].data.W);
-                    unitree_DunkMotor_t[3].cmd.T = -4.5;
+                    unitree_DunkMotor_Tff[3] = -15.5;*/
+                    unitree_DunkMotor_t[3].cmd.T = -2;
+                    unitree_DunkMotor_t[4].cmd.T = 2;
+                    my_Dunk_Task_t.Throwball_Flag = 1;
                 }
-
-                if(unitree_DunkMotor_t[3].data.Pos <= (my_Dunk_Task_t.Throwball_InitialPos[0] - Max_ThrowBall_Angle*0.5))
+                //刹停力矩
+                if(encoderData.angle >= Encoder_VertPos + 130 && my_Dunk_Task_t.Throwball_Flag == 1)
                 {
                     unitree_DunkMotor_t[3].cmd.Pos = 0;
                     unitree_DunkMotor_t[3].cmd.K_P = 0;
                     unitree_DunkMotor_t[3].cmd.K_W = 0;
                     unitree_DunkMotor_t[3].cmd.W = 0;
-                    unitree_DunkMotor_Tff[3] = 0;
-                    unitree_DunkMotor_t[3].cmd.T = 1.2;
-                    my_Dunk_Task_t.ThrowBall_Status = 1;
-                }
+                    unitree_DunkMotor_t[3].cmd.T = 2.5;
 
-                if (unitree_DunkMotor_t[3].data.Pos >= my_Dunk_Task_t.Throwball_InitialPos[0] - Max_ThrowBall_Angle*0.3 )
+                    unitree_DunkMotor_t[4].cmd.Pos = 0;
+                    unitree_DunkMotor_t[4].cmd.K_P = 0;
+                    unitree_DunkMotor_t[4].cmd.K_W = 0;
+                    unitree_DunkMotor_t[4].cmd.W = 0;
+                    unitree_DunkMotor_t[4].cmd.T = 0;
+                    my_Dunk_Task_t.Throwball_Flag = 2;
+                }
+                //下降控制
+                if (my_Dunk_Task_t.Throwball_Flag == 2 && encoderData.angle <= Encoder_VertPos + 100)
                 {
                     unitree_DunkMotor_t[3].cmd.Pos = my_Dunk_Task_t.Throwball_InitialPos[0];
-                    unitree_DunkMotor_t[3].cmd.K_P = 0.1;
-                    unitree_DunkMotor_t[3].cmd.K_W = 0.18;
+                    unitree_DunkMotor_t[3].cmd.K_P = 0;
+                    unitree_DunkMotor_t[3].cmd.K_W = 0.2;
                     unitree_DunkMotor_t[3].cmd.W = 0.1;
+                    unitree_DunkMotor_t[3].cmd.T = 0;
+
+                    unitree_DunkMotor_t[4].cmd.Pos = 0;
+                    unitree_DunkMotor_t[4].cmd.K_P = 0;
+                    unitree_DunkMotor_t[4].cmd.K_W = 0;
+                    unitree_DunkMotor_t[4].cmd.W = 0;
+                    unitree_DunkMotor_t[4].cmd.T = 0;
                     //unitree_DunkMotor_t[3].cmd.T = - 0.6;
+                    if(encoderData.angle <= Encoder_VertPos + 10)
+                    {
+                        my_Dunk_Task_t.Throwball_Flag = 3;
+                    }
                 }
 
-                if (unitree_DunkMotor_t[3].data.Pos >= my_Dunk_Task_t.Throwball_InitialPos[0]  )
+                if(my_Dunk_Task_t.Throwball_Flag == 3&&encoderData.angle <= Encoder_VertPos)
                 {
+                    unitree_DunkMotor_t[3].cmd.Pos = 0;
+                    unitree_DunkMotor_t[3].cmd.K_P = 0;
+                    unitree_DunkMotor_t[3].cmd.K_W = 0;
+                    unitree_DunkMotor_t[3].cmd.W = 0;
+                    unitree_DunkMotor_t[3].cmd.T = 0;
+
+                    unitree_DunkMotor_t[4].cmd.Pos = 0;
+                    unitree_DunkMotor_t[4].cmd.K_P = 0;
+                    unitree_DunkMotor_t[4].cmd.K_W = 0;
+                    unitree_DunkMotor_t[4].cmd.W = 0;
+                    unitree_DunkMotor_t[4].cmd.T = 0;
                     my_Dunk_Task_t.my_Dunk_Status = DUNK_IDLE;
                 }
+
+                osDelay(2);
                 break;
             case DUNK_JUMP_UP:
                 BufferOn();
-
                 //执行跳跃
+
                 //未达到跳跃极限
-                if(my_Dunk_Task_t.Jump_Completed_Flag <= 3)
+                if(my_Dunk_Task_t.Jump_Completed_Flag == 0)
                 {
                     for (uint8_t i = 0; i < 3; i++)
                     {
@@ -387,25 +433,40 @@ void Handle_Dunk_Task(void *argument)
                         unitree_DunkMotor_t[i].cmd.T = 8;
                         unitree_DunkMotor_t[i].cmd.W = 0;
                     }
+                    my_Dunk_Task_t.Jump_Completed_Flag = 1;
                 }
 
-                for (uint8_t i = 0; i < 3; i++)
+                //检测是否达到跳跃伸腿极限
+                if (my_Dunk_Task_t.Jump_Completed_Flag == 1)
                 {
-                    //达到跳跃伸腿极限
-                    if(unitree_DunkMotor_t[i].data.Pos >= ( my_Dunk_Task_t.Unitree_DunkMotor_LimitingPos[0][i] + Max_Extension_Angle ))
+                    for (uint8_t i = 0; i < 3; i++)
                     {
-                        my_Dunk_Task_t.Jump_Completed_Flag ++;
+                        if(unitree_DunkMotor_t[i].data.Pos >= ( my_Dunk_Task_t.Unitree_DunkMotor_LimitingPos[0][i] + Max_Extension_Angle ))
+                        {
+                            my_Dunk_Task_t.Stood_Flag[i] = 1;
+                        }
+                    }
+                    if(my_Dunk_Task_t.Stood_Flag[0] == 1)
+                    {
+                        if(my_Dunk_Task_t.Stood_Flag[1] == 1)
+                        {
+                            if(my_Dunk_Task_t.Stood_Flag[2] == 1)
+                            {
+                                //完全站立
+                                my_Dunk_Task_t.Jump_Completed_Flag = 2;
+                            }
+                        }
                     }
                 }
                 
-                if(my_Dunk_Task_t.Jump_Completed_Flag >= 3)//全部伸腿完毕
+                if(my_Dunk_Task_t.Jump_Completed_Flag == 2)//全部伸腿完毕
                 {
                     //启动摆臂
-                    ThrowBall();
+                    //ThrowBall();
                 }
 
                 //开始收腿
-                if(unitree_DunkMotor_t[3].data.Pos <= my_Dunk_Task_t.Throwball_InitialPos[0] - Max_ThrowBall_Angle*0.45 )
+                if( encoderData.angle >= Encoder_VertPos + 110 && my_Dunk_Task_t.Jump_Completed_Flag == 2)
                 {
                     for (uint8_t i = 0; i < 3; i++)
                     {
@@ -415,19 +476,33 @@ void Handle_Dunk_Task(void *argument)
                         unitree_DunkMotor_t[i].cmd.T = -5;
                         unitree_DunkMotor_t[i].cmd.W = 0;
                     }
+                    my_Dunk_Task_t.Jump_Completed_Flag = 3;
                 }
+
                 //完成收腿恢复正常扭矩
-                for(uint8_t i = 0; i < 3; i++)
+                if (my_Dunk_Task_t.Jump_Completed_Flag == 3)
                 {
-                    if (unitree_DunkMotor_t[i].data.Pos <= my_Dunk_Task_t.Unitree_DunkMotor_LimitingPos[0][i])
+                    for(uint8_t i = 0; i < 3; i++)
                     {
-                        unitree_DunkMotor_t[i].cmd.T = -0.35;
-                        my_Dunk_Task_t.Jump_Completed_Flag ++;
+                        if (unitree_DunkMotor_t[i].data.Pos <= my_Dunk_Task_t.Unitree_DunkMotor_LimitingPos[0][i])
+                        {
+                            unitree_DunkMotor_t[i].cmd.T = -0.35;
+                        }
+                    }
+                    if(unitree_DunkMotor_t[0].cmd.T == -0.35)
+                    {
+                        if(unitree_DunkMotor_t[1].cmd.T == -0.35)
+                        {
+                            if(unitree_DunkMotor_t[2].cmd.T == -0.35)
+                            {
+                                my_Dunk_Task_t.Jump_Completed_Flag = 4;
+                            }
+                        }
                     }
                 }
 
                 //三条腿收腿完毕且投篮臂恢复
-                if (unitree_DunkMotor_t[3].data.Pos >= my_Dunk_Task_t.Throwball_InitialPos[0] && my_Dunk_Task_t.Jump_Completed_Flag >=6 )
+                if (encoderData.angle <= Encoder_VertPos && my_Dunk_Task_t.Jump_Completed_Flag == 4 )
                 {
                     my_Dunk_Task_t.my_Dunk_Status = DUNK_IDLE;
                 }

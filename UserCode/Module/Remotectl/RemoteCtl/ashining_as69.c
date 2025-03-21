@@ -23,7 +23,12 @@ mavlink_joystick_air_led_t msg_joystick_air_led;
 void AS69_RemoteControl_Init()
 {
     wtrMavlink_BindChannel(&AS69_UART_HANDLE, MAVLINK_COMM_0); // MAVLINK遥控器
-    wtrMavlink_StartReceiveIT(MAVLINK_COMM_0);                 // 以mavlink接收遥控器
+    if (wtrMavlink_StartReceiveIT(MAVLINK_COMM_0)!= 0)
+    {
+        Error_Handler();
+    }
+    
+    //wtrMavlink_StartReceiveIT(MAVLINK_COMM_0);                 // 以mavlink接收遥控器
 
     //上位机配置用
     HAL_GPIO_WritePin(AS69_MD0_GPIO_Port,AS69_MD0_Pin,GPIO_PIN_SET);

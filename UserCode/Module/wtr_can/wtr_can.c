@@ -42,7 +42,7 @@ HAL_StatusTypeDef CAN2FilterInit(CAN_HandleTypeDef* hcan){
     sFilterConfig.FilterBank = 14;
     sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
     sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-    sFilterConfig.FilterIdHigh = 0x0000; // 左移 5 位
+    sFilterConfig.FilterIdHigh = 0x0000; 
     sFilterConfig.FilterIdLow = 0x0000;
     sFilterConfig.FilterMaskIdHigh = 0x0000;
     sFilterConfig.FilterMaskIdLow = 0x0000;
@@ -96,7 +96,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan){
       if (HAL_CAN_GetRxFifoFillLevel(hcan, CAN_RX_FIFO0) > 0) {
         if(HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
         {
-          ParseCANData(&RxHeader, RxData, &encoderData,&encoderCalculateData);
+          ParseCANData(&RxHeader, RxData,&encoderData,&encoderCalculateData);
         }else Error_Handler();
         //CanDataDecode(RxHeader);
         // 解析角编码器数据

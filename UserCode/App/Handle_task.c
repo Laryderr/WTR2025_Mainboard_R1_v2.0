@@ -42,8 +42,8 @@ void my_handle_Task_Start(void)
  */
 void my_handle_Task(void *arguement)
 {
-    //Handle_Dunk_TaskStart();
-    Handle_Shoot_TaskStart();
+    Handle_Dunk_TaskStart();
+    //Handle_Shoot_TaskStart();
 
     //动作线程启动
     myHandle_State = HANDLE_IDLE_MODE;
@@ -85,7 +85,7 @@ void my_handle_Task(void *arguement)
         {
         case HANDLE_IDLE_MODE:
             //osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
-            osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
+            //osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
             JoystickDelete(ID_HANDLE_DUNK, &mav_joystick_del);
             JoystickDelete(ID_HANDLE_SHOOT, &mav_joystick_del);
             JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
