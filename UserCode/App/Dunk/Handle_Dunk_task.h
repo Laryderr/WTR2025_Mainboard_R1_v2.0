@@ -5,12 +5,12 @@ extern "C" {
 #endif
 
 #include "usermain.h"
+#include "DJI.h"
 
 #define Max_Extension_Angle 16  //轮腿电机从抬腿到伸腿的最大正转弧度
 #define Max_ThrowBall_Angle 18.9 //投球电机旋转总角度（已乘减速比）
-#define Encoder_VertPos 80       ////投篮臂垂直时编码器角度
+#define Encoder_VertPos 94       ////投篮臂垂直时编码器角度
 #define DegreetoRad     6.283
-
 
 
 enum Dunk_Status{
@@ -46,6 +46,7 @@ typedef struct{
     float Unitree_DunkMotor_LimitingPos[2][3]; // 0:抬腿极限位置，1：伸腿极限位置
 
     int32_t Encoder_InitialPos ; //投篮臂上电时编码器角度
+    PID_t Encoder_PosPID_t; //投篮臂角编码器位置PID结构体
 }Dunk_Task_t;
 
 extern Dunk_Task_t my_Dunk_Task_t;
@@ -55,6 +56,8 @@ extern Dunk_Task_t my_Dunk_Task_t;
 //外部接口函数定义
 extern osThreadId_t unitree_dunk_ctrl_TaskHandle;
 void Handle_Dunk_TaskStart(void);
+void Encoder_Pospid_Init(PID_t *upid,float ref, float KP, float KI, float KD);
+float Encoder_PosServo(PID_t *upid, float Feedback_value);
 
 #ifdef __cplusplus
 }

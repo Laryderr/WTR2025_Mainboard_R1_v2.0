@@ -99,6 +99,13 @@ int main(void)
   MX_TIM2_Init();
   MX_UART8_Init();
   MX_USART6_UART_Init();
+  MX_USART2_UART_Init();
+  MX_UART7_Init();
+  MX_TIM6_Init();
+  MX_TIM3_Init();
+  MX_TIM7_Init();
+  MX_USART3_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   //CANFilterInit(&hcan1);
   //ENCODER_CANFilterInit(&hcan2);
@@ -124,6 +131,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    //HAL_IWDG_Refresh(&hiwdg); 
   }
   /* USER CODE END 3 */
 }
@@ -203,6 +211,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
   /* USER CODE BEGIN Callback 1 */
 
+  //码盘速度计算定时器回调
+  /*if(htim->Instance == OPS_Calculate_TIM)
+  {
+      my_Chassis_Odom_v.current_pos[0] = OPS_Data.pos_x;
+      my_Chassis_Odom_v.current_pos[1] = OPS_Data.pos_y;
+      my_Chassis_Odom_v.current_v[0] = (my_Chassis_Odom_v.current_pos[0] - my_Chassis_Odom_v.last_pos[0])/OPS_Calculate_Time;
+      my_Chassis_Odom_v.current_v[1] = (my_Chassis_Odom_v.current_pos[1] - my_Chassis_Odom_v.last_pos[1])/OPS_Calculate_Time;
+      my_Chassis_Odom_v.last_pos[0]  = my_Chassis_Odom_v.current_pos[0];
+      my_Chassis_Odom_v.last_pos[1]  = my_Chassis_Odom_v.current_pos[1];
+
+      //雷达位置微分速度
+      my_Alldir_Chassis_t.last_pos.xpos = my_Alldir_Chassis_t.current_pos.xpos;
+      my_Alldir_Chassis_t.last_pos.ypos = my_Alldir_Chassis_t.current_pos.ypos;
+
+      my_Alldir_Chassis_t.current_pos.xpos = Lidar_pose[0];
+      my_Alldir_Chassis_t.current_pos.ypos = Lidar_pose[1];
+
+      my_Alldir_Chassis_t.current_v.vx = (my_Alldir_Chassis_t.current_pos.xpos - my_Alldir_Chassis_t.last_pos.xpos)/OPS_Calculate_Time;
+      my_Alldir_Chassis_t.current_v.vy = (my_Alldir_Chassis_t.current_pos.ypos - my_Alldir_Chassis_t.last_pos.ypos)/OPS_Calculate_Time;
+  }*/
   /* USER CODE END Callback 1 */
 }
 

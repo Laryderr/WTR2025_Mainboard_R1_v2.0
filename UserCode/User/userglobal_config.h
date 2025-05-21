@@ -20,6 +20,7 @@ extern "C"{
 
 #define AS69_UART_HANDLE    huart8  //接收器串口
 #define AS69_UART           UART8
+#define OPS_Calibration     0
 
 #define ID_HANDLE_DUNK      2
 #define ID_HANDLE_INTERCEPT 2
@@ -47,6 +48,7 @@ extern mavlink_joystick_air_dashboard_set_msg_t mav_run_msg;
 extern char run_title[20]     ;
 extern char run_auto_msg[20]   ;
 extern char run_handle_msg[20];
+extern char run_stop_msg[20] ;
 
 extern mavlink_joystick_air_dashboard_set_title_t mav_rst_choose_title;
 extern mavlink_joystick_air_dashboard_set_msg_t mav_rst_choose_msg;

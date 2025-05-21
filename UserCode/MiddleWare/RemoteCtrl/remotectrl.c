@@ -61,14 +61,30 @@ void my_RemoteCtrl_Task_Start(void)
  * @return true 
  * @return false 
  */
-bool BtnScan_Press(bool this_status,bool last_status)
+bool BtnScan_Press(bool this_status)
 {
-    if(this_status == 1 && last_status == 0)
+    if(this_status == 1)
     {
-        osDelay(400);
+        osDelay(20);
+        if(this_status == 1){
         return true;
+        }
     }
     return false;
+}
+
+bool BtnPress_Once(bool this_status, bool last_status)
+{
+    if (this_status == 1&&last_status == 0)
+    {
+        osDelay(20);
+        if (this_status == 1)
+        {
+            return true;
+        }else return false;
+        
+    }else return  false;
+    
 }
 
 

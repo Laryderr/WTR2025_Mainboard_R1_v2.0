@@ -94,9 +94,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan){
     }
     if(hcan->Instance == hcan2.Instance){
       if (HAL_CAN_GetRxFifoFillLevel(hcan, CAN_RX_FIFO0) > 0) {
-        if(HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)
+        if(HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, CanReceiveData) == HAL_OK)
         {
-          ParseCANData(&RxHeader, RxData,&encoderData,&encoderCalculateData);
+          if ((CanReceiveData[0] == 0x55 && CanReceiveData[1] == 0x55) || (CanReceiveData[0] == 0x55 && CanReceiveData[1] == 0x56))
+          {
+              ParseCANData(&RxHeader, CanReceiveData, &encoderData,&encoderCalculateData);
+          }else CanDataDecode(RxHeader);
         }else Error_Handler();
         //CanDataDecode(RxHeader);
         // 解析角编码器数据

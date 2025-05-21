@@ -57,7 +57,8 @@ extern Remote_Data MyLastRemote_Data;
 void my_RemoteCtrl_Init(void);
 void my_RemoteCtrl_Task_Start(void);
 
-bool BtnScan_Press(bool this_status,bool last_status);
+bool BtnScan_Press(bool this_status);
+bool BtnPress_Once(bool this_status, bool last_status);
 
 
 

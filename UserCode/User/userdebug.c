@@ -44,7 +44,7 @@ void my_debug_Task(void *argument)
     for(; ;)
     {
         //调试底盘3508PID
-        if(BtnScan_Press(MyRemote_Data.btn_LeftCrossUp,MyLastRemote_Data.btn_LeftCrossUp))
+        /*if(BtnScan_Press(MyRemote_Data.btn_LeftCrossUp,MyLastRemote_Data.btn_LeftCrossUp))
         {
             for (int i = 0; i < 4; i++) {
             hDJI[i].speedPID.KP = hDJI[i].speedPID.KP + 0.05;
@@ -117,7 +117,7 @@ void my_debug_Task(void *argument)
             {
                 unitree_DunkMotor_t[i].cmd.K_W = unitree_DunkMotor_t[i].cmd.K_W - 0.02f;
             }
-        }
+        }*/
 
     }
 }

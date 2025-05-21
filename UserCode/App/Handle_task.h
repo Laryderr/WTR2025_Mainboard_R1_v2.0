@@ -5,10 +5,6 @@ extern "C" {
 #endif
 
 #include "usermain.h"
-#include "Handle_Dunk_task.h"
-#include "Handle_Intercept_task.h"
-#include "Handle_Patball_task.h"
-#include "Handle_Shoot_task.h"
 
 enum Handle_State{
     HANDLE_IDLE_MODE = 0,   //空闲
@@ -22,10 +18,10 @@ extern enum Handle_State myHandle_State;   //手动模式状态
 extern osThreadId_t handle_TaskHandle;
 
 //外部接口函数
-void my_handle_Task_Start(void);
+void my_handle_Task(void);
 
 #ifdef __cplusplus
 }
 #endif
 // C++
-#endif // 
+#endif //    

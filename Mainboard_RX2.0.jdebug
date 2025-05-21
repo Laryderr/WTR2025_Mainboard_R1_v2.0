@@ -22,12 +22,12 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("D:/embedded_about/WTR/25season/Mainboard_RX2.0", "$(ProjectDir)");
-  Project.AddPathSubstitute ("d:/embedded_about/wtr/25season/mainboard_rx2.0", "$(ProjectDir)");
   Project.SetDevice ("STM32F427II");
   Project.SetHostIF ("USB", "69409487");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
+  Project.AddPathSubstitute ("D:/embedded_about/WTR/25season/Mainboard_RX2.0", "$(ProjectDir)");
+  Project.AddPathSubstitute ("d:/embedded_about/wtr/25season/mainboard_rx2.0", "$(ProjectDir)");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
   Project.AddSvdFile ("C:/Users/aa158/Desktop/Ozone/Config/Peripherals/STM32F427x.svd");
   //

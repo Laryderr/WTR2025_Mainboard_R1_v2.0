@@ -1,51 +1,41 @@
 
 
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/encoder/encoder.c:127, State=BP_STATE_ON
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c:19, State=BP_STATE_ON
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c:32, State=BP_STATE_ON
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c:91, State=BP_STATE_ON
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c:100, State=BP_STATE_ON
-Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c:103, State=BP_STATE_ON
-GraphedExpression="(( unitree_DunkMotor_t[1]).data).T", Color=#a00909
-GraphedExpression="(( unitree_DunkMotor_t[2]).data).T", Color=#09a01b
-GraphedExpression="(( unitree_DunkMotor_t[0]).data).T", Color=#09a087
-GraphedExpression="(( unitree_DunkMotor_t[3]).data).T", Color=#0984a0
-GraphedExpression="(( unitree_DunkMotor_t[3]).data).W", Color=#0964a0
-GraphedExpression="(( unitree_DunkMotor_t[0]).data).Pos", Color=#094fa0
-GraphedExpression="(( unitree_DunkMotor_t[3]).data).Pos", Color=#0940a0
-OpenDocument="encoder.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/encoder/encoder.c", Line=114
-OpenDocument="main.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Core/Src/main.c", Line=64
-OpenDocument="startup_stm32f427xx.s", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/startup_stm32f427xx.s", Line=88
-OpenDocument="wtr_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c", Line=81
-OpenDocument="my_Callback.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c", Line=14
-OpenDocument="stm32f4xx_hal_uart.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c", Line=3184
-OpenDocument="tasks.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/tasks.c", Line=3643
-OpenDocument="chassis_ctrl.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Chassis_Ctrl/chassis_ctrl.c", Line=59
-OpenDocument="stm32f4xx_it.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Core/Src/stm32f4xx_it.c", Line=81
-OpenDocument="GO-M8010-6.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Unitree/GO-M8010-6.c", Line=97
-OpenDocument="Unitree_user.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Unitree/Unitree_user.c", Line=59
-OpenDocument="Unitree.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Unitree/Unitree.c", Line=34
-OpenDocument="usermain.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/User/usermain.c", Line=17
-OpenDocument="Handle_Dunk_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Dunk/Handle_Dunk_task.c", Line=208
-OpenDocument="stm32f4xx_hal.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c", Line=317
-OpenDocument="Unitree_user.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Unitree/Unitree_user.h", Line=0
+Breakpoint=d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c:39, State=BP_STATE_ON
+OpenDocument="main.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Core/Src/main.c", Line=62
+OpenDocument="my_Callback.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c", Line=39
+OpenDocument="Handle_Shoot_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Shoot/Handle_Shoot_task.c", Line=42
+OpenDocument="startup_stm32f427xx.s", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/startup_stm32f427xx.s", Line=51
+OpenDocument="tasks.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/tasks.c", Line=3640
+OpenDocument="Handle_Dunk_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Dunk/Handle_Dunk_task.c", Line=91
+OpenDocument="Handle_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Handle_task.c", Line=41
+OpenDocument="stm32f4xx_hal_uart.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c", Line=3180
+OpenDocument="cmsis_os2.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c", Line=885
+OpenDocument="usermain.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/User/usermain.c", Line=28
+OpenDocument="Handle_Patball_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/PatBall/Handle_Patball_task.c", Line=127
+OpenDocument="list.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/list.c", Line=161
+OpenDocument="stm32f4xx_hal.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c", Line=316
+OpenDocument="Laser.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/DT35/Laser.c", Line=57
+OpenDocument="cmsis_gcc.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/CMSIS/Include/cmsis_gcc.h", Line=1027
+OpenDocument="wtr_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c", Line=48
+OpenDocument="encoder.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/encoder/encoder.c", Line=122
+OpenDocument="stm32f4xx_it.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Core/Src/stm32f4xx_it.c", Line=92
 OpenDocument="wtr_mavlink.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Remotectl/Mavlink/wtr_mavlink.h", Line=63
 OpenDocument="stm32f4xx_hal_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c", Line=1548
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=165, h=270, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=894, h=250, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=165, h=214, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=BOTTOM, x=0, y=0, w=811, h=502, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=1, y=1, w=133, h=234, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=1017, h=502, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
-OpenWindow="Timeline", DockArea=LEFT, x=0, y=1, w=760, h=234, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="1 s / Div", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;-34", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="663;-20", CodeGraphLegendShown=0, CodeGraphLegendPosition="677;0"
-TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[674;104;100;100;336]
-TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[359;100;100;100;959]
-TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";" (( unitree_DunkMotor_t[1]).data).T";" (( unitree_DunkMotor_t[2]).data).T";" (( unitree_DunkMotor_t[0]).data).T";" (( unitree_DunkMotor_t[3]).data).T";" (( unitree_DunkMotor_t[3]).data).W";" (( unitree_DunkMotor_t[0]).data).Pos";" (( unitree_DunkMotor_t[3]).data).Pos"], ColWidths=[100;100;100;100;100;100;100;100;100]
-TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[302;100;102;110;102;134;100;134;126]
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=165, h=470, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=861, h=461, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=165, h=339, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=BOTTOM, x=0, y=0, w=1098, h=587, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=1, y=1, w=151, h=348, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=1461, h=587, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
+OpenWindow="Timeline", DockArea=LEFT, x=0, y=1, w=709, h=348, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="2 s / Div", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="14;0", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="436;-75", CodeGraphLegendShown=0, CodeGraphLegendPosition="457;0"
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[674;104;100;100;474]
+TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[359;100;100;100;1364]
+TableHeader="Data Sampling Table", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[100;100]
+TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[387;100;100;100;100;110;130;150;284]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;144;259]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[248;202;100;240]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;144;364]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[248;233;100;487]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;366]
 WatchedExpression=" unitree_DunkMotor_t", RefreshRate=5, Window=Watched Data 1
@@ -54,3 +44,23 @@ WatchedExpression="MyRemote_Data", RefreshRate=5, Window=Watched Data 1
 WatchedExpression="encoderCalculateData", RefreshRate=5, Window=Watched Data 1
 WatchedExpression="encoderData", RefreshRate=5, Window=Watched Data 1
 WatchedExpression="my_Shoot_Task_T", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="hDJI", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="my_Alldir_Chassis_t", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="myHandle_State", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="gyrodata", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="my_Alldir_Chassis_t", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="chassis_gyro_init_flag", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="(( unitree_DunkMotor_t[0]).data).W", Window=Watched Data 1
+WatchedExpression=" OPS_Data", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="my_Chassis_Odom_v", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="rev_buffer", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Lidar_pose", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="YawPosServo_Flag", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="patballstate", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Laser_data", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Laser_x", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Laser_y ", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Laser_rawdata", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Laser_rev_byte", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="nuc_rev_buffer", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="camera_basket_xyz", RefreshRate=5, Window=Watched Data 1
