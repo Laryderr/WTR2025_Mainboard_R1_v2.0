@@ -25,7 +25,7 @@ void StartDefaultTask(void *arguement)
     //  Hardware Init
     my_Chassis_Init();      //底盘运动电机初始化
     my_RemoteCtrl_Init();   //遥控器初始化
-    my_Unitree_Init();    //宇树电机初始化
+    //my_Unitree_Init();    //宇树电机初始化
     Laser_rev_Init();       //DT35激光初始化
     NUC_rev_init();         //NUC接收数据初始化
     m_Chassis_Gyro_Init(); //陀螺仪初始化
@@ -37,14 +37,14 @@ void StartDefaultTask(void *arguement)
     my_RemoteCtrl_Task_Start();         //开启遥控器线程
     my_Chassis_CAN_Message_TaskStart(); //开启底盘电机消息线程
     my_Chassis_Ctrl_TaskStart();        //开启底盘控制线程
-    my_Unitree_UART_Message_TaskStart();//开启跳跃电机消息线程
+    //my_Unitree_UART_Message_TaskStart();//开启跳跃电机消息线程
     m_Chassis_Gyro_TaskStart();         //开启底盘陀螺仪线程
     //Expansion_Executor_TaskStart();     //开启升降机构控制线程
     //m_Chassis_Odom_TaskStart();         //开启码盘消息线程
     osDelay(500);
 
     //开启动作线程
-    Handle_Dunk_TaskStart();
+    //Handle_Dunk_TaskStart();
     //Patball_TaskStart();
     //Handle_Shoot_TaskStart();
     //my_debug_TaskStart();               //调试线程

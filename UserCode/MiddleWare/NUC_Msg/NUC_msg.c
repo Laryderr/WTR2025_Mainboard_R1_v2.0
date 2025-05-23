@@ -9,6 +9,7 @@ float camera_basket_xyz[3] = {0}; //篮筐的x(水平),y（竖直）,z（深度�
 bool packet_valid = false;
 
 static bool set_offset_flag = false;
+static float raw_lidar[3];
 static float lidar_offset[3] = {0};
 static float lidar_offset_sum[3] = {0};
 static uint8_t lidar_offset_count = 0;
@@ -55,12 +56,12 @@ void NUC_Msg_Decode()
                 if (received_crc == computed_crc) {
                     packet_valid = true;
 
-                    float raw_lidar[3];
+                    
                     memcpy(&raw_lidar[0], nuc_rev_buffer + 2, 4);
                     memcpy(&raw_lidar[1], nuc_rev_buffer + 6, 4);
                     memcpy(&raw_lidar[2], nuc_rev_buffer + 10, 4);
 
-                    if(my_Alldir_Chassis_t.chassis_calibrate_flag==1){
+                    if(my_Alldir_Chassis_t.chassis_calibrate_flag==0){
                         // 初始化偏置处理 
                         if (!set_offset_flag) {
                             lidar_offset_sum[0] += raw_lidar[0];

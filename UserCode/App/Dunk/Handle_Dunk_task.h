@@ -42,6 +42,7 @@ typedef struct{
     uint8_t Throwball_Flag; //投球状态标志
 
     bool Buffer_flag ; //1开启
+    bool Buffer_flag2 ; //1开启
     bool BallHelp_flag ; //1 on
     float Unitree_DunkMotor_LimitingPos[2][3]; // 0:抬腿极限位置，1：伸腿极限位置
 

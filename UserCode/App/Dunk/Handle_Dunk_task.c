@@ -79,7 +79,7 @@ float Dunkmotor_Contect_LimitingPos(uint8_t i)
             unitree_DunkMotor_t[i].cmd.Pos = 0;
             unitree_DunkMotor_t[i].cmd.K_P = 0;
             unitree_DunkMotor_t[i].cmd.K_W = 0;
-            unitree_DunkMotor_t[i].cmd.T = -0.4;
+            unitree_DunkMotor_t[i].cmd.T = 0.4;
             unitree_DunkMotor_t[i].cmd.W = 0;
     }
     return unitree_DunkMotor_t[i].data.Pos;
@@ -208,9 +208,13 @@ void ThrowBall(void)
  */
 void BufferOn(void)
 {
-    HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
-    my_Dunk_Task_t.Buffer_flag = 1;
+    //if(my_Dunk_Task_t.Buffer_flag == 0)
+    //{
+        HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_SET);
+        my_Dunk_Task_t.Buffer_flag = 1;
+    //}
 }
 
 /**
@@ -219,9 +223,18 @@ void BufferOn(void)
  */
 void BufferOff(void)
 {
-    HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_SET);
-    HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_RESET);
-    my_Dunk_Task_t.Buffer_flag = 0;
+    //if(my_Dunk_Task_t.Buffer_flag == 1)
+    //{
+        HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_RESET);
+        /*start_time = 
+        if(HAL_GetTick() - start_time >= 2000){
+            HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_SET);*/
+            //osDelay(100)
+            my_Dunk_Task_t.Buffer_flag = 0;
+        //}
+    //}
 }
 
 /**
@@ -346,10 +359,13 @@ void Handle_Dunk_Task(void *argument)
         {
             my_Dunk_Task_t.my_Dunk_Status = DUNK_TEST;
         }
+        //气缸
         if(MyRemote_Data.right_switch == 1)
         {
             BufferOn();
-        }else BufferOff();
+        }else {
+            BufferOff();
+        }
 
         //状态控制
         if(my_Dunk_Task_t.Found_LimitingPos_Flag == 3)
@@ -364,7 +380,7 @@ void Handle_Dunk_Task(void *argument)
                 unitree_DunkMotor_t[i].cmd.Pos = 0;
                 unitree_DunkMotor_t[i].cmd.K_P = 0;
                 unitree_DunkMotor_t[i].cmd.K_W = 0;
-                unitree_DunkMotor_t[i].cmd.T = 0.3;
+                unitree_DunkMotor_t[i].cmd.T = 0.2;
                 unitree_DunkMotor_t[i].cmd.W = 0;
                 }
                 
@@ -485,7 +501,7 @@ void Handle_Dunk_Task(void *argument)
                         unitree_DunkMotor_t[i].cmd.Pos = 0;
                         unitree_DunkMotor_t[i].cmd.K_P = 0;
                         unitree_DunkMotor_t[i].cmd.K_W = 0;
-                        unitree_DunkMotor_t[i].cmd.T = 20;
+                        unitree_DunkMotor_t[i].cmd.T = -6;
                         unitree_DunkMotor_t[i].cmd.W = 0;
                     }
                     my_Dunk_Task_t.Jump_Completed_Flag = 1;
@@ -528,7 +544,7 @@ void Handle_Dunk_Task(void *argument)
                         unitree_DunkMotor_t[i].cmd.Pos = 0;
                         unitree_DunkMotor_t[i].cmd.K_P = 0;
                         unitree_DunkMotor_t[i].cmd.K_W = 0;
-                        unitree_DunkMotor_t[i].cmd.T = -5;
+                        unitree_DunkMotor_t[i].cmd.T = 5;
                         unitree_DunkMotor_t[i].cmd.W = 0;
                     }
                     my_Dunk_Task_t.Jump_Completed_Flag = 3;
@@ -541,14 +557,14 @@ void Handle_Dunk_Task(void *argument)
                     {
                         if (unitree_DunkMotor_t[i].data.Pos <= my_Dunk_Task_t.Unitree_DunkMotor_LimitingPos[0][i])
                         {
-                            unitree_DunkMotor_t[i].cmd.T = -0.35;
+                            unitree_DunkMotor_t[i].cmd.T = 0.35;
                         }
                     }
-                    if(unitree_DunkMotor_t[0].cmd.T == -0.35)
+                    if(unitree_DunkMotor_t[0].cmd.T == 0.35)
                     {
-                        if(unitree_DunkMotor_t[1].cmd.T == -0.35)
+                        if(unitree_DunkMotor_t[1].cmd.T == 0.35)
                         {
-                            if(unitree_DunkMotor_t[2].cmd.T == -0.35)
+                            if(unitree_DunkMotor_t[2].cmd.T == 0.35)
                             {
                                 my_Dunk_Task_t.Jump_Completed_Flag = 4;
                             }
