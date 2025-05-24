@@ -51,11 +51,15 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOI_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOH, POWER1_Pin|POWER2_Pin|POWER3_Pin|POWER4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOH, POWER1_Pin|POWER2_Pin|POWER3_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(POWER4_GPIO_Port, POWER4_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, LED6_Pin|LED5_Pin|LED4_Pin|LED3_Pin
@@ -73,6 +77,12 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_Red_GPIO_Port, LED_Red_Pin, GPIO_PIN_SET);
 
+  /*Configure GPIO pin : ButtonRL_Pin */
+  GPIO_InitStruct.Pin = ButtonRL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ButtonRL_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : POWER1_Pin POWER2_Pin POWER3_Pin POWER4_Pin */
   GPIO_InitStruct.Pin = POWER1_Pin|POWER2_Pin|POWER3_Pin|POWER4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -88,6 +98,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ButtonRH_Pin ButtonLL_Pin ButtonLH_Pin */
+  GPIO_InitStruct.Pin = ButtonRH_Pin|ButtonLL_Pin|ButtonLH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
   /*Configure GPIO pins : AS69_MD1_Pin AS69_MD0_Pin */
   GPIO_InitStruct.Pin = AS69_MD1_Pin|AS69_MD0_Pin;

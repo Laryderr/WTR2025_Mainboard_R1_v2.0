@@ -30,16 +30,16 @@ void StartDefaultTask(void *arguement)
     NUC_rev_init();         //NUC接收数据初始化
     m_Chassis_Gyro_Init(); //陀螺仪初始化
     //m_Chassis_Odom_Init(); //码盘初始化
-    //Expansion_Init();      //升降机构初始化
+    Expansion_Init();      //升降机构初始化
     osDelay(200);
 
     //  Tasks Start
     my_RemoteCtrl_Task_Start();         //开启遥控器线程
-    my_Chassis_CAN_Message_TaskStart(); //开启底盘电机消息线程
-    my_Chassis_Ctrl_TaskStart();        //开启底盘控制线程
+    //my_Chassis_CAN_Message_TaskStart(); //开启底盘电机消息线程
+    //my_Chassis_Ctrl_TaskStart();        //开启底盘控制线程
     //my_Unitree_UART_Message_TaskStart();//开启跳跃电机消息线程
-    m_Chassis_Gyro_TaskStart();         //开启底盘陀螺仪线程
-    //Expansion_Executor_TaskStart();     //开启升降机构控制线程
+    //m_Chassis_Gyro_TaskStart();         //开启底盘陀螺仪线程
+    Expansion_Executor_TaskStart();     //开启升降机构控制线程
     //m_Chassis_Odom_TaskStart();         //开启码盘消息线程
     osDelay(500);
 
@@ -55,7 +55,7 @@ void StartDefaultTask(void *arguement)
 
     //my_IWDG_TaskStart();                  //看门狗线程开启
     //开启主线程
-    my_main_Task_Start();
+    //my_main_Task_Start();
 
 
 

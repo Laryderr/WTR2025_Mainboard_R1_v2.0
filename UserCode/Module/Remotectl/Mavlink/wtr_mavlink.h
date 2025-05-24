@@ -192,7 +192,7 @@ void wtrMavlink_MsgRxCpltCallback(mavlink_message_t *msg);
  * @param huart 收到数据的串口（函数内部有判断，只有这个 huart 是 channel 对应的 huart 时，该函数才会处理）
  * @param chan
  */
-extern test_char;
+extern int test_char;
 static inline void wtrMavlink_UARTRxCpltCallback(UART_HandleTypeDef *huart, mavlink_channel_t chan)
 {
     extern volatile uint32_t MavTotalBytesGot;
