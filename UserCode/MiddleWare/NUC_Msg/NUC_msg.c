@@ -14,6 +14,12 @@ static float lidar_offset[3] = {0};
 static float lidar_offset_sum[3] = {0};
 static uint8_t lidar_offset_count = 0;
 
+#define CAMERA_FILTER_WINDOW 5
+static float raw_camera[3]; // 中间变量：相机原始值
+static float camera_buffer[3][CAMERA_FILTER_WINDOW] = {0};
+static uint8_t camera_index = 0;
+static bool camera_buffer_full = false;
+
 void NUC_rev_init()
 {
     HAL_UART_Receive_IT(&NUC_MSG_UART_HANDLE, &nuc_rev_byte, 1);
@@ -61,7 +67,7 @@ void NUC_Msg_Decode()
                     memcpy(&raw_lidar[1], nuc_rev_buffer + 6, 4);
                     memcpy(&raw_lidar[2], nuc_rev_buffer + 10, 4);
 
-                    if(my_Alldir_Chassis_t.chassis_calibrate_flag==0){
+                    if(my_Alldir_Chassis_t.chassis_calibrate_flag==1){
                         // 初始化偏置处理 
                         if (!set_offset_flag) {
                             lidar_offset_sum[0] += raw_lidar[0];
@@ -88,10 +94,36 @@ void NUC_Msg_Decode()
                         }
                     }
                     
-                    memcpy(&camera_basket_xyz[0], nuc_rev_buffer + 14, 4);
-                    memcpy(&camera_basket_xyz[1], nuc_rev_buffer + 18, 4);
-                    memcpy(&camera_basket_xyz[2], nuc_rev_buffer + 22, 4);
+                    // 接收并暂存原始相机数据
+                    memcpy(&raw_camera[0], nuc_rev_buffer + 14, 4);
+                    memcpy(&raw_camera[1], nuc_rev_buffer + 18, 4);
+                    memcpy(&raw_camera[2], nuc_rev_buffer + 22, 4);
 
+                    // 滑动平均滤波更新缓存
+                    for (int i = 0; i < 3; i++) {
+                        camera_buffer[i][camera_index] = raw_camera[i];
+                    }
+                    camera_index++;
+                    if (camera_index >= CAMERA_FILTER_WINDOW) {
+                        camera_index = 0;
+                        camera_buffer_full = true;
+                    }
+
+                    // 滤波后赋值给 camera_basket_xyz
+                    if (camera_buffer_full) {
+                        for (int i = 0; i < 3; i++) {
+                            float sum = 0;
+                            for (int j = 0; j < CAMERA_FILTER_WINDOW; j++) {
+                                sum += camera_buffer[i][j];
+                            }
+                            camera_basket_xyz[i] = sum / CAMERA_FILTER_WINDOW;
+                        }
+                    } else {
+                        // 缓存未满，用原始值
+                        for (int i = 0; i < 3; i++) {
+                            camera_basket_xyz[i] = raw_camera[i];
+                        }
+                    }
                 } else {
                     packet_valid = false;
                 }

@@ -80,7 +80,7 @@ void m_Chassis_Gyro_Task(void *argument)
                 gyro_flag++; // 逆时针跳变
             }
             chassis_yaw = gyro_now + gyro_flag * 360.0f;
-            my_Alldir_Chassis_t.current_pos.yawpos = chassis_yaw;
+            
         }
         osDelay(1);
     }

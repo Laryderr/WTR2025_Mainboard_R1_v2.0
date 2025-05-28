@@ -21,16 +21,16 @@ extern "C" {
 #include "math.h"
 #include "wtr_can.h"
 
-#define FORWARD_ANGLE -77
+#define FORWARD_ANGLE 24.4
 
 /**
  * @brief 底盘状态机
  * 
  */
 typedef enum{
+    CHASSIS_STOP,
     CHASSIS_HANDLE_RUNNING,
     CHASSIS_AUTO_RUNNING,
-    CHASSIS_STOP,
     CHASSIS_READY,
     CHASSIS_ERROR,
     CHASSIS_NULL}Chassis_state_e;  
@@ -75,7 +75,7 @@ typedef struct
 {
     float vx;
     float vy;
-    float vw;
+    float vw;//线速度
 }Chassis_velocity_t;
 
 typedef struct 
@@ -131,6 +131,7 @@ typedef struct
     float init_x_pos;
     float init_y_pos;
     bool chassis_calibrate_flag;
+    uint32_t count_start_time;
 
     float chassis_to_basket; //底盘中心到篮筐中心水平距离
 

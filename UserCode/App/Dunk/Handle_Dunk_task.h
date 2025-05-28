@@ -59,6 +59,9 @@ extern osThreadId_t unitree_dunk_ctrl_TaskHandle;
 void Handle_Dunk_TaskStart(void);
 void Encoder_Pospid_Init(PID_t *upid,float ref, float KP, float KI, float KD);
 float Encoder_PosServo(PID_t *upid, float Feedback_value);
+void BufferOn(void);
+void BufferOff(void);
+void ClipLock(void);
 
 #ifdef __cplusplus
 }

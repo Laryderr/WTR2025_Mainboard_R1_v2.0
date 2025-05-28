@@ -119,10 +119,10 @@ HAL_StatusTypeDef Unitree_Encoder_Autoclibrating(UnitreeMotor *MotorInstance)
     return state_;
 }
 
-HAL_StatusTypeDef Unitree_Force_Pos()
+/*HAL_StatusTypeDef Unitree_Force_Pos()
 {
 
-}
+}*/
 
 
 

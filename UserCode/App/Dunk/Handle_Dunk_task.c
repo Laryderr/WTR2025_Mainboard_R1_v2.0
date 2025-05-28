@@ -210,9 +210,9 @@ void BufferOn(void)
 {
     //if(my_Dunk_Task_t.Buffer_flag == 0)
     //{
-        HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_SET);
+        //HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_SET);
         my_Dunk_Task_t.Buffer_flag = 1;
     //}
 }
@@ -225,9 +225,9 @@ void BufferOff(void)
 {
     //if(my_Dunk_Task_t.Buffer_flag == 1)
     //{
-        HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_RESET);
+        //HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_RESET);
         /*start_time = 
         if(HAL_GetTick() - start_time >= 2000){
             HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_SET);*/
@@ -237,28 +237,10 @@ void BufferOff(void)
     //}
 }
 
-/**
- * @brief 辅助出球气缸开启
- * 
- */
-void BallHelpOn(void)
+void ClipLock(void)
 {
-    HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_RESET);
-    //HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_RESET);
-    my_Dunk_Task_t.Buffer_flag = 1;
+    HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_SET);
 }
-
-/**
- * @brief 辅助出球气缸关闭
- * 
- */
-void BallHelpOff(void)
-{
-    HAL_GPIO_WritePin(POWER1_GPIO_Port,POWER1_Pin,GPIO_PIN_SET);
-    //HAL_GPIO_WritePin(POWER2_GPIO_Port,POWER2_Pin,GPIO_PIN_SET);
-    my_Dunk_Task_t.Buffer_flag = 0;
-}
-
 
 /****************************************************************************************************************************** 
  * @brief 底盘Unitree跳跃电机控制线程
@@ -359,12 +341,19 @@ void Handle_Dunk_Task(void *argument)
         {
             my_Dunk_Task_t.my_Dunk_Status = DUNK_TEST;
         }
-        //气缸
-        if(MyRemote_Data.right_switch == 1)
+
+        //气缸与卡扣控制
+        if (MyRemote_Data.btn_LeftCrossDown == 1)
         {
             BufferOn();
-        }else {
+        }
+        if (MyRemote_Data.btn_LeftCrossMid == 1)
+        {
             BufferOff();
+        }
+        if(MyRemote_Data.btn_LeftCrossUp == 1)
+        {
+            ClipLock();
         }
 
         //状态控制
@@ -411,8 +400,8 @@ void Handle_Dunk_Task(void *argument)
                 
                 if(MyRemote_Data.right_switch == 1)
                 {
-                    BufferOff();
-                }else BufferOn();
+                    BufferOn();
+                }else BufferOff();
                 break;
             case DUNK_TEST:
                 /*unitree_DunkMotor_t[1].cmd.Pos = 0;

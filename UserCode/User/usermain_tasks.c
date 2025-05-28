@@ -153,6 +153,10 @@ void my_main_Task(void *arguement)
             my_Alldir_Chassis_t.target_v.vx = 0;
             my_Alldir_Chassis_t.target_v.vy = 0;
             my_Alldir_Chassis_t.target_v.vw = 0;
+            for (uint8_t i = 0; i < 4; i++)
+            {
+                my_Alldir_Chassis_t.my_wheel[i].target_v = 0;
+            }
 
             JoystickSwitchTitle(ID_STATUS, status_title, &mav_status_title);
             JoystickSwitchMsg(ID_STATUS, status_error_msg, &mav_status_msg);
