@@ -30,7 +30,7 @@ void StartDefaultTask(void *arguement)
     NUC_rev_init();         //NUC接收数据初始化
     m_Chassis_Gyro_Init(); //陀螺仪初始化
     //m_Chassis_Odom_Init(); //码盘初始化
-    //Expansion_Init();      //升降机构初始化
+    Expansion_Init();      //升降机构初始化
     osDelay(200);
 
     //  Tasks Start
@@ -46,7 +46,7 @@ void StartDefaultTask(void *arguement)
     //开启动作线程
     //Handle_Dunk_TaskStart();
     //Patball_TaskStart();
-    //Handle_Shoot_TaskStart();
+    Handle_Shoot_TaskStart();
     //my_debug_TaskStart();               //调试线程
     osDelay(500);
 
@@ -71,6 +71,7 @@ void StartDefaultTask(void *arguement)
         //JoystickSwitchTitle(10, debug_title, &mav_debug_title);
         //JoystickSwitchMsg(10, debug_msg, &mav_dir_choose_msg);
         Laser_Buffer_Decode();
+        HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
         osDelay(1);
     }
 }

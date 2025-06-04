@@ -21,7 +21,7 @@ extern "C" {
 #include "math.h"
 #include "wtr_can.h"
 
-#define FORWARD_ANGLE 24.4
+#define FORWARD_ANGLE -85
 
 /**
  * @brief 底盘状态机
@@ -104,6 +104,7 @@ typedef void (*__XPosServo)(float);
 typedef void (*__YPosServo)(float);
 typedef void (*__YAWPosServo)(float);
 typedef void (*__AllPosServo)(float, float, float);
+typedef void (*__chassis_Aim_at_Basket)(float);
 
 
 /**
@@ -116,6 +117,7 @@ typedef struct
     ChassisPID_t chassis_yawpos_pid;
     ChassisPID_t chassis_xpos_pid;
     ChassisPID_t chassis_ypos_pid;
+    ChassisPID_t chassis_aim_pid;
 
     //整车速度PID对象
     ChassisPID_t chassis_vx_pid;
@@ -143,6 +145,7 @@ typedef struct
     __YPosServo YPosServo;
     __YAWPosServo YAWPosServo;
     __AllPosServo AllPosServo; 
+    __chassis_Aim_at_Basket chassis_Aim_at_Basket;
 
 }Alldir_Chassis_t;
 

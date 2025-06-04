@@ -12,9 +12,9 @@ extern "C" {
 #define INITIAL_DELAY_TIME 2000//投篮臂自然下垂给定时间ms
 #define Best_Throw_Degree 130 - 22.86 //输出轴最佳出手角度
 #define Motor_to_Chassis_L 0.0395 //电机输出轴距离底盘中心水平距离
-#define Motor_HeightLow   0 //三个高度挡位时输出轴离地高度
-#define Motor_HeightMedium   0 
-#define Motor_HeightHigh   0 
+#define Motor_HeightLow   0 //低挡位时输出轴离地高度
+#define Motor_HeightMedium   0 //中挡位时输出轴离地高度
+#define Motor_HeightHigh   0 //高挡位时输出轴离地高度
 
 enum Shoot_Status{
     SHOOT_IDLE = 0,

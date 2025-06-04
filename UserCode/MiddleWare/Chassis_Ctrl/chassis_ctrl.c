@@ -138,12 +138,13 @@ void chassis_YAWPoseServo_calc(float ref)
 
 void chassis_Aim_at_Basket(float ref)
 {
-    my_Alldir_Chassis_t.chassis_yawpos_pid.ref = ref;
-    my_Alldir_Chassis_t.chassis_yawpos_pid.fdb = camera_basket_xyz[0];
-    chassis_pid_calc(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.chassis_yawpos_pid.fdb);
+    my_Alldir_Chassis_t.chassis_aim_pid.ref = ref;
+    my_Alldir_Chassis_t.chassis_aim_pid.fdb = camera_basket_xyz[0];
+    chassis_pid_calc(&my_Alldir_Chassis_t.chassis_aim_pid,my_Alldir_Chassis_t.chassis_aim_pid.fdb);
     
-    my_Alldir_Chassis_t.chassis_vw_pid.ref = my_Alldir_Chassis_t.chassis_yawpos_pid.output;
-    my_Alldir_Chassis_t.target_v.vw = my_Alldir_Chassis_t.chassis_yawpos_pid.output;
+    //暂不放内环
+    my_Alldir_Chassis_t.chassis_vw_pid.ref = my_Alldir_Chassis_t.chassis_aim_pid.output;
+    my_Alldir_Chassis_t.target_v.vw = -my_Alldir_Chassis_t.chassis_aim_pid.output;
 }
 
 /**
@@ -187,6 +188,7 @@ void my_Chassis_Init(void)
     my_Alldir_Chassis_t.YPosServo = chassis_YPoseServo_calc;
     my_Alldir_Chassis_t.YAWPosServo = chassis_YAWPoseServo_calc;
     my_Alldir_Chassis_t.AllPosServo = All_Pose_Servo;
+    my_Alldir_Chassis_t.chassis_Aim_at_Basket = chassis_Aim_at_Basket;
 
     for (int i = 0; i < 4; i++){
         hDJI[i].motorType = M3508;
@@ -208,6 +210,7 @@ void my_Chassis_Init(void)
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,6,0,0.1);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,6,0,0.1);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.target_pos.yawpos,0.28,0,0.02);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.3,0,0.15);
     //底盘位置初始化
     my_Alldir_Chassis_t.current_pos.xpos = 0;
     my_Alldir_Chassis_t.current_pos.ypos = 0;
@@ -328,9 +331,10 @@ void my_Chassis_Ctrl_Task(void *arguement)
             }
         }else if(my_Alldir_Chassis_t.state == CHASSIS_AUTO_RUNNING)
         {
-            my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
+            /*my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
             my_Alldir_Chassis_t.XPosServo(1.5);
-            my_Alldir_Chassis_t.YPosServo(-1);
+            my_Alldir_Chassis_t.YPosServo(-1);*/
+            my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
         }
 
         //底盘运动学逆解算

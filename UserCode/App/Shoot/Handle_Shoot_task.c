@@ -153,7 +153,8 @@ void Handle_Shoot_Task(void*argument)
             unitree_DunkMotor_t[3].cmd.K_P = 0;
             unitree_DunkMotor_t[3].cmd.K_W = 0;
             unitree_DunkMotor_t[3].cmd.W = 0;
-            unitree_DunkMotor_t[3].cmd.T = -Encoder_PosServo(&my_Dunk_Task_t.Encoder_PosPID_t,encoderData.angle);
+            //unitree_DunkMotor_t[3].cmd.T = -Encoder_PosServo(&my_Dunk_Task_t.Encoder_PosPID_t,encoderData.angle);
+            unitree_DunkMotor_t[3].cmd.T = 0;
 
             unitree_DunkMotor_t[4].cmd.Pos = 0;
             unitree_DunkMotor_t[4].cmd.K_P = 0;
@@ -169,29 +170,30 @@ void Handle_Shoot_Task(void*argument)
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.T = -4;
+                unitree_DunkMotor_t[3].cmd.T = -5;
+                
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
                 unitree_DunkMotor_t[4].cmd.K_P = 0;
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
-                unitree_DunkMotor_t[4].cmd.T = 4;
+                unitree_DunkMotor_t[4].cmd.T = 5;
                 my_Shoot_Task_T.Shoot_Completed_Flag =1;
             }
 
             //刹停力矩
-            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + 95 )
+            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + 100 )
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.T = 3.8;
+                unitree_DunkMotor_t[3].cmd.T = 6;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
                 unitree_DunkMotor_t[4].cmd.K_P = 0;
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
-                unitree_DunkMotor_t[4].cmd.T = -3.8;
+                unitree_DunkMotor_t[4].cmd.T = -6;
                 my_Shoot_Task_T.Shoot_Completed_Flag =2;
                 
             }
@@ -201,7 +203,7 @@ void Handle_Shoot_Task(void*argument)
                 unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0.3;
-                unitree_DunkMotor_t[3].cmd.W = 0.05;
+                unitree_DunkMotor_t[3].cmd.W = 0.5;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;

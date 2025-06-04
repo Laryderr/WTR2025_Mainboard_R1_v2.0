@@ -35,17 +35,20 @@ typedef struct{
     bool Stood_Flag[3];             //三条腿伸直完成标志
     bool throw_delay_flag ;//站立后延时稳定标志位
     uint8_t Jump_Completed_Flag ;   //是否完成一次跳跃
+    float Unitree_DunkMotor_LimitingPos[2][3]; // 0:抬腿极限位置，1：伸腿极限位置
+
     //投篮
     float Throwball_InitialPos[2]; //投球电机初始位置
     bool Foundthrow_InitialPos_Flag; //是否找到投球电机初始位置
     bool Time_TO_Jump ; //投球臂是否转动到跳跃时机
     uint8_t Throwball_Flag; //投球状态标志
 
+    //缓冲
     bool Buffer_flag ; //1开启
     bool Buffer_flag2 ; //1开启
-    bool BallHelp_flag ; //1 on
-    float Unitree_DunkMotor_LimitingPos[2][3]; // 0:抬腿极限位置，1：伸腿极限位置
-
+    uint64_t ClipOnOff_time;//卡扣通电计时器
+    bool Clip_count_flag;
+    
     int32_t Encoder_InitialPos ; //投篮臂上电时编码器角度
     PID_t Encoder_PosPID_t; //投篮臂角编码器位置PID结构体
 }Dunk_Task_t;
