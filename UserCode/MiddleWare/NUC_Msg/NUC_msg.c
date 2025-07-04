@@ -8,23 +8,36 @@ float Lidar_pose[3] = {0};
 float camera_basket_xyz[3] = {0}; //篮筐的x(水平),y（竖直）,z（深度）坐标（相机坐标系）
 bool packet_valid = false;
 
+//激光雷达相关
 static bool set_offset_flag = false;
 static float raw_lidar[3];
 static float lidar_offset[3] = {0};
 static float lidar_offset_sum[3] = {0};
 static uint8_t lidar_offset_count = 0;
 
+//相机相关
 #define CAMERA_FILTER_WINDOW 5
 static float raw_camera[3]; // 中间变量：相机原始值
 static float camera_buffer[3][CAMERA_FILTER_WINDOW] = {0};
 static uint8_t camera_index = 0;
 static bool camera_buffer_full = false;
 
+/**
+ * @brief NUC接收初始化
+ * 
+ */
 void NUC_rev_init()
 {
     HAL_UART_Receive_IT(&NUC_MSG_UART_HANDLE, &nuc_rev_byte, 1);
 }
 
+/**
+ * @brief CRC接收计算
+ * 
+ * @param data 
+ * @param length 
+ * @return uint16_t 
+ */
 uint16_t ComputeCRC16(uint8_t* data, uint16_t length) {
     uint16_t crc = 0xFFFF;
     for (uint16_t i = 0; i < length; ++i) {
@@ -35,6 +48,10 @@ uint16_t ComputeCRC16(uint8_t* data, uint16_t length) {
     return crc;
 }
 
+/**
+ * @brief NUC数据解码
+ * 
+ */
 void NUC_Msg_Decode()
 {
     switch (rx_index) {
@@ -131,4 +148,31 @@ void NUC_Msg_Decode()
             break;
     }
     HAL_UART_Receive_IT(&NUC_MSG_UART_HANDLE, &nuc_rev_byte, 1);
+}
+
+/**
+ * @brief 向NUC发送底盘当前位姿数据
+ * @param pos 要发送的位姿结构体指针
+ */
+void SendCurrentPos_ToNUC()
+{
+    static uint8_t tx_buffer[20] = {0}; // 帧头 + 4个float + CRC = 20字节
+    uint16_t crc;
+
+    // 帧头
+    tx_buffer[0] = 0x55;
+    tx_buffer[1] = 0xAA;
+
+    // 写入 float 数据（xpos, ypos, yawpos, yaw_offset）
+    memcpy(&tx_buffer[2],  &(my_Alldir_Chassis_t.current_pos.xpos),       4);
+    memcpy(&tx_buffer[6],  &(my_Alldir_Chassis_t.current_pos.ypos),       4);
+    memcpy(&tx_buffer[10], &(my_Alldir_Chassis_t.current_pos.yawpos),     4);
+    memcpy(&tx_buffer[14], &(my_Alldir_Chassis_t.current_pos.yaw_offset), 4);
+
+    // 计算 CRC16，前16字节为数据
+    crc = ComputeCRC16(tx_buffer, 18);
+    memcpy(&tx_buffer[18], &crc, 2);  // 低字节在前，高字节在后
+
+    // 发送
+    HAL_UART_Transmit_DMA(&NUC_MSG_UART_HANDLE, tx_buffer, sizeof(tx_buffer));
 }

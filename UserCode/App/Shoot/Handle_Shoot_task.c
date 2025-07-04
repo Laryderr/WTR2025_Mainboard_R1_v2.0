@@ -121,6 +121,8 @@ void Handle_Shoot_Task(void*argument)
     {
         Error_Handler();
     }
+    my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+    osDelay(1000);
     for (;;)
     {
         //遥控器控制投篮状态机
@@ -164,19 +166,23 @@ void Handle_Shoot_Task(void*argument)
             osDelay(1);
             break;
         case SHOOT_ING:
+            if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_2)==1)
+            {
+                my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+            }
             if (my_Shoot_Task_T.Shoot_Completed_Flag == 0)
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.T = -5;
+                unitree_DunkMotor_t[3].cmd.T = -2.5;
                 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
                 unitree_DunkMotor_t[4].cmd.K_P = 0;
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
-                unitree_DunkMotor_t[4].cmd.T = 5;
+                unitree_DunkMotor_t[4].cmd.T = 2.5;
                 my_Shoot_Task_T.Shoot_Completed_Flag =1;
             }
 
@@ -187,23 +193,24 @@ void Handle_Shoot_Task(void*argument)
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
                 unitree_DunkMotor_t[3].cmd.K_W = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.T = 6;
+                unitree_DunkMotor_t[3].cmd.T = 2.5;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
                 unitree_DunkMotor_t[4].cmd.K_P = 0;
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
-                unitree_DunkMotor_t[4].cmd.T = -6;
+                unitree_DunkMotor_t[4].cmd.T = -2.5;
                 my_Shoot_Task_T.Shoot_Completed_Flag =2;
                 
             }
+            
             //下降控制
             if (encoderData.angle <= Encoder_VertPos + 70 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
-                unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
+                unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = 0.3;
-                unitree_DunkMotor_t[3].cmd.W = 0.5;
+                unitree_DunkMotor_t[3].cmd.K_W = 0.8;
+                unitree_DunkMotor_t[3].cmd.W = 0.4;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
@@ -223,7 +230,7 @@ void Handle_Shoot_Task(void*argument)
                 //unitree_DunkMotor_t[3].cmd.T = - 0.6;
             }
 
-            if(my_Shoot_Task_T.Shoot_Completed_Flag == 3&&encoderData.angle <= Encoder_VertPos)
+            if(my_Shoot_Task_T.Shoot_Completed_Flag == 3&&encoderData.angle <= Encoder_VertPos + 3)
             {
                 unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
@@ -241,7 +248,11 @@ void Handle_Shoot_Task(void*argument)
             osDelay(1);
             break;
         case SHOOT_FINISH :
-            my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+            if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_2)==1)
+            {
+                my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+            }
+            //my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
             break;    
         default:
             break;

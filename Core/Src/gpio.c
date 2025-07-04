@@ -102,6 +102,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PB2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /*Configure GPIO pins : AS69_MD1_Pin AS69_MD0_Pin */
   GPIO_InitStruct.Pin = AS69_MD1_Pin|AS69_MD0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;

@@ -172,7 +172,7 @@ void my_Chassis_Init(void)
     //注意cube里的can引脚配置
     CANFilterInit(&hcan1);
     osDelay(2);
-    //CAN2FilterInit(&hcan2);
+    //CAN2FilterInit(&hcan2);//不用
     ENCODER_CANFilterInit(&hcan2);
     HAL_CAN_Start(&hcan2);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
@@ -181,7 +181,7 @@ void my_Chassis_Init(void)
     }*/
 
     if (HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK) {
-        Error_Handler();
+        //Error_Handler();
     }
 
     my_Alldir_Chassis_t.XPosServo = chassis_XPoseServo_calc;
@@ -210,7 +210,7 @@ void my_Chassis_Init(void)
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,6,0,0.1);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,6,0,0.1);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.target_pos.yawpos,0.28,0,0.02);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.3,0,0.15);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.3,0,0.2);
     //底盘位置初始化
     my_Alldir_Chassis_t.current_pos.xpos = 0;
     my_Alldir_Chassis_t.current_pos.ypos = 0;
@@ -287,7 +287,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
         }
 
         //底盘状态机执行
-        if (my_Alldir_Chassis_t.state == CHASSIS_STOP)
+        /*if (my_Alldir_Chassis_t.state == CHASSIS_STOP)
         {
             my_Alldir_Chassis_t.target_v.vx = 0;
             my_Alldir_Chassis_t.target_v.vy = 0;
@@ -331,11 +331,13 @@ void my_Chassis_Ctrl_Task(void *arguement)
             }
         }else if(my_Alldir_Chassis_t.state == CHASSIS_AUTO_RUNNING)
         {
-            /*my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
+            my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
             my_Alldir_Chassis_t.XPosServo(1.5);
-            my_Alldir_Chassis_t.YPosServo(-1);*/
+            my_Alldir_Chassis_t.YPosServo(-1);
             my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
-        }
+        }*/
+        //测试
+        my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
 
         //底盘运动学逆解算
         Inverse_kinematic_equation(&my_Alldir_Chassis_t);

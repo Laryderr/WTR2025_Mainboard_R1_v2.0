@@ -210,8 +210,8 @@ void BufferOn(void)
 {
     //if(my_Dunk_Task_t.Buffer_flag == 0)
     //{
-        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_SET);
+        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_RESET);
         //HAL_GPIO_WritePin(POWER3_GPIO_Port,POWER3_Pin,GPIO_PIN_SET);
         my_Dunk_Task_t.Buffer_flag = 1;
         my_Dunk_Task_t.ClipOnOff_time = 0;
@@ -225,6 +225,7 @@ void BufferOn(void)
  */
 void BufferOff(void)
 {
+    HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_RESET);
     if(my_Dunk_Task_t.Clip_count_flag == 0)
     {
         my_Dunk_Task_t.ClipOnOff_time = HAL_GetTick();
@@ -232,15 +233,14 @@ void BufferOff(void)
     }
     
     //卡扣通电时间限制
-    if (HAL_GetTick() - my_Dunk_Task_t.ClipOnOff_time >= 1500)
+    if (HAL_GetTick() - my_Dunk_Task_t.ClipOnOff_time >= 2000)
     {
-        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_SET);
-        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_SET);
-    }else{
-        HAL_GPIO_WritePin(Buffer_POWER_GPIO_Port,Buffer_POWER_Pin,GPIO_PIN_SET);
         HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_RESET);
+    }else{
+        HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_SET);
     }
     my_Dunk_Task_t.Buffer_flag = 0;
+    //HAL_GPIO_WritePin(Clip_POWER_GPIO_Port,Clip_POWER_Pin,GPIO_PIN_RESET);
 }
 
 void ClipLock(void)

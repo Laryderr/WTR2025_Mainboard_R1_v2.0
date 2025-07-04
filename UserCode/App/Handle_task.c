@@ -39,7 +39,7 @@ void my_handle_Task(void)
     case HANDLE_IDLE_MODE:
         /*Expansion_Up.contract();
         Expansion_Down.contract();*/
-        osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
+        //osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
         osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
         osThreadSuspend(Patball_TaskHandle);
         JoystickDelete(ID_HANDLE_DUNK, &mav_joystick_del);

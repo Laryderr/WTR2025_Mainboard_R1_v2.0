@@ -71,7 +71,9 @@ void StartDefaultTask(void *arguement)
         //JoystickSwitchTitle(10, debug_title, &mav_debug_title);
         //JoystickSwitchMsg(10, debug_msg, &mav_dir_choose_msg);
         Laser_Buffer_Decode();
+        SendCurrentPos_ToNUC();
         HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
+        //BufferOn();
         osDelay(1);
     }
 }

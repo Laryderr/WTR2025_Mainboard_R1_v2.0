@@ -73,6 +73,12 @@
           "elFile": "None",
           "optionBytes": ".eide/debug.st.option.bytes.ini",
           "otherCmds": ""
+        },
+        "OpenOCD": {
+          "bin": "",
+          "target": "stm32f4x",
+          "interface": "jlink",
+          "baseAddr": "0x08000000"
         }
       },
       "custom_dep": {
