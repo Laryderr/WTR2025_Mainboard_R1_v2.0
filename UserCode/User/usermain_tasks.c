@@ -68,35 +68,46 @@ void my_main_Task(void *arguement)
     myHandle_State = HANDLE_IDLE_MODE;
 
     for(;;)
-    {
+    {   
+        if (myHandle_State != HANDLE_IDLE_MODE)
+        {
+            running_status = AUTO_MODE;
+        }else running_status = HANDLE_MODE;
+        
         //发送遥控器状态显示面框
-
-         //判断遥控器底盘指令
-        switch ((int)MyRemote_Data.usr_right_knob)
+        //判断遥控器底盘指令
+        if(running_status == HANDLE_MODE)
         {
-        case 0:
-        my_Alldir_Chassis_t.state = CHASSIS_STOP;
-            break;
-        case 4:
-        my_Alldir_Chassis_t.state = CHASSIS_HANDLE_RUNNING;
-            break;
-        case -4:
-        my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
-            break;
-        
-        default:
-            break;
-        }
-        
-        if(MyRemote_Data.left_switch == 0 && my_Alldir_Chassis_t.state != CHASSIS_READY)
-        {
-            my_Alldir_Chassis_t.state = CHASSIS_STOP;
-            for (uint8_t i = 0; i < 3; i++)
+            switch ((int)MyRemote_Data.usr_left_knob)
             {
-                my_Alldir_Chassis_t.my_wheel[i].state = WHEEL_STOP;
+            case 0:
+            my_Alldir_Chassis_t.state = CHASSIS_STOP;
+                break;
+            case 4:
+            my_Alldir_Chassis_t.state = CHASSIS_HANDLE_RUNNING;
+                break;
+            case -4:
+            my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
+                break;
+            
+            default:
+                break;
             }
-        }
 
+            if(MyRemote_Data.left_switch == 0 && my_Alldir_Chassis_t.state != CHASSIS_READY)
+            {
+                my_Alldir_Chassis_t.state = CHASSIS_STOP;
+                for (uint8_t i = 0; i < 3; i++)
+                {
+                    my_Alldir_Chassis_t.my_wheel[i].state = WHEEL_STOP;
+                }
+            }
+        }else if (running_status == AUTO_MODE)
+        {
+            my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
+        }
+        
+        
         //底盘状态
         switch (my_Alldir_Chassis_t.state)
         {
@@ -153,7 +164,7 @@ void my_main_Task(void *arguement)
             my_Alldir_Chassis_t.target_v.vx = 0;
             my_Alldir_Chassis_t.target_v.vy = 0;
             my_Alldir_Chassis_t.target_v.vw = 0;
-            for (uint8_t i = 0; i < 4; i++)
+            for (uint8_t i = 0; i < 3; i++)
             {
                 my_Alldir_Chassis_t.my_wheel[i].target_v = 0;
             }

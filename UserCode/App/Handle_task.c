@@ -39,13 +39,18 @@ void my_handle_Task(void)
     case HANDLE_IDLE_MODE:
         /*Expansion_Up.contract();
         Expansion_Down.contract();*/
-        //osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
+        osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
         osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
         osThreadSuspend(Patball_TaskHandle);
         JoystickDelete(ID_HANDLE_DUNK, &mav_joystick_del);
         JoystickDelete(ID_HANDLE_SHOOT, &mav_joystick_del);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
         JoystickSwitchMsg(ID_MODE, mode_idle_msg, &mav_mode_msg);
+        
+        my_Alldir_Chassis_t.now_mark_flag = 0;
+        my_Alldir_Chassis_t.Now_marked_pos.xpos = 0;
+        my_Alldir_Chassis_t.Now_marked_pos.ypos = 0;
+
         osDelay(1);
         break;
     case HANDLE_DUNK_MODE:
@@ -54,6 +59,9 @@ void my_handle_Task(void)
         osThreadResume(unitree_dunk_ctrl_TaskHandle);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
         JoystickSwitchMsg(ID_MODE, mode_dunk_msg, &mav_mode_msg);
+        //自动定位 篮筐瞄准
+        my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
+        Now_Pose_Servo();
         osDelay(1);
         break;
     case HANDLE_INTERCEPT_MODE:
@@ -72,6 +80,10 @@ void my_handle_Task(void)
         osThreadResume(unitree_shoot_ctrl_TaskHandle);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
         JoystickSwitchMsg(ID_MODE, mode_shoot_msg, &mav_mode_msg);
+
+        //自动定位 篮筐瞄准
+        my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
+        Now_Pose_Servo();
         osDelay(1);
         break;
     default:

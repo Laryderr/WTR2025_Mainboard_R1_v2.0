@@ -4,10 +4,10 @@
   "dependenceList": [],
   "srcDirs": [
     "Core",
-    "Drivers",
-    "Middlewares",
     "UserCode",
-    "UserCode/Module"
+    "UserCode/Module",
+    "Drivers",
+    "Middlewares"
   ],
   "virtualFolder": {
     "name": "<virtual_root>",
@@ -91,7 +91,18 @@
           "UserCode",
           "Middlewares/Third_Party/FreeRTOS/Source/include",
           "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
-          "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
+          "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F",
+          "Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+          "Middlewares/ST/STM32_MotionAC_Library/Inc",
+          "Middlewares/ST/STM32_MotionAW_Library/Inc",
+          "Middlewares/ST/STM32_MotionEC_Library/Inc",
+          "Middlewares/ST/STM32_MotionFX_Library/Inc",
+          "Middlewares/ST/STM32_MotionGC_Library/Inc",
+          "Middlewares/ST/STM32_MotionID_Library/Inc",
+          "Middlewares/ST/STM32_MotionMC_Library/Inc",
+          "Middlewares/ST/STM32_MotionPM_Library/Inc",
+          "Middlewares/ST/STM32_MotionPW_Library/Inc",
+          "Middlewares/ST/STM32_MotionTL_Library/Inc"
         ],
         "libList": [],
         "defineList": [
@@ -105,7 +116,7 @@
           "beforeBuildTasks": [],
           "afterBuildTasks": [],
           "global": {
-            "$float-abi-type": "softfp",
+            "$float-abi-type": "hard",
             "output-debug-info": "enable",
             "misc-control": "--specs=nosys.specs --specs=nano.specs"
           },
@@ -115,18 +126,14 @@
             "optimization": "level-debug",
             "warnings": "all-warnings",
             "one-elf-section-per-function": true,
-            "one-elf-section-per-data": true,
-            "C_FLAGS": "",
-            "CXX_FLAGS": ""
+            "one-elf-section-per-data": true
           },
-          "asm-compiler": {
-            "ASM_FLAGS": ""
-          },
+          "asm-compiler": {},
           "linker": {
             "output-format": "elf",
             "remove-unused-input-sections": true,
-            "LD_FLAGS": "",
-            "LIB_FLAGS": "-lm"
+            "LIB_FLAGS": "-lm",
+            "$toolName": "auto"
           }
         }
       }

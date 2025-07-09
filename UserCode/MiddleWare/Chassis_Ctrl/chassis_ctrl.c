@@ -161,6 +161,23 @@ void All_Pose_Servo(float ref_x,float ref_y,float ref_yaw)
     chassis_YAWPoseServo_calc(ref_yaw);
 }
 
+/**
+ * @brief 停车瞄筐
+ * 
+ */
+void Now_Pose_Servo(void)
+{
+    if (my_Alldir_Chassis_t.now_mark_flag == 0)
+    {
+        my_Alldir_Chassis_t.Now_marked_pos.xpos = my_Alldir_Chassis_t.current_pos.xpos;
+        my_Alldir_Chassis_t.Now_marked_pos.ypos = my_Alldir_Chassis_t.current_pos.ypos;
+        my_Alldir_Chassis_t.now_mark_flag = 1;
+    }
+    chassis_XPoseServo_calc(my_Alldir_Chassis_t.Now_marked_pos.xpos);
+    chassis_YPoseServo_calc(my_Alldir_Chassis_t.Now_marked_pos.ypos);
+    //chassis_Aim_at_Basket(0.1);
+}
+
 
 /************************************************************
  * @brief 底盘初始化
@@ -205,7 +222,7 @@ void my_Chassis_Init(void)
     //底盘速度pid初始化
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vx_pid,my_Alldir_Chassis_t.target_v.vx,0,0,0);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vy_pid,my_Alldir_Chassis_t.target_v.vy,0,0,0);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0,0,0);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0.2,0,0);
     //底盘位置pid初始化
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,6,0,0.1);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,6,0,0.1);
@@ -220,6 +237,7 @@ void my_Chassis_Init(void)
     my_Alldir_Chassis_t.last_pos.ypos = 0;
     my_Alldir_Chassis_t.last_pos.yawpos = 0;
 
+    my_Alldir_Chassis_t.now_mark_flag = 0;
     my_Alldir_Chassis_t.count_start_time = 0; 
 }
 
@@ -287,7 +305,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
         }
 
         //底盘状态机执行
-        /*if (my_Alldir_Chassis_t.state == CHASSIS_STOP)
+        if (my_Alldir_Chassis_t.state == CHASSIS_STOP)
         {
             my_Alldir_Chassis_t.target_v.vx = 0;
             my_Alldir_Chassis_t.target_v.vy = 0;
@@ -331,13 +349,11 @@ void my_Chassis_Ctrl_Task(void *arguement)
             }
         }else if(my_Alldir_Chassis_t.state == CHASSIS_AUTO_RUNNING)
         {
-            my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
+            /*my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
             my_Alldir_Chassis_t.XPosServo(1.5);
-            my_Alldir_Chassis_t.YPosServo(-1);
-            my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
-        }*/
-        //测试
-        my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
+            my_Alldir_Chassis_t.YPosServo(-1);*/
+            //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
+        }
 
         //底盘运动学逆解算
         Inverse_kinematic_equation(&my_Alldir_Chassis_t);

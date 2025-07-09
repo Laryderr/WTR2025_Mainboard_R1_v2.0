@@ -63,6 +63,8 @@ void Error_Handler(void);
 #define Clip_POWER_GPIO_Port GPIOH
 #define Buffer_POWER_Pin GPIO_PIN_3
 #define Buffer_POWER_GPIO_Port GPIOH
+#define Clip_Ctrl_Pin GPIO_PIN_1
+#define Clip_Ctrl_GPIO_Port GPIOF
 #define POWER3_Pin GPIO_PIN_4
 #define POWER3_GPIO_Port GPIOH
 #define POWER4_Pin GPIO_PIN_5

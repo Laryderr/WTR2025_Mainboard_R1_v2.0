@@ -121,8 +121,8 @@ void Handle_Shoot_Task(void*argument)
     {
         Error_Handler();
     }
-    my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
-    osDelay(1000);
+    /*my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+    osDelay(1000);*/
     for (;;)
     {
         //遥控器控制投篮状态机
@@ -135,6 +135,7 @@ void Handle_Shoot_Task(void*argument)
             my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
         }
 
+        
         //升降机构固定在中部
         /*Expansion_Up.contract();
         Expansion_Down.contract();*/
@@ -209,8 +210,8 @@ void Handle_Shoot_Task(void*argument)
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = 0.8;
-                unitree_DunkMotor_t[3].cmd.W = 0.4;
+                unitree_DunkMotor_t[3].cmd.K_W = 0.7;
+                unitree_DunkMotor_t[3].cmd.W = 1;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
@@ -223,11 +224,6 @@ void Handle_Shoot_Task(void*argument)
                     my_Shoot_Task_T.Shoot_Completed_Flag = 3;
                 }
 
-                /*unitree_DunkMotor_t[4].cmd.Pos = 0;
-                unitree_DunkMotor_t[4].cmd.K_P = 0;
-                unitree_DunkMotor_t[4].cmd.K_W = 0.2;
-                unitree_DunkMotor_t[4].cmd.W = -0.1;*/
-                //unitree_DunkMotor_t[3].cmd.T = - 0.6;
             }
 
             if(my_Shoot_Task_T.Shoot_Completed_Flag == 3&&encoderData.angle <= Encoder_VertPos + 3)

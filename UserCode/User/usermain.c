@@ -73,6 +73,13 @@ void StartDefaultTask(void *arguement)
         Laser_Buffer_Decode();
         SendCurrentPos_ToNUC();
         HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
+        /*if (MyRemote_Data.left_switch == 0)
+        {
+            BufferOn();
+        }else if(MyRemote_Data.left_switch == 1)
+        {
+            BufferOff();
+        }*/
         //BufferOn();
         osDelay(1);
     }

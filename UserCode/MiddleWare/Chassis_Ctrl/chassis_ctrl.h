@@ -21,7 +21,7 @@ extern "C" {
 #include "math.h"
 #include "wtr_can.h"
 
-#define FORWARD_ANGLE -85
+#define FORWARD_ANGLE -87.58
 
 /**
  * @brief 底盘状态机
@@ -130,6 +130,8 @@ typedef struct
     Chassis_pos_t target_pos;
     Chassis_pos_t current_pos;
     Chassis_pos_t last_pos;
+    Chassis_pos_t Now_marked_pos;
+    bool now_mark_flag;
     float init_x_pos;
     float init_y_pos;
     bool chassis_calibrate_flag;
@@ -167,6 +169,8 @@ void Forward_kinematics_equation(Alldir_Chassis_t *this_chassis);
 void chassis_XPoseServo_calc(float ref);
 void chassis_YPoseServo_calc(float ref);
 void chassis_YAWPoseServo_calc(float ref);
+
+void Now_Pose_Servo(void);
 
 #ifdef __cplusplus
 }
