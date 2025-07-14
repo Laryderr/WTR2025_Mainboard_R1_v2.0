@@ -2,6 +2,8 @@
 
 #include "Caculate.h"
 #include "math.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 //增量式PID算法
 void PID_Calc(PID_t *pid){
@@ -89,4 +91,10 @@ void speedServo(float ref, DJI_t * motor){
 float mps_to_rpm(float velocity)
 {
     return ((velocity * 60.0f) / (2.0f * 3.1415926) );
+}
+
+void float_to_char(float value, char* buffer, int decimals) {
+    int integer = (int)value;
+    int decimal = (int)((value - integer) * pow(10, decimals));  // 提取小数部分
+    sprintf(buffer, "%d.%02d", integer, abs(decimal));  // 格式化为字符串
 }

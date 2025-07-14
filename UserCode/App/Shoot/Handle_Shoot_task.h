@@ -34,6 +34,11 @@ typedef struct{
 
     float HorizontalDist_to_Basket;//篮球出手点距离篮筐中心水平距离
     float ShotTime_Ball_Heigh;//篮球中心出手离地高度
+    uint8_t shoot_point;
+
+    bool camera_aim_flag;
+    float camera_aim_angle;
+    bool camera_get_angle_flag;
     
     
 }Shoot_Task_T ;                                

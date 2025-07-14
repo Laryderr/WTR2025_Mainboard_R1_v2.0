@@ -50,3 +50,13 @@ char status_running_msg[20] = "Running";
 char status_ready_msg[20] = "Ready";
 char status_stop_msg[20] = "Stop";
 char status_error_msg[20] = "Error";
+
+mavlink_joystick_air_dashboard_set_title_t mav_posx_title;
+mavlink_joystick_air_dashboard_set_msg_t mav_posx_msg;
+char posx_title[20]      = "PositionX";
+char posx_msg[20]         ;  
+
+mavlink_joystick_air_dashboard_set_title_t mav_posy_title;
+mavlink_joystick_air_dashboard_set_msg_t mav_posy_msg;
+char posy_title[20]      = "PositionY";
+char posy_msg[20]         ;  

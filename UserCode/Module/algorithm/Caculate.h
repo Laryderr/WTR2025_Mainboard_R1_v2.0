@@ -10,6 +10,7 @@ void positionServo(float ref, DJI_t * motor);
 
 void speedServo(float ref, DJI_t * motor);
 float mps_to_rpm(float velocity);
+void float_to_char(float value, char* buffer, int decimals);
 
 #ifdef __cplusplus
 }

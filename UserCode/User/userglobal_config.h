@@ -30,7 +30,8 @@ extern "C"{
 #define ID_STATUS           4
 #define ID_MODE             5
 #define ID_RST              6
-
+#define ID_POSITIONX        7
+#define ID_POSITIONY        8
 
 
 #define chassis_R           (152 * 0.001) // 全向轮半径
@@ -78,7 +79,15 @@ extern char status_ready_msg[20];
 extern char status_stop_msg[20];
 extern char status_error_msg[20];
 
+extern mavlink_joystick_air_dashboard_set_title_t mav_posx_title;
+extern mavlink_joystick_air_dashboard_set_msg_t mav_posx_msg;
+extern char posx_title[20];
+extern char posx_msg[20]; 
 
+extern mavlink_joystick_air_dashboard_set_title_t mav_posy_title;
+extern mavlink_joystick_air_dashboard_set_msg_t mav_posy_msg;
+extern char posy_title[20];
+extern char posy_msg[20]; 
 
 
 

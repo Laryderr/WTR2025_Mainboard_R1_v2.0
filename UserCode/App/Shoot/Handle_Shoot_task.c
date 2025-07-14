@@ -88,6 +88,14 @@ HAL_StatusTypeDef Shootmotor_Init(Shoot_Task_T * my_T)
     my_T->target_throw_deg = 0;
     my_T->target_throw_w   = 0;
     my_T->Shoot_Completed_Flag =0;
+    my_T->shoot_point = 0;
+    my_T->camera_aim_flag = 0;
+    my_T->camera_get_angle_flag = 0;
+
+    if(encoderData.angle != 0)
+    {
+        return HAL_OK;
+    }else return HAL_ERROR;
 
     if (Shootmotor_Contect_InitialPos(my_T) == HAL_OK )
     {
@@ -111,6 +119,7 @@ float Shot_Speed_Calculation(float L,float H,float throw_degree)
 
 
 
+
 /****************************************************************************************************************************** 
  * @brief Unitree电机后抛投篮控制线程实现
  * 
@@ -126,11 +135,11 @@ void Handle_Shoot_Task(void*argument)
     for (;;)
     {
         //遥控器控制投篮状态机
-        if(MyRemote_Data.btn_KnobR == 1)
+        if(BtnScan_Press(MyRemote_Data.btn_LeftCrossUp))
         {
             my_Shoot_Task_T.myshoot_status = SHOOT_ING;
         }
-        if (MyRemote_Data.btn_KnobL == 1)
+        if (BtnScan_Press(MyRemote_Data.btn_LeftCrossMid))
         {
             my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
         }
@@ -167,28 +176,47 @@ void Handle_Shoot_Task(void*argument)
             osDelay(1);
             break;
         case SHOOT_ING:
+            
             if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_2)==1)
             {
                 my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
             }
             if (my_Shoot_Task_T.Shoot_Completed_Flag == 0)
             {
-                unitree_DunkMotor_t[3].cmd.Pos = 0;
-                unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = 0;
-                unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.T = -2.5;
+                if (my_Shoot_Task_T.shoot_point != 3)
+                {
+                    unitree_DunkMotor_t[3].cmd.Pos = 0;
+                    unitree_DunkMotor_t[3].cmd.K_P = 0;
+                    unitree_DunkMotor_t[3].cmd.K_W = 0.913;
+                    unitree_DunkMotor_t[3].cmd.W = -0.7;
+                    unitree_DunkMotor_t[3].cmd.T = 0;//-3.1
+                    
+                    unitree_DunkMotor_t[4].cmd.Pos = 0;
+                    unitree_DunkMotor_t[4].cmd.K_P = 0;
+                    unitree_DunkMotor_t[4].cmd.K_W = 0.913;
+                    unitree_DunkMotor_t[4].cmd.W = 0.7;
+                    unitree_DunkMotor_t[4].cmd.T = 0;//3.1
+                    my_Shoot_Task_T.Shoot_Completed_Flag =1;
+                }else{
+                    unitree_DunkMotor_t[3].cmd.Pos = 0;
+                    unitree_DunkMotor_t[3].cmd.K_P = 0;
+                    unitree_DunkMotor_t[3].cmd.K_W = 0.895;
+                    unitree_DunkMotor_t[3].cmd.W = -0.7;
+                    unitree_DunkMotor_t[3].cmd.T = 0;//-3.1
+                    
+                    unitree_DunkMotor_t[4].cmd.Pos = 0;
+                    unitree_DunkMotor_t[4].cmd.K_P = 0;
+                    unitree_DunkMotor_t[4].cmd.K_W = 0.895;
+                    unitree_DunkMotor_t[4].cmd.W = 0.7;
+                    unitree_DunkMotor_t[4].cmd.T = 0;//3.1
+                    my_Shoot_Task_T.Shoot_Completed_Flag =1;
+                }
                 
-                unitree_DunkMotor_t[4].cmd.Pos = 0;
-                unitree_DunkMotor_t[4].cmd.K_P = 0;
-                unitree_DunkMotor_t[4].cmd.K_W = 0;
-                unitree_DunkMotor_t[4].cmd.W = 0;
-                unitree_DunkMotor_t[4].cmd.T = 2.5;
-                my_Shoot_Task_T.Shoot_Completed_Flag =1;
+                
             }
 
             //刹停力矩
-            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + 100 )
+            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + 80 )
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
@@ -206,12 +234,12 @@ void Handle_Shoot_Task(void*argument)
             }
             
             //下降控制
-            if (encoderData.angle <= Encoder_VertPos + 70 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
+            if (encoderData.angle <= Encoder_VertPos + 75 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = 0.7;
-                unitree_DunkMotor_t[3].cmd.W = 1;
+                unitree_DunkMotor_t[3].cmd.K_W = 1.5;
+                unitree_DunkMotor_t[3].cmd.W = 0.25;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[4].cmd.Pos = 0;
@@ -219,6 +247,7 @@ void Handle_Shoot_Task(void*argument)
                 unitree_DunkMotor_t[4].cmd.K_W = 0;
                 unitree_DunkMotor_t[4].cmd.W = 0;
                 unitree_DunkMotor_t[4].cmd.T = 0;
+                my_Shoot_Task_T.camera_get_angle_flag = 0;
                 if(encoderData.angle <= Encoder_VertPos + 10)
                 {
                     my_Shoot_Task_T.Shoot_Completed_Flag = 3;

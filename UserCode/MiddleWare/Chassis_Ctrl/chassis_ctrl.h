@@ -21,7 +21,9 @@ extern "C" {
 #include "math.h"
 #include "wtr_can.h"
 
-#define FORWARD_ANGLE -87.58
+#define FORWARD_ANGLE -23
+#define BASKET_X    3.41
+#define BASKET_Y    1.1
 
 /**
  * @brief 底盘状态机
@@ -138,6 +140,9 @@ typedef struct
     uint32_t count_start_time;
 
     float chassis_to_basket; //底盘中心到篮筐中心水平距离
+    float PreAim_angle; //预瞄角度
+    bool PreAim_Ctrl_flag;//预瞄控制标置
+
 
     Chassis_state_e state;
     Alldir_wheel_t my_wheel[3];
@@ -168,8 +173,10 @@ void Forward_kinematics_equation(Alldir_Chassis_t *this_chassis);
 
 void chassis_XPoseServo_calc(float ref);
 void chassis_YPoseServo_calc(float ref);
+void chassis_XYPoseServo_calc(float refx,float refy);
 void chassis_YAWPoseServo_calc(float ref);
 
+void Chassis_Pre_Aim(void);
 void Now_Pose_Servo(void);
 
 #ifdef __cplusplus

@@ -79,7 +79,8 @@ void m_Chassis_Gyro_Task(void *argument)
             } else if (gyro_now - gyro_last < -300.0f) {
                 gyro_flag++; // 逆时针跳变
             }
-            chassis_yaw = gyro_now + gyro_flag * 360.0f;
+            //chassis_yaw = gyro_now + gyro_flag * 360.0f;
+            chassis_yaw = gyrodata[2];
             
         }
         osDelay(1);

@@ -22,6 +22,12 @@ static float camera_buffer[3][CAMERA_FILTER_WINDOW] = {0};
 static uint8_t camera_index = 0;
 static bool camera_buffer_full = false;
 
+//雷达相关
+#define LIDAR_FILTER_WINDOW 10
+static float lidar_buffer[3][LIDAR_FILTER_WINDOW];
+static uint8_t lidar_index = 0;
+static bool lidar_buffer_full = false;
+
 /**
  * @brief NUC接收初始化
  * 
@@ -52,8 +58,7 @@ uint16_t ComputeCRC16(uint8_t* data, uint16_t length) {
  * @brief NUC数据解码
  * 
  */
-void NUC_Msg_Decode()
-{
+void NUC_Msg_Decode() {
     switch (rx_index) {
         case 0:
             if (nuc_rev_byte == 0xAA) {
@@ -72,6 +77,7 @@ void NUC_Msg_Decode()
             if (rx_index >= PACKET_SIZE) {
                 rx_index = 0;
 
+                // CRC校验（完全未改动）
                 uint16_t received_crc;
                 memcpy(&received_crc, nuc_rev_buffer + 26, 2);
                 uint16_t computed_crc = ComputeCRC16(nuc_rev_buffer, 26);
@@ -79,13 +85,24 @@ void NUC_Msg_Decode()
                 if (received_crc == computed_crc) {
                     packet_valid = true;
 
-                    
+                    // 雷达原始数据接收（完全未改动）
                     memcpy(&raw_lidar[0], nuc_rev_buffer + 2, 4);
                     memcpy(&raw_lidar[1], nuc_rev_buffer + 6, 4);
                     memcpy(&raw_lidar[2], nuc_rev_buffer + 10, 4);
 
-                    if(my_Alldir_Chassis_t.chassis_calibrate_flag==1){
-                        // 初始化偏置处理 
+                    // ========== 新增的雷达滤波处理 ==========
+                    // 更新雷达数据缓存
+                    for (int i = 0; i < 3; i++) {
+                        lidar_buffer[i][lidar_index] = raw_lidar[i];
+                    }
+                    lidar_index++;
+                    if (lidar_index >= LIDAR_FILTER_WINDOW) {
+                        lidar_index = 0;
+                        lidar_buffer_full = true;
+                    }
+
+                    // 校准逻辑（完全保持原有结构）
+                    if (my_Alldir_Chassis_t.chassis_calibrate_flag == 1) {
                         if (!set_offset_flag) {
                             lidar_offset_sum[0] += raw_lidar[0];
                             lidar_offset_sum[1] += raw_lidar[1];
@@ -99,24 +116,33 @@ void NUC_Msg_Decode()
                                 set_offset_flag = true;
                             }
 
-                            // 初始化阶段直接复制原始值
                             Lidar_pose[0] = raw_lidar[0];
                             Lidar_pose[1] = raw_lidar[1];
                             Lidar_pose[2] = raw_lidar[2];
                         } else {
-                            // 应用偏置修正
-                            Lidar_pose[0] = raw_lidar[0] - lidar_offset[0];
-                            Lidar_pose[1] = raw_lidar[1] - lidar_offset[1];
-                            Lidar_pose[2] = raw_lidar[2] - lidar_offset[2];
+                            // 仅在此处修改：应用偏置后使用滤波数据
+                            if (lidar_buffer_full) {
+                                for (int i = 0; i < 3; i++) {
+                                    float sum = 0;
+                                    for (int j = 0; j < LIDAR_FILTER_WINDOW; j++) {
+                                        sum += lidar_buffer[i][j];
+                                    }
+                                    Lidar_pose[i] = (sum / LIDAR_FILTER_WINDOW) - lidar_offset[i];
+                                }
+                            } else {
+                                // 缓存未满时保持原逻辑
+                                for (int i = 0; i < 3; i++) {
+                                    Lidar_pose[i] = raw_lidar[i] - lidar_offset[i];
+                                }
+                            }
                         }
                     }
-                    
-                    // 接收并暂存原始相机数据
+
+                    // 相机数据处理（完全未改动）
                     memcpy(&raw_camera[0], nuc_rev_buffer + 14, 4);
                     memcpy(&raw_camera[1], nuc_rev_buffer + 18, 4);
                     memcpy(&raw_camera[2], nuc_rev_buffer + 22, 4);
 
-                    // 滑动平均滤波更新缓存
                     for (int i = 0; i < 3; i++) {
                         camera_buffer[i][camera_index] = raw_camera[i];
                     }
@@ -126,7 +152,6 @@ void NUC_Msg_Decode()
                         camera_buffer_full = true;
                     }
 
-                    // 滤波后赋值给 camera_basket_xyz
                     if (camera_buffer_full) {
                         for (int i = 0; i < 3; i++) {
                             float sum = 0;
@@ -136,7 +161,6 @@ void NUC_Msg_Decode()
                             camera_basket_xyz[i] = sum / CAMERA_FILTER_WINDOW;
                         }
                     } else {
-                        // 缓存未满，用原始值
                         for (int i = 0; i < 3; i++) {
                             camera_basket_xyz[i] = raw_camera[i];
                         }
@@ -147,6 +171,7 @@ void NUC_Msg_Decode()
             }
             break;
     }
+    // UART接收（完全未改动）
     HAL_UART_Receive_IT(&NUC_MSG_UART_HANDLE, &nuc_rev_byte, 1);
 }
 
