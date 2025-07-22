@@ -9,7 +9,7 @@ extern "C" {
 
 #define Max_Extension_Angle 16  //轮腿电机从抬腿到伸腿的最大正转弧度
 #define Max_ThrowBall_Angle 18.9 //投球电机旋转总角度（已乘减速比）
-#define Encoder_VertPos 87.8      ////投篮臂垂直时编码器角度
+#define Encoder_VertPos 54      ////投篮臂垂直时编码器角度
 #define DegreetoRad     6.283
 
 
@@ -59,6 +59,7 @@ extern Dunk_Task_t my_Dunk_Task_t;
 
 //外部接口函数定义
 extern osThreadId_t unitree_dunk_ctrl_TaskHandle;
+void Unitree_motor_0Torque(uint8_t i);
 void Handle_Dunk_TaskStart(void);
 void Encoder_Pospid_Init(PID_t *upid,float ref, float KP, float KI, float KD);
 float Encoder_PosServo(PID_t *upid, float Feedback_value);

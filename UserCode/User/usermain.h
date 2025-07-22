@@ -27,6 +27,7 @@ extern "C" {
 #include "Handle_Dunk_task.h"
 #include "Handle_Intercept_task.h"
 #include "Handle_Shoot_task.h"
+#include "Auto_Shoot_task.h"
 
 
 #include "userglobal_config.h"

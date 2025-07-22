@@ -30,15 +30,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         WitSerialDataIn(ucTemp);
         HAL_UART_Receive_IT(huart, &ucTemp, 1);
     }
-    //码盘回调
-    /*if (huart->Instance == OPS_UART) {
-        OPS_Decode();
-    }*/
-
+    //上位机回调
     if(huart->Instance == NUC_MSG_UART){
         NUC_Msg_Decode();
     }
-
+    //DT35回调
     if(huart->Instance == LASER_DATA_UART){
         // 将接收到的字节写入缓冲区
         //Laser_Data_Decode();

@@ -25,6 +25,7 @@ void StartDefaultTask(void *arguement)
     //  Hardware Init
     my_Chassis_Init();      //底盘运动电机初始化
     my_RemoteCtrl_Init();   //遥控器初始化
+    osDelay(20);
     my_Unitree_Init();    //宇树电机初始化
     Laser_rev_Init();       //DT35激光初始化
     NUC_rev_init();         //NUC接收数据初始化
@@ -35,20 +36,22 @@ void StartDefaultTask(void *arguement)
 
     //  Tasks Start
     my_RemoteCtrl_Task_Start();         //开启遥控器线程
+    osDelay(20);
     my_Chassis_CAN_Message_TaskStart(); //开启底盘电机消息线程
     my_Chassis_Ctrl_TaskStart();        //开启底盘控制线程
     my_Unitree_UART_Message_TaskStart();//开启跳跃电机消息线程
     m_Chassis_Gyro_TaskStart();         //开启底盘陀螺仪线程
-    //Expansion_Executor_TaskStart();     //开启升降机构控制线程
-    //m_Chassis_Odom_TaskStart();         //开启码盘消息线程
-    osDelay(500);
+    Expansion_Executor_TaskStart();     //开启升降机构控制线程
+    m_Chassis_Odom_TaskStart();         //开启码盘消息线程
+    osDelay(300);
 
     //开启动作线程
     //Handle_Dunk_TaskStart();
     //Patball_TaskStart();
     Handle_Shoot_TaskStart();
+    //Auto_Shoot_TaskStart();
     //my_debug_TaskStart();               //调试线程
-    osDelay(500);
+    //osDelay(500);
 
     // entry chassis ready state
     my_Alldir_Chassis_t.state = CHASSIS_STOP;
@@ -60,13 +63,14 @@ void StartDefaultTask(void *arguement)
 
 
     static int i = 0;
+    
     for (;;) {
         // Run State
-        i++;
-        if (i == 500) {
-            i = 0;
-            HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);
-        }
+        // i++;
+        // if (i == 500) {
+        //     i = 0;
+        //     HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);
+        // }
         //sprintf(debug_msg, "yaw:%d,seed:%d", (int)(chassis_yaw - chassis_offset), seed_count);
         //JoystickSwitchTitle(10, debug_title, &mav_debug_title);
         //JoystickSwitchMsg(10, debug_msg, &mav_dir_choose_msg);

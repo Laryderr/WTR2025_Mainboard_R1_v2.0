@@ -86,6 +86,9 @@ void my_main_Task(void *arguement)
             case 4:
             my_Alldir_Chassis_t.state = CHASSIS_HANDLE_RUNNING;
                 break;
+            case 8:
+            my_Alldir_Chassis_t.state = CHASSIS_RESET;
+                break;
             case -4:
             my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
                 break;
@@ -160,6 +163,14 @@ void my_main_Task(void *arguement)
             JoystickSwitchMsg(ID_STATUS, status_stop_msg, &mav_status_msg);
             osDelay(2);
             break;
+        case CHASSIS_RESET:
+            JoystickSwitchTitle(ID_RUN, run_title, &mav_run_title);
+            JoystickSwitchMsg(ID_RUN, run_handle_msg, &mav_run_msg);
+
+            JoystickSwitchTitle(ID_STATUS, status_title, &mav_status_title);
+            JoystickSwitchMsg(ID_STATUS, status_reset_msg, &mav_status_msg);
+            break;
+            
         case CHASSIS_ERROR:
             my_Alldir_Chassis_t.target_v.vx = 0;
             my_Alldir_Chassis_t.target_v.vy = 0;

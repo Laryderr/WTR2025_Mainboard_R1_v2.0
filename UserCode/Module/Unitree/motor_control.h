@@ -6,6 +6,7 @@
 #include "ris_protocol.h"
 #include "usart.h"
 
+#define PI 3.14159
 #pragma pack(1) // 将结构体内变量强制1字节对齐
 
 /**

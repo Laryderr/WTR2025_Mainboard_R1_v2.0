@@ -5,12 +5,18 @@
 #include "can.h"
 #include <stdio.h>
 
+#define ENCODER_Calculate_Time 0.01 //角编码器角速度计算间隔时间,秒（Tim3定时器）
+#define ENCODER_Calculate_htim htim3
+#define ENCODER_Calculate_TIM  TIM3
+
 // 定义接收数据结构
 typedef struct {
     float angle;       // 角度
     float angularSpeed; // 角速度
     int16_t revolutions; // 转数
     float temperature; // 温度
+    float last_angle;
+    float encoder_W;
 } EncoderData;
 
 //定义计算数据结构体

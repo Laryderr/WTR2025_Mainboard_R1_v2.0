@@ -111,6 +111,7 @@ int main(void)
   //ENCODER_CANFilterInit(&hcan2);
   //HAL_CAN_Start(&hcan2);
   //HAL_CAN_ActivateNotification(&hcan2,CAN_IT_RX_FIFO0_MSG_PENDING);
+  HAL_TIM_Base_Start_IT(&ENCODER_Calculate_htim);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -231,6 +232,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       my_Alldir_Chassis_t.current_v.vx = (my_Alldir_Chassis_t.current_pos.xpos - my_Alldir_Chassis_t.last_pos.xpos)/OPS_Calculate_Time;
       my_Alldir_Chassis_t.current_v.vy = (my_Alldir_Chassis_t.current_pos.ypos - my_Alldir_Chassis_t.last_pos.ypos)/OPS_Calculate_Time;
   }*/
+
+  // //角编码器角速度计算
+  // if(htim->Instance == ENCODER_Calculate_TIM)
+  // {
+  //     encoderData.encoder_W = (encoderData.angle - encoderData.last_angle)/ENCODER_Calculate_Time;
+  //     encoderData.last_angle = encoderData.angle;
+  // }
   /* USER CODE END Callback 1 */
 }
 

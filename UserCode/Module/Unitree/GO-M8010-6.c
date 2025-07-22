@@ -70,7 +70,7 @@ int extract_data(MOTOR_recv *motor_r)
         motor_r->MError = motor_r->motor_recv_data.fbk.MError;
         motor_r->W = ((float)motor_r->motor_recv_data.fbk.speed/256)*6.2832f ;
         motor_r->T = ((float)motor_r->motor_recv_data.fbk.torque) / 256;
-        motor_r->Pos = 6.2832f*((float)motor_r->motor_recv_data.fbk.pos) / 32768;
+        motor_r->Pos = 6.2832f*((float)motor_r->motor_recv_data.fbk.pos)/32768;
 				motor_r->footForce = motor_r->motor_recv_data.fbk.force;
 				motor_r->correct = 1;
         return motor_r->correct;

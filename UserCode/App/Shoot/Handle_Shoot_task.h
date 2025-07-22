@@ -9,7 +9,7 @@ extern "C" {
 
 #define Rotation_r_Of_Ball 0.3987 //电机输出轴与球心距离，单位m
 #define Deg_Ball_to_Arm 22.86 //输出轴对应铝管与球心线夹角 单位°
-#define INITIAL_DELAY_TIME 2000//投篮臂自然下垂给定时间ms
+#define INITIAL_DELAY_TIME 1000//投篮臂自然下垂给定时间ms
 #define Best_Throw_Degree 130 - 22.86 //输出轴最佳出手角度
 #define Motor_to_Chassis_L 0.0395 //电机输出轴距离底盘中心水平距离
 #define Motor_HeightLow   0 //低挡位时输出轴离地高度
@@ -39,7 +39,7 @@ typedef struct{
     bool camera_aim_flag;
     float camera_aim_angle;
     bool camera_get_angle_flag;
-    
+    PID_t Encoder_SpeedPID_t; //投篮臂角编码器速度PID结构体
     
 }Shoot_Task_T ;                                
 
@@ -47,6 +47,7 @@ extern osThreadId_t unitree_shoot_ctrl_TaskHandle;
 extern Shoot_Task_T my_Shoot_Task_T;
 
 void Handle_Shoot_TaskStart(void);
+void Ball_Hold(float W);
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,7 @@ Remote_Data MyLastRemote_Data;
 osThreadId_t remotectrl_TaskHandle;
 const osThreadAttr_t remotectrl_Task_attributes ={
     .name       = "remotectrl_Task",
-    .stack_size = 128 * 4,
+    .stack_size = 256 * 6,
     .priority   =(osPriority_t)osPriorityNormal,
 };
 void my_Remotectrl_Task(void *arguement);
@@ -73,21 +73,105 @@ bool BtnScan_Press(bool this_status)
     return false;
 }
 
-bool BtnPress_Once(bool this_status, bool last_status)
+
+
+void BtnPress_Once(bool this_btn)
 {
-    if (this_status == 1&&last_status == 0)
+    if(MyRemote_Data.btn_LeftCrossUp == 1)
     {
-        osDelay(20);
-        if (this_status == 1)
+        while (MyRemote_Data.btn_LeftCrossUp == 1)
         {
-            return true;
-        }else return false;
-        
-    }else return  false;
+            MyRemote_Data.btn_LeftCrossUp = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossUp);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_LeftCrossUp_press_count++;
+    }
     
 }
 
+void BtnPress_Once1(bool this_btn)
+{
+    if(MyRemote_Data.btn_LeftCrossMid == 1)
+    {
+        while (MyRemote_Data.btn_LeftCrossMid == 1)
+        {
+            MyRemote_Data.btn_LeftCrossMid = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossMid);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_LeftCrossMid_press_count++;
+    }
+    
+}
 
+void BtnPress_Once2(bool this_btn)
+{
+    if(MyRemote_Data.btn_LeftCrossDown == 1)
+    {
+        while (MyRemote_Data.btn_LeftCrossDown == 1)
+        {
+            MyRemote_Data.btn_LeftCrossDown = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossDown);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_LeftCrossDown_press_count++;
+    }
+    
+}
+
+void BtnPress_Once3(bool this_btn)
+{
+    if(MyRemote_Data.btn_LeftCrossRight == 1)
+    {
+        while (MyRemote_Data.btn_LeftCrossRight == 1)
+        {
+            MyRemote_Data.btn_LeftCrossRight = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossRight);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_LeftCrossRight_press_count++;
+    }
+    
+}
+
+void BtnPress_Once4(bool this_btn)
+{
+    if(MyRemote_Data.btn_LeftCrossLeft == 1)
+    {
+        while (MyRemote_Data.btn_LeftCrossLeft == 1)
+        {
+            MyRemote_Data.btn_LeftCrossLeft = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossLeft);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_LeftCrossLeft_press_count++;
+    }
+    
+}
+
+void BtnPress_Once5(bool this_btn)
+{
+    if(MyRemote_Data.btn_RightCrossLeft == 1)
+    {
+        while (MyRemote_Data.btn_RightCrossLeft == 1)
+        {
+            MyRemote_Data.btn_RightCrossLeft = ReadJoystickButtons(&msg_joystick_air, Btn_RightCrossLeft);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_RightCrossLeft_press_count++;
+    }
+    
+}
+
+void BtnPress_Once6(bool this_btn)
+{
+    if(MyRemote_Data.btn_RightCrossRight == 1)
+    {
+        while (MyRemote_Data.btn_RightCrossRight == 1)
+        {
+            MyRemote_Data.btn_RightCrossRight = ReadJoystickButtons(&msg_joystick_air, Btn_RightCrossRight);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_RightCrossRight_press_count++;
+    }
+    
+}
 /*****************************************************************************
  * @brief 以下是线程函数定义
  * 
@@ -108,8 +192,20 @@ void my_Remotectrl_Task(void *arguement)
     knob_offset[0] = MyRemote_Data.left_knob;
     knob_offset[1] = MyRemote_Data.right_knob;
     for (;;) {
+
+        BtnPress_Once(1);
+        BtnPress_Once1(1);
+        BtnPress_Once2(1);
+        BtnPress_Once3(1);
+        BtnPress_Once4(1);
+        BtnPress_Once5(1);
+        BtnPress_Once6(1);
+        MyRemote_Data.KW01 = (float)MyRemote_Data.btn_LeftCrossDown_press_count/10.0f;
+        MyRemote_Data.KW001 = (float)MyRemote_Data.btn_LeftCrossMid_press_count /100.0f;
+        MyRemote_Data.KW0001 = (float)MyRemote_Data.btn_LeftCrossUp_press_count /1000.0f;
+        MyRemote_Data.KW00001 = (float)MyRemote_Data.btn_RightCrossLeft_press_count/10000.0f;
         //数据处理
-        MyLastRemote_Data.btn_LeftCrossUp     = MyRemote_Data.btn_LeftCrossUp;
+        /*MyLastRemote_Data.btn_LeftCrossUp     = MyRemote_Data.btn_LeftCrossUp;
         MyLastRemote_Data.btn_LeftCrossDown   = MyRemote_Data.btn_LeftCrossDown;
         MyLastRemote_Data.btn_LeftCrossLeft   = MyRemote_Data.btn_LeftCrossLeft;
         MyLastRemote_Data.btn_LeftCrossRight  = MyRemote_Data.btn_LeftCrossRight;
@@ -130,7 +226,7 @@ void my_Remotectrl_Task(void *arguement)
         MyLastRemote_Data.btn_KnobL           = ReadJoystickButtons(&msg_joystick_air, Btn_KnobL);
         MyLastRemote_Data.btn_KnobR           = ReadJoystickButtons(&msg_joystick_air, Btn_KnobR);
         MyLastRemote_Data.left_knob           = ReadJoystickKnobsLeft(&msg_joystick_air);
-        MyLastRemote_Data.right_knob          = ReadJoystickKnobsRight(&msg_joystick_air);
+        MyLastRemote_Data.right_knob          = ReadJoystickKnobsRight(&msg_joystick_air);*/
 
         MyRemote_Data.btn_LeftCrossUp     = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossUp);
         MyRemote_Data.btn_LeftCrossDown   = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossDown);
@@ -202,7 +298,7 @@ void my_Remotectrl_Task(void *arguement)
             MyRemote_Data.usr_right_knob = 0;
         }        
 
-        JoystickSwitchLED(1,0.5,0,10,2000,&msg_joystick_air_led);
+        //JoystickSwitchLED(1,0.5,0,10,2000,&msg_joystick_air_led);
         JoystickSwitchTitle(ID_RUN, run_title, &mav_run_title);
         osDelay(1);
     }

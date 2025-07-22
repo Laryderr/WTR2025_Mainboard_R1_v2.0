@@ -28,7 +28,7 @@ float test1=0;
 osThreadId_t can_message_TaskHandle;
 const osThreadAttr_t can_message_Task_attributes = {
     .name       = "can_message_Task",
-    .stack_size = 256 * 4,
+    .stack_size = 256 * 8,
     .priority   = (osPriority_t)osPriorityNormal,
 };
 void my_CAN_Message_Task(void *argument);
@@ -36,7 +36,7 @@ void my_CAN_Message_Task(void *argument);
 osThreadId_t chassis_ctrl_TaskHandle;
 const osThreadAttr_t chassis_ctrl_Task_attributes = {
     .name       = "chassis_ctrl_Task",
-    .stack_size = 256 * 4,
+    .stack_size = 256 * 8,
     .priority   = (osPriority_t)osPriorityNormal,
 };
 void my_Chassis_Ctrl_Task(void *argument);
@@ -86,8 +86,24 @@ float chassis_pid_calc(ChassisPID_t *upid, float Feedback_value)
 {
     upid->fdb = Feedback_value;
     upid->cur_error = (float)(upid->ref - upid->fdb); /* 计算偏差 */
-
+    if(upid != &my_Alldir_Chassis_t.chassis_yawpos_pid)
+    {
+        if (upid != &my_Alldir_Chassis_t.chassis_aim_pid)
+        {
+            if(upid->cur_error <= 0.007&&upid->cur_error > -0.007)
+            {
+                upid->cur_error = 0;
+            }
+        }else{
+            if(upid->cur_error <= 1&&upid->cur_error > -1)
+            {
+                upid->cur_error = 0;
+            }
+        }
+        
+    }
     upid->integral += upid->cur_error;
+    
     upid->output        = (upid->KP * upid->cur_error)                        /* 比例环节 */
                         + (upid->KI * upid->integral)                     /* 积分环节 */
                         + (upid->KD * (upid->cur_error - upid->error[0])); /* 微分环节 */
@@ -152,7 +168,7 @@ void chassis_XYPoseServo_calc(float refx,float refy)
     
     double alloutput = sqrt(pow(my_Alldir_Chassis_t.chassis_xpos_pid.output,2) + pow(my_Alldir_Chassis_t.chassis_ypos_pid.output,2));
     double angle1 = atan(my_Alldir_Chassis_t.chassis_ypos_pid.output/my_Alldir_Chassis_t.chassis_xpos_pid.output);
-    double angle2 = angle1 + (my_Alldir_Chassis_t.current_pos.yawpos - FORWARD_ANGLE)/180*PI;
+    double angle2 = angle1 + (my_Alldir_Chassis_t.current_pos.yawpos - my_Alldir_Chassis_t.current_pos.yaw_offset)/180*PI;
 
     /*my_Alldir_Chassis_t.target_v.vx = alloutput * cos(angle2);
     my_Alldir_Chassis_t.target_v.vy = alloutput * sin(angle2);*/
@@ -236,8 +252,9 @@ void Chassis_Pre_Aim(void)
         my_Alldir_Chassis_t.PreAim_angle = 180 - atan(my_Alldir_Chassis_t.current_pos.ypos/(my_Alldir_Chassis_t.current_pos.xpos - BASKET_X))/PI*180;
     }
     
-    my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE + my_Alldir_Chassis_t.PreAim_angle);
+    my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset + my_Alldir_Chassis_t.PreAim_angle);
 }
+
 
 
 /************************************************************
@@ -285,11 +302,11 @@ void my_Chassis_Init(void)
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vy_pid,my_Alldir_Chassis_t.target_v.vy,0,0,0);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0.2,0.000001,0.001);
     //底盘位置pid初始化
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,2.4,0.00002,0.6);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,2.4,0.00002,0.6);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,2.4,0.00002,0.85);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,2.4,0.00002,0.85);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.target_pos.yawpos,0.28,0,0.02);
     //chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.46,0.00003,0.04);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,1.4,0.001,1.25);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.016,0,0.08);
     //底盘位置初始化
     my_Alldir_Chassis_t.current_pos.xpos = 0;
     my_Alldir_Chassis_t.current_pos.ypos = 0;
@@ -368,6 +385,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
             my_Alldir_Chassis_t.current_pos.ypos = my_Alldir_Chassis_t.init_y_pos - Lidar_pose[1];
             my_Alldir_Chassis_t.current_pos.yawpos = chassis_yaw;
 
+            
             //车身坐标转换
         }
 
@@ -380,13 +398,21 @@ void my_Chassis_Ctrl_Task(void *arguement)
             hDJI[0].speedPID.output = 0;
             hDJI[1].speedPID.output = 0;
             hDJI[2].speedPID.output = 0;
+            hDJI[3].speedPID.output = 0;
+            hDJI[4].speedPID.output = 0;
+            hDJI[5].speedPID.output = 0;
+            hDJI[6].speedPID.output = 0;
+            hDJI[7].speedPID.output = 0;
+            hDJI[8].speedPID.output = 0;
+            Unitree_motor_0Torque(3);
+            Unitree_motor_0Torque(5);
         }else if(my_Alldir_Chassis_t.state == CHASSIS_HANDLE_RUNNING)
         {
             /****************初始化位置校准*****************************************************************/
             if (my_Alldir_Chassis_t.chassis_calibrate_flag == 0)
             {
-                my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
-                if (my_Alldir_Chassis_t.current_pos.yawpos <= (FORWARD_ANGLE+0.2)&&my_Alldir_Chassis_t.current_pos.yawpos >= (FORWARD_ANGLE-0.2))
+                my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                if (my_Alldir_Chassis_t.current_pos.yawpos <= (my_Alldir_Chassis_t.current_pos.yaw_offset+0.2)&&my_Alldir_Chassis_t.current_pos.yawpos >= (my_Alldir_Chassis_t.current_pos.yaw_offset-0.2))
                 {
                     if(!start_once)
                     {
@@ -397,8 +423,8 @@ void my_Chassis_Ctrl_Task(void *arguement)
                     {
                         //注意加入遥控器反馈
                         my_Alldir_Chassis_t.chassis_calibrate_flag = 1;
-                        my_Alldir_Chassis_t.init_x_pos = Laser_x;
-                        my_Alldir_Chassis_t.init_y_pos = Laser_y;
+                        my_Alldir_Chassis_t.init_x_pos = Laser_x + 0.37103;
+                        my_Alldir_Chassis_t.init_y_pos = Laser_y + 0.0755;
                         my_Alldir_Chassis_t.count_start_time = 0;
                     }
                 }
@@ -409,13 +435,15 @@ void my_Chassis_Ctrl_Task(void *arguement)
             //遥控器目标速度获取
             if (my_Alldir_Chassis_t.chassis_calibrate_flag == 1)
             {
-                my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*3.0f ;
-                my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*3.0f;
+                Ball_Hold(0.1);
+
+                my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*6.0f ;
+                my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*6.0f;
                 my_Alldir_Chassis_t.target_v.vw = ((float)MyRemote_Data.usr_right_x)/230.0f*2.0f;
                 my_Alldir_Chassis_t.chassis_vw_pid.ref = my_Alldir_Chassis_t.target_v.vw;
                 chassis_pid_calc(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.current_v.vw);
                 //是否启动预瞄
-                if (BtnScan_Press(MyRemote_Data.btn_Btn3))
+                if (BtnScan_Press(MyRemote_Data.btn_JoystickR))
                 {
                     my_Alldir_Chassis_t.PreAim_Ctrl_flag = 1;
                 }else if (my_Alldir_Chassis_t.target_v.vw != 0)
@@ -438,6 +466,12 @@ void my_Chassis_Ctrl_Task(void *arguement)
             my_Alldir_Chassis_t.XPosServo(1.5);
             my_Alldir_Chassis_t.YPosServo(-1);*/
             //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
+        }else if (my_Alldir_Chassis_t.state == CHASSIS_RESET)
+        {
+            Ball_Hold(0.1);
+            chassis_XYPoseServo_calc(2,2.7);
+            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+            myHandle_State = HANDLE_IDLE_MODE;
         }
 
         //底盘运动学逆解算
@@ -446,7 +480,9 @@ void my_Chassis_Ctrl_Task(void *arguement)
         //获取底盘速度值,注意码盘坐标和底盘坐标的转换(暂时不用)
         my_Alldir_Chassis_t.current_v.vw = gyrodata[1]/360*2*PI*0.2;
 
-        my_Alldir_Chassis_t.chassis_to_basket = 0;
+        my_Alldir_Chassis_t.chassis_to_basket = sqrt((my_Alldir_Chassis_t.current_pos.xpos - BASKET_X)*(my_Alldir_Chassis_t.current_pos.xpos - BASKET_X) + 
+                                                    (my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)*(my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)); 
+
 
         osDelay(2);
     }

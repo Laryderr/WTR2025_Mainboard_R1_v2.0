@@ -21,9 +21,9 @@ extern "C" {
 #include "math.h"
 #include "wtr_can.h"
 
-#define FORWARD_ANGLE -23
-#define BASKET_X    3.41
-#define BASKET_Y    1.1
+#define FORWARD_ANGLE -60
+#define BASKET_X    3.849
+#define BASKET_Y    1.095
 
 /**
  * @brief 底盘状态机
@@ -35,7 +35,8 @@ typedef enum{
     CHASSIS_AUTO_RUNNING,
     CHASSIS_READY,
     CHASSIS_ERROR,
-    CHASSIS_NULL}Chassis_state_e;  
+    CHASSIS_NULL,
+    CHASSIS_RESET}Chassis_state_e;  
 
 /**
  * @brief 全向轮状态机
@@ -115,6 +116,7 @@ typedef void (*__chassis_Aim_at_Basket)(float);
  */
 typedef struct 
 {
+    
     //整车位置PID对象
     ChassisPID_t chassis_yawpos_pid;
     ChassisPID_t chassis_xpos_pid;
@@ -130,6 +132,8 @@ typedef struct
     Chassis_velocity_t current_v;//码盘获取，m/s
 
     Chassis_pos_t target_pos;
+    float test_KW;
+    float shoot_angle;
     Chassis_pos_t current_pos;
     Chassis_pos_t last_pos;
     Chassis_pos_t Now_marked_pos;

@@ -39,13 +39,13 @@ void my_handle_Task(void)
         myHandle_State = HANDLE_IDLE_MODE;
     }
 
-    /*float_to_char(my_Alldir_Chassis_t.current_pos.xpos,posx_msg,2);
-    JoystickSwitchTitle(ID_POSITIONX, posx_title, &mav_posx_title);
-    JoystickSwitchMsg(ID_POSITIONX, posx_msg, &mav_posx_msg);
+    my_Auto_Shoot_Task_T.now_train_distance = MIN_TRAIN_DISTANCE + MyRemote_Data.btn_LeftCrossRight_press_count*my_Auto_Shoot_Task_T.train_step - MyRemote_Data.btn_LeftCrossLeft_press_count*my_Auto_Shoot_Task_T.train_step;
+    my_Auto_Shoot_Task_T.train_point[0] = BASKET_X - sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
+    my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
+    my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
+                                   MyRemote_Data.KW0001 + MyRemote_Data.KW00001 ;
+    my_Alldir_Chassis_t.shoot_angle = 80 + MyRemote_Data.btn_RightCrossRight_press_count;
 
-    float_to_char(my_Alldir_Chassis_t.current_pos.ypos,posy_msg,2);
-    JoystickSwitchTitle(ID_POSITIONY, posy_title, &mav_posy_title);
-    JoystickSwitchMsg(ID_POSITIONY, posy_msg, &mav_posy_msg);*/
     switch (myHandle_State)
     {
     case HANDLE_IDLE_MODE:
@@ -119,47 +119,14 @@ void my_handle_Task(void)
         switch (my_Shoot_Task_T.shoot_point)
         {
         case 1:
-            chassis_XYPoseServo_calc(2.05,3.32);
-            
-            if (my_Shoot_Task_T.camera_aim_flag == 1)
-            {
-                //精瞄
-                my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.05);
-            }else Chassis_Pre_Aim(); //育苗
-            //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.05);
 
             break;
         case 2:
-            chassis_XYPoseServo_calc(4.77,3.35);
-            
-            if (my_Shoot_Task_T.camera_aim_flag == 1)
-            {
-                //精瞄
-                my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.05);
-            }else Chassis_Pre_Aim(); //育苗
-            //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.05);
+            chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
+            my_Alldir_Chassis_t.chassis_Aim_at_Basket(-0.5);
+
             break;
         case 3:
-            chassis_XYPoseServo_calc(BASKET_X,2.9);
-            
-            if (my_Shoot_Task_T.camera_aim_flag == 1)
-            {
-                //精瞄
-                /*if (camera_basket_xyz[0]!=0.02&&my_Shoot_Task_T.camera_get_angle_flag == 0)
-                {
-                    my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.02);
-                }else if(camera_basket_xyz[0] == 0.02) 
-                {
-                    my_Shoot_Task_T.camera_aim_angle = my_Alldir_Chassis_t.current_pos.yawpos;
-                    my_Shoot_Task_T.camera_get_angle_flag = 1;
-                }
-                if(my_Shoot_Task_T.camera_get_angle_flag==1){
-                    my_Alldir_Chassis_t.YAWPosServo(my_Shoot_Task_T.camera_aim_angle);
-                }*/
-                my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.055);
-                
-            }else Chassis_Pre_Aim(); //育苗
-            //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.05);
             break;
         case 4:
             //复位校准位置

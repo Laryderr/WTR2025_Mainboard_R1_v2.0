@@ -49,9 +49,10 @@ void Handle_Dunk_TaskStart(void)
 void Unitree_motor_0Torque(uint8_t i)
 {
         unitree_DunkMotor_t[i].cmd.T = 0;
+        unitree_DunkMotor_t[i].cmd.Pos = 0;
         unitree_DunkMotor_t[i].cmd.K_P = 0;
         unitree_DunkMotor_t[i].cmd.W = 0;
-        unitree_DunkMotor_t[i].cmd.K_W = 0.02;
+        unitree_DunkMotor_t[i].cmd.K_W = 0;
 }
 
 /**

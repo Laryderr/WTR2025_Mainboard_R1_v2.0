@@ -158,11 +158,11 @@ void NUC_Msg_Decode() {
                             for (int j = 0; j < CAMERA_FILTER_WINDOW; j++) {
                                 sum += camera_buffer[i][j];
                             }
-                            camera_basket_xyz[i] = sum / CAMERA_FILTER_WINDOW;
+                            camera_basket_xyz[i] = sum / CAMERA_FILTER_WINDOW*100;
                         }
                     } else {
                         for (int i = 0; i < 3; i++) {
-                            camera_basket_xyz[i] = raw_camera[i];
+                            camera_basket_xyz[i] = raw_camera[i]*100;
                         }
                     }
                 } else {

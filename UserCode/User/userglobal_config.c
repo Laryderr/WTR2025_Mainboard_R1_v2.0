@@ -49,6 +49,7 @@ char status_title[20]    = "Chassis Status";
 char status_running_msg[20] = "Running";
 char status_ready_msg[20] = "Ready";
 char status_stop_msg[20] = "Stop";
+char status_reset_msg[20] = "Reset";
 char status_error_msg[20] = "Error";
 
 mavlink_joystick_air_dashboard_set_title_t mav_posx_title;

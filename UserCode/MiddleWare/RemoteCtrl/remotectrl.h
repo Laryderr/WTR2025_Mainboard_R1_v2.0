@@ -13,7 +13,19 @@ extern "C" {
  */
 typedef struct 
 {
+    float KW01;
+    float KW001;
+    float KW0001;
+    float KW00001;
     bool btn_LeftCrossUp;
+    uint32_t btn_LeftCrossUp_press_count;    // 总按下次数
+    uint32_t btn_LeftCrossMid_press_count;    // 总按下次数
+    uint32_t btn_LeftCrossDown_press_count;    // 总按下次数
+    uint32_t btn_LeftCrossRight_press_count;
+    uint32_t btn_LeftCrossLeft_press_count;
+    uint32_t btn_RightCrossLeft_press_count;
+    uint32_t btn_RightCrossRight_press_count;
+
     bool btn_LeftCrossDown;
     bool btn_LeftCrossLeft;
     bool btn_LeftCrossRight;
@@ -49,6 +61,14 @@ typedef struct
     float usr_left_knob;
 }Remote_Data;
 
+typedef struct {
+    uint8_t filter_cnt;      // 连续稳定计数
+    uint8_t stable_state;    // 稳定后的状态
+    uint8_t last_state;      // 上次状态
+    bool is_pressed;         // 单次按下标志
+    uint32_t total_press;    // 总按下次数 [6](@ref)
+} KeyDebounce_t;
+
 extern Remote_Data MyRemote_Data;  
 extern Remote_Data MyLastRemote_Data;  
 
@@ -58,7 +78,7 @@ void my_RemoteCtrl_Init(void);
 void my_RemoteCtrl_Task_Start(void);
 
 bool BtnScan_Press(bool this_status);
-bool BtnPress_Once(bool this_status, bool last_status);
+void BtnPress_Once(bool this_btn);
 
 
 

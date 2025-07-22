@@ -77,6 +77,7 @@ extern char status_title[20];
 extern char status_running_msg[20];
 extern char status_ready_msg[20];
 extern char status_stop_msg[20];
+extern char status_reset_msg[20];
 extern char status_error_msg[20];
 
 extern mavlink_joystick_air_dashboard_set_title_t mav_posx_title;
