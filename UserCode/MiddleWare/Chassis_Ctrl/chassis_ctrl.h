@@ -22,8 +22,8 @@ extern "C" {
 #include "wtr_can.h"
 
 #define FORWARD_ANGLE -60
-#define BASKET_X    3.849
-#define BASKET_Y    1.095
+#define BASKET_X    4.03
+#define BASKET_Y    0.996
 
 /**
  * @brief 底盘状态机
@@ -179,6 +179,8 @@ void chassis_XPoseServo_calc(float ref);
 void chassis_YPoseServo_calc(float ref);
 void chassis_XYPoseServo_calc(float refx,float refy);
 void chassis_YAWPoseServo_calc(float ref);
+
+void chassis_RePosToAbPos(float RePos_x, float RePos_y, float* AbPos_x, float* AbPos_y);
 
 void Chassis_Pre_Aim(void);
 void Now_Pose_Servo(void);

@@ -3,7 +3,7 @@
  * @Author: Alex
  * @Date: 2025-03-22 10:35:23
  * @LastEditors: Alex
- * @LastEditTime: 2025-03-22 14:31:31
+ * @LastEditTime: 2025-07-14 12:41:51
  */
 #ifndef _HANDLE_PATBALL_TASH_H
 #define _HANDLE_PATBALL_TASH_H
@@ -15,6 +15,8 @@ extern "C" {
 #include "usermain.h"
 #include "remotectrl.h"
 #include "Unitree.h"
+#include "chassis_ctrl.h"
+#include "Handle_task.h"
 
 typedef enum
 {

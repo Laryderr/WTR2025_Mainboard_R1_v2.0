@@ -119,19 +119,20 @@ void my_handle_Task(void)
         switch (my_Shoot_Task_T.shoot_point)
         {
         case 1:
-
+            chassis_XYPoseServo_calc(1.5,1.5);
+            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
             break;
         case 2:
             chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
-            my_Alldir_Chassis_t.chassis_Aim_at_Basket(-0.5);
+            my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.2);
 
             break;
         case 3:
             break;
         case 4:
             //复位校准位置
-            chassis_XYPoseServo_calc(1.23,3.56);
-            my_Alldir_Chassis_t.YAWPosServo(FORWARD_ANGLE);
+            chassis_XYPoseServo_calc(0.51,0.51);
+            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
         default:
             break;
         }

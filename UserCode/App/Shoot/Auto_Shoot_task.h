@@ -7,7 +7,7 @@ extern "C" {
 
 #include "usermain.h"
 
-#define MIN_TRAIN_DISTANCE 2.5
+#define MIN_TRAIN_DISTANCE 2.7
 #define MAX_TRAIN_DISTANCE 5
 
 

@@ -3,7 +3,7 @@
  * @Author: Alex
  * @Date: 2025-03-22 10:35:23
  * @LastEditors: Alex
- * @LastEditTime: 2025-07-16 12:04:05
+ * @LastEditTime: 2025-07-23 15:49:21
  */
 #include "Expansion.h"
 
@@ -29,6 +29,8 @@ float DJI_Output_WithFC_Down[2];
 float DJI_Output_WithFC_Up[2];
 
 uint8_t Button[4] = {0};
+
+EXPANSION_STATE_t Expansion_State = Expansion_Stop;
 
 void m_up_expandhighly()
 {
@@ -116,7 +118,7 @@ void Expansion_Init()
 	}
     for (int i = 4; i < 8; ++i)
     {
-        hDJI[i].posPID.outputMax=25000;
+        hDJI[i].posPID.outputMax=10000;
         hDJI[i].posPID.KP=135.0f;
         hDJI[i].posPID.KI=5.0f;
         hDJI[i].posPID.KD=0.02f;
@@ -161,60 +163,87 @@ void Expansion_Executor_Task(void* argument)
     //     CanTransmit_DJI_5678(&hcan2, hDJI[4].speedPID.output, hDJI[5].speedPID.output, hDJI[6].speedPID.output, hDJI[7].speedPID.output);
     //     HAL_Delay(2);
     // } while (Button[0] == 1 || Button[1] == 1 || Button[2] == 1 || Button[3] == 1);
-    // for (uint8_t i = 0; i < 2; ++i)
-    // {
-    //     Expansion_Down.m_StartAngle[i] = Expansion_Down.m_DJI[i].AxisData.AxisAngle_inDegree;
-    //     Expansion_Down.m_Angle[i] = Expansion_Down.m_StartAngle[i];
-    // }
-    // for (uint8_t i = 0; i < 2; ++i)
-    // {
-    //     Expansion_Up.m_StartAngle[i] = Expansion_Up.m_DJI[i].AxisData.AxisAngle_inDegree;
-    //     Expansion_Up.m_Angle[i] = Expansion_Up.m_StartAngle[i];
-    // }
+    for (uint8_t i = 0; i < 2; ++i)
+    {
+        //Expansion_Down.m_StartAngle[i] = Expansion_Down.m_DJI[i].AxisData.AxisAngle_inDegree;
+        Expansion_Down.m_StartAngle[i] = 0;
+        Expansion_Down.m_Angle[i] = Expansion_Down.m_StartAngle[i];
+    }
+    for (uint8_t i = 0; i < 2; ++i)
+    {
+        //Expansion_Up.m_StartAngle[i] = Expansion_Up.m_DJI[i].AxisData.AxisAngle_inDegree;
+        Expansion_Up.m_StartAngle[i] = 0;
+        Expansion_Up.m_Angle[i] = Expansion_Up.m_StartAngle[i];
+    }
     for (;;)
     {
-        // if (MyRemote_Data.btn_LeftCrossUp == 1)
-        // {
-        //     Expansion_Up.expandhighly();
-        //     Expansion_Down.expandhighly();
-        // }
-        // else if (MyRemote_Data.btn_LeftCrossMid == 1)
-        // {
-        //     Expansion_Up.expand();
-        //     Expansion_Down.expand();
-        // }
-        // else if (MyRemote_Data.btn_LeftCrossDown == 1)
-        // {
-        //     Expansion_Up.contract();
-        //     Expansion_Down.contract();
-        // }
+        if (MyRemote_Data.btn_LeftCrossUp == 1)
+        {
+            Expansion_Up.expandhighly();
+            Expansion_Down.expandhighly();
+        }
+        else if (MyRemote_Data.btn_LeftCrossMid == 1)
+        {
+            Expansion_Up.expand();
+            Expansion_Down.expand();
+        }
+        else if (MyRemote_Data.btn_LeftCrossDown == 1)
+        {
+            Expansion_Up.contract();
+            Expansion_Down.contract();
+        }
         /* 此处代码留作可添加部分，可以按照下面这个方法写，也可以直接将for(;;)前面的部分复制到这里 */
         // else if (按某一个按键再次进行升降机构的初始位置校准)
         // {
         //     goto STARTUP;
         // }
-        for (uint8_t i = 0; i < 2; ++i)
+        // if(MyRemote_Data.left_switch == 0)
+        // {
+            if (MyRemote_Data.btn_LeftCrossLeft == 1)
+            {
+                for (uint8_t i = 0; i < 2; ++i)
+                {
+                    Expansion_Down.m_StartAngle[i] = Expansion_Down.m_DJI[i].AxisData.AxisAngle_inDegree;
+                    Expansion_Down.m_Angle[i] = Expansion_Down.m_StartAngle[i];
+                }
+                for (uint8_t i = 0; i < 2; ++i)
+                {
+                    Expansion_Up.m_StartAngle[i] = Expansion_Up.m_DJI[i].AxisData.AxisAngle_inDegree;
+                    Expansion_Up.m_Angle[i] = Expansion_Up.m_StartAngle[i];
+                }
+                Expansion_State = Expansion_Working;
+            }
+        // }
+        // if(MyRemote_Data.left_switch == 0)
+        // {
+            if (MyRemote_Data.btn_LeftCrossRight == 1)
+            {
+                Expansion_State = Expansion_Stop;
+            }
+        // }
+        if (Expansion_State == Expansion_Working)
         {
-            //positionServo(Expansion_Down.m_Angle[i],   Expansion_Down.m_DJI + i);
-            positionServo(0,   Expansion_Down.m_DJI + i);
-            if((Expansion_Down.m_DJI + i)->speedPID.output > 100)
-                DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output + (Expansion_Down.m_DJI + i)->f_current;
-            else if((Expansion_Down.m_DJI + i)->speedPID.output < -100)
-                DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output - (Expansion_Down.m_DJI + i)->f_current;
-            else
-                DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output;
-            
-            //positionServo(Expansion_Up.m_Angle[i],     Expansion_Up.m_DJI + i);
-            positionServo(0,   Expansion_Up.m_DJI + i);
-            if((Expansion_Up.m_DJI + i)->speedPID.output > 100)
-                DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output + (Expansion_Up.m_DJI + i)->f_current;
-            else if((Expansion_Up.m_DJI + i)->speedPID.output < -100)
-                DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output - (Expansion_Up.m_DJI + i)->f_current;
-            else
-                DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output;
-        }
+            for (uint8_t i = 0; i < 2; ++i)
+            {
+                positionServo(Expansion_Down.m_Angle[i],   Expansion_Down.m_DJI + i);
+                if((Expansion_Down.m_DJI + i)->speedPID.output > 100)
+                    DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output + (Expansion_Down.m_DJI + i)->f_current;
+                else if((Expansion_Down.m_DJI + i)->speedPID.output < -100)
+                    DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output - (Expansion_Down.m_DJI + i)->f_current;
+                else
+                    DJI_Output_WithFC_Down[i] = (Expansion_Down.m_DJI + i)->speedPID.output;
+                
+                positionServo(Expansion_Up.m_Angle[i],     Expansion_Up.m_DJI + i);
+                if((Expansion_Up.m_DJI + i)->speedPID.output > 100)
+                    DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output + (Expansion_Up.m_DJI + i)->f_current;
+                else if((Expansion_Up.m_DJI + i)->speedPID.output < -100)
+                    DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output - (Expansion_Up.m_DJI + i)->f_current;
+                else
+                    DJI_Output_WithFC_Up[i] = (Expansion_Up.m_DJI + i)->speedPID.output;
+            }
         
-        CanTransmit_DJI_5678(MX_CAN, DJI_Output_WithFC_Down[0], DJI_Output_WithFC_Down[1], DJI_Output_WithFC_Up[0], DJI_Output_WithFC_Up[1]);
+            CanTransmit_DJI_5678(MX_CAN, DJI_Output_WithFC_Down[0], DJI_Output_WithFC_Down[1], DJI_Output_WithFC_Up[0], DJI_Output_WithFC_Up[1]);
+        }
         //CanTransmit_DJI_5678(MX_CAN,0,0,0,0);
         osDelay(5);
     }

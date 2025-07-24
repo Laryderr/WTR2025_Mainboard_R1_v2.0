@@ -195,11 +195,11 @@ void Handle_Shoot_Task(void*argument)
 {
     my_Auto_Shoot_Task_T.now_train_distance = 0;
     my_Auto_Shoot_Task_T.train_step = 0.2;
-    my_Auto_Shoot_Task_T.min_KW = 0.9132;
+    my_Auto_Shoot_Task_T.min_KW = 0.9133;
     my_Auto_Shoot_Task_T.max_KW = 0.0f;
     if (Shootmotor_Init(&my_Shoot_Task_T) != HAL_OK)
     {
-        Error_Handler();
+        //Error_Handler();
     }
     
     Encoder_Pospid_Init(&my_Dunk_Task_t.Encoder_PosPID_t,Encoder_VertPos+10,0,0,0.);
@@ -324,7 +324,7 @@ void Handle_Shoot_Task(void*argument)
             if (encoderData.angle <= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle - 10 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
                 unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
-                unitree_DunkMotor_t[3].cmd.K_P = 0.3;
+                unitree_DunkMotor_t[3].cmd.K_P = 0.25;
                 unitree_DunkMotor_t[3].cmd.K_W = 0.8;
                 unitree_DunkMotor_t[3].cmd.W = 0.1;
                 unitree_DunkMotor_t[3].cmd.T = 0;

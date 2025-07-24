@@ -14,8 +14,8 @@
 #include "Caculate.h"
 #include "usermain.h"
 
-#define UP_ROTATION 5.25      //上层机构伸缩所需旋转圈数   10
-#define DOWN_ROTATION 5.25    //下层机构伸缩所需旋转圈数   14
+#define UP_ROTATION 6.75      //上层机构伸缩所需旋转圈数   10
+#define DOWN_ROTATION 6.75    //下层机构伸缩所需旋转圈数   14
 #define UPHIGH_ROTATION 14.25
 #define DOWNHIGH_ROTATION 15.25
 #define MX_CAN &hcan2
@@ -35,8 +35,15 @@ typedef struct
     __contract contract;        //伸缩机构收缩函数
 }Expansion_t;
 
+typedef enum
+{
+    Expansion_Stop,
+    Expansion_Working,
+}EXPANSION_STATE_t;
+
 extern Expansion_t Expansion_Up;
 extern Expansion_t Expansion_Down;
+extern EXPANSION_STATE_t Expansion_State;
 
 void Expansion_Init();
 void Expansion_Executor_Task(void* argument);
