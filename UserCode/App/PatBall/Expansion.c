@@ -3,7 +3,7 @@
  * @Author: Alex
  * @Date: 2025-03-22 10:35:23
  * @LastEditors: Alex
- * @LastEditTime: 2025-07-23 15:49:21
+ * @LastEditTime: 2025-07-25 09:42:47
  */
 #include "Expansion.h"
 
@@ -199,7 +199,7 @@ void Expansion_Executor_Task(void* argument)
         // }
         // if(MyRemote_Data.left_switch == 0)
         // {
-            if (MyRemote_Data.btn_LeftCrossLeft == 1)
+            if (MyRemote_Data.btn_Btn3 == 1)
             {
                 for (uint8_t i = 0; i < 2; ++i)
                 {
@@ -216,7 +216,7 @@ void Expansion_Executor_Task(void* argument)
         // }
         // if(MyRemote_Data.left_switch == 0)
         // {
-            if (MyRemote_Data.btn_LeftCrossRight == 1)
+            if (MyRemote_Data.btn_Btn2 == 1)
             {
                 Expansion_State = Expansion_Stop;
             }

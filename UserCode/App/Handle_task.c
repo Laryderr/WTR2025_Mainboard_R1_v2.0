@@ -53,7 +53,7 @@ void my_handle_Task(void)
         Expansion_Down.contract();*/
         osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
         osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
-        osThreadSuspend(Patball_TaskHandle);
+        //osThreadSuspend(Patball_TaskHandle);
         JoystickDelete(ID_HANDLE_DUNK, &mav_joystick_del);
         JoystickDelete(ID_HANDLE_SHOOT, &mav_joystick_del);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
@@ -112,29 +112,24 @@ void my_handle_Task(void)
         }else if (BtnScan_Press(MyRemote_Data.btn_RightCrossDown))
         {
             my_Shoot_Task_T.shoot_point = 3;
-        }else if (BtnScan_Press(MyRemote_Data.btn_Btn2))
-        {
-            my_Shoot_Task_T.shoot_point = 4;
         }
+        
         switch (my_Shoot_Task_T.shoot_point)
         {
-        case 1:
-            chassis_XYPoseServo_calc(1.5,1.5);
-            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-            break;
-        case 2:
-            chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
-            my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.2);
+            case 1:
+                chassis_XYPoseServo_calc(2,2);
+                my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                break;
+            case 2:
+                chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
+                //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.7);
 
-            break;
-        case 3:
-            break;
-        case 4:
-            //复位校准位置
-            chassis_XYPoseServo_calc(0.51,0.51);
-            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-        default:
-            break;
+                break;
+            case 3:
+                break;
+            default:
+                break;
         }
 
         //自动定位 篮筐瞄准
