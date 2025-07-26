@@ -123,11 +123,7 @@ void my_handle_Task(void)
             case 2:
                 chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
                 //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-<<<<<<< HEAD
                 my_Alldir_Chassis_t.chassis_Aim_at_Basket(4);
-=======
-                my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.7);
->>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
 
                 break;
             case 3:

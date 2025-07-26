@@ -195,11 +195,7 @@ void Handle_Shoot_Task(void*argument)
 {
     my_Auto_Shoot_Task_T.now_train_distance = 0;
     my_Auto_Shoot_Task_T.train_step = 0.2;
-<<<<<<< HEAD
     my_Auto_Shoot_Task_T.min_KW = 0.9091;
-=======
-    my_Auto_Shoot_Task_T.min_KW = 0.9125;
->>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
     my_Auto_Shoot_Task_T.max_KW = 0.0f;
     if (Shootmotor_Init(&my_Shoot_Task_T) != HAL_OK)
     {
@@ -290,19 +286,11 @@ void Handle_Shoot_Task(void*argument)
             //下降控制
             if (encoderData.angle <= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle - 5 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
-<<<<<<< HEAD
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
                 unitree_DunkMotor_t[5].cmd.K_W = 1;
                 unitree_DunkMotor_t[5].cmd.W = -0.05;
                 unitree_DunkMotor_t[5].cmd.T = 0;
-=======
-                unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
-                unitree_DunkMotor_t[3].cmd.K_P = 0.2;
-                unitree_DunkMotor_t[3].cmd.K_W = 0.85;
-                unitree_DunkMotor_t[3].cmd.W = 0.1;
-                unitree_DunkMotor_t[3].cmd.T = 0;
->>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
 
                 Unitree_motor_0Torque(3);
                 my_Shoot_Task_T.camera_get_angle_flag = 0;
