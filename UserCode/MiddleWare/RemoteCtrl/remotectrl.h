@@ -17,6 +17,7 @@ typedef struct
     float KW001;
     float KW0001;
     float KW00001;
+    float KW_00001;
     bool btn_LeftCrossUp;
     uint32_t btn_LeftCrossUp_press_count;    // 总按下次数
     uint32_t btn_LeftCrossMid_press_count;    // 总按下次数
@@ -25,6 +26,8 @@ typedef struct
     uint32_t btn_LeftCrossLeft_press_count;
     uint32_t btn_RightCrossLeft_press_count;
     uint32_t btn_RightCrossRight_press_count;
+    uint32_t btn_JoystickL_press_count;
+    uint32_t btn_JoystickR_press_count;
 
     bool btn_LeftCrossDown;
     bool btn_LeftCrossLeft;

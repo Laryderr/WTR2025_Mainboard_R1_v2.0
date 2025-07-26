@@ -40,6 +40,7 @@ typedef struct{
     float camera_aim_angle;
     bool camera_get_angle_flag;
     PID_t Encoder_SpeedPID_t; //投篮臂角编码器速度PID结构体
+    uint8_t shoot_count;
     
 }Shoot_Task_T ;                                
 

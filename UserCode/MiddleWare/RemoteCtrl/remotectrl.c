@@ -172,6 +172,19 @@ void BtnPress_Once6(bool this_btn)
     }
     
 }
+void BtnPress_Once7(bool this_btn)
+{
+    if(MyRemote_Data.btn_JoystickL == 1)
+    {
+        while (MyRemote_Data.btn_JoystickL == 1)
+        {
+            MyRemote_Data.btn_JoystickL = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickL);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_JoystickL_press_count++;
+    }
+    
+}
 /*****************************************************************************
  * @brief 以下是线程函数定义
  * 
@@ -200,10 +213,12 @@ void my_Remotectrl_Task(void *arguement)
         BtnPress_Once4(1);
         BtnPress_Once5(1);
         BtnPress_Once6(1);
+        BtnPress_Once7(1);
         MyRemote_Data.KW01 = (float)MyRemote_Data.btn_LeftCrossDown_press_count/10.0f;
         MyRemote_Data.KW001 = (float)MyRemote_Data.btn_LeftCrossMid_press_count /100.0f;
         MyRemote_Data.KW0001 = (float)MyRemote_Data.btn_LeftCrossUp_press_count /1000.0f;
         MyRemote_Data.KW00001 = (float)MyRemote_Data.btn_RightCrossLeft_press_count/10000.0f;
+        MyRemote_Data.KW_00001 = -(float)MyRemote_Data.btn_JoystickL_press_count/10000.0f;
         //数据处理
         /*MyLastRemote_Data.btn_LeftCrossUp     = MyRemote_Data.btn_LeftCrossUp;
         MyLastRemote_Data.btn_LeftCrossDown   = MyRemote_Data.btn_LeftCrossDown;

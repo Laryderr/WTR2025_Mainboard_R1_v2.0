@@ -43,8 +43,8 @@ void my_handle_Task(void)
     my_Auto_Shoot_Task_T.train_point[0] = BASKET_X - sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
-                                   MyRemote_Data.KW0001 + MyRemote_Data.KW00001 ;
-    my_Alldir_Chassis_t.shoot_angle = 80 + MyRemote_Data.btn_RightCrossRight_press_count;
+                                   MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
+    my_Alldir_Chassis_t.shoot_angle = 72.5 + MyRemote_Data.btn_RightCrossRight_press_count;
 
     switch (myHandle_State)
     {
@@ -53,7 +53,7 @@ void my_handle_Task(void)
         Expansion_Down.contract();*/
         osThreadSuspend(unitree_shoot_ctrl_TaskHandle);
         osThreadSuspend(unitree_dunk_ctrl_TaskHandle);
-        osThreadSuspend(Patball_TaskHandle);
+        //osThreadSuspend(Patball_TaskHandle);
         JoystickDelete(ID_HANDLE_DUNK, &mav_joystick_del);
         JoystickDelete(ID_HANDLE_SHOOT, &mav_joystick_del);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
@@ -112,29 +112,24 @@ void my_handle_Task(void)
         }else if (BtnScan_Press(MyRemote_Data.btn_RightCrossDown))
         {
             my_Shoot_Task_T.shoot_point = 3;
-        }else if (BtnScan_Press(MyRemote_Data.btn_Btn2))
-        {
-            my_Shoot_Task_T.shoot_point = 4;
         }
+        
         switch (my_Shoot_Task_T.shoot_point)
         {
-        case 1:
-            chassis_XYPoseServo_calc(1.5,1.5);
-            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-            break;
-        case 2:
-            chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
-            my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.2);
+            case 1:
+                chassis_XYPoseServo_calc(2,2);
+                my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                break;
+            case 2:
+                chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
+                //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                my_Alldir_Chassis_t.chassis_Aim_at_Basket(4);
 
-            break;
-        case 3:
-            break;
-        case 4:
-            //复位校准位置
-            chassis_XYPoseServo_calc(0.51,0.51);
-            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-        default:
-            break;
+                break;
+            case 3:
+                break;
+            default:
+                break;
         }
 
         //自动定位 篮筐瞄准

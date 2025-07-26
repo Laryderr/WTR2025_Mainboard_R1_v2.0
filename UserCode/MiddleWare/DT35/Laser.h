@@ -16,8 +16,8 @@ extern uint8_t Laser_rev_buffer[24];
 extern float Laser_x ;
 extern float Laser_y ;
 
-extern void Laser_rev_Init();
-extern void Laser_Data_Decode();
-extern void Laser_Buffer_Decode();
+void Laser_rev_Init();
+void Laser_Data_Decode();
+void Laser_Buffer_Decode();
 
 #endif 
