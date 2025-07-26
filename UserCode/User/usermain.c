@@ -48,7 +48,11 @@ void StartDefaultTask(void *arguement)
     //开启动作线程
     //Handle_Dunk_TaskStart();
     Patball_TaskStart();
+<<<<<<< HEAD
     Handle_Shoot_TaskStart();
+=======
+    //Handle_Shoot_TaskStart();
+>>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
     //Auto_Shoot_TaskStart();
     //my_debug_TaskStart();               //调试线程
     //osDelay(500);
