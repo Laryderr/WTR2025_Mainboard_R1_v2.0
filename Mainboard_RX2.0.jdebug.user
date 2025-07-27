@@ -1,6 +1,5 @@
 
-<<<<<<< HEAD
-GraphedExpression="camera_basket_xyz[0]", Color=#a00909
+GraphedExpression="camera_basket_xyz[0]", DisplayFormat=DISPLAY_FORMAT_DEC, Color=#a00909
 GraphedExpression="(encoderData).angle", Color=#09a01b
 GraphedExpression="((my_Alldir_Chassis_t).current_pos).xpos", Color=#09a087
 GraphedExpression="((my_Alldir_Chassis_t).current_pos).ypos", Color=#0984a0
@@ -14,16 +13,16 @@ OpenDocument="Handle_Shoot_task.c", FilePath="d:/embedded_about/WTR/25season/Mai
 OpenDocument="my_Callback.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Callback/my_Callback.c", Line=16
 OpenDocument="DJI.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/DJI/DJI.c", Line=56
 OpenDocument="stm32f4xx_hal_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.c", Line=1719
-OpenDocument="wtr_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c", Line=65
-OpenDocument="crc_ccitt.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Unitree/crc_ccitt.h", Line=31
-OpenDocument="Unitree.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Unitree/Unitree.c", Line=55
+OpenDocument="wtr_can.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/wtr_can/wtr_can.c", Line=57
+OpenDocument="crc_ccitt.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Unitree/crc_ccitt.h", Line=23
+OpenDocument="Unitree.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Unitree/Unitree.c", Line=48
 OpenDocument="stm32f4xx_hal.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c", Line=316
 OpenDocument="stm32f4xx_it.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Core/Src/stm32f4xx_it.c", Line=237
 OpenDocument="Handle_Dunk_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Dunk/Handle_Dunk_task.c", Line=91
 OpenDocument="Handle_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/Handle_task.c", Line=28
 OpenDocument="Laser.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/DT35/Laser.c", Line=71
 OpenDocument="cmsis_os2.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c", Line=885
-OpenDocument="usermain.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/User/usermain.c", Line=41
+OpenDocument="usermain.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/User/usermain.c", Line=37
 OpenDocument="Handle_Patball_task.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/App/PatBall/Handle_Patball_task.c", Line=112
 OpenDocument="list.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/Middlewares/Third_Party/FreeRTOS/Source/list.c", Line=146
 OpenDocument="wtr_mavlink.h", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/Module/Remotectl/Mavlink/wtr_mavlink.h", Line=60
@@ -33,43 +32,21 @@ OpenDocument="encoder.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2
 OpenDocument="chassis_ctrl.c", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/UserCode/MiddleWare/Chassis_Ctrl/chassis_ctrl.c", Line=356
 OpenDocument="startup_stm32f427xx.s", FilePath="d:/embedded_about/WTR/25season/Mainboard_RX2.0/startup_stm32f427xx.s", Line=52
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=165, h=151, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=1164, h=153, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=165, h=178, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=BOTTOM, x=0, y=0, w=1165, h=1067, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=1, y=0, w=290, h=153, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=1394, h=1067, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
-OpenWindow="Timeline", DockArea=LEFT, x=0, y=1, w=1455, h=176, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="500 ms / Div", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;-126", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="1182;-75", CodeGraphLegendShown=0, CodeGraphLegendPosition="1203;0"
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=165, h=174, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=1164, h=175, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=165, h=197, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=BOTTOM, x=0, y=0, w=1165, h=1025, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=1, y=0, w=290, h=175, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=1394, h=1025, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
+OpenWindow="Timeline", DockArea=LEFT, x=0, y=1, w=1455, h=196, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="100 s / Div", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;0", PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="1182;-75", CodeGraphLegendShown=0, CodeGraphLegendPosition="1203;0"
 TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[674;104;100;100;544]
 TableHeader="Source Files", SortCol="File", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[359;100;100;100;1364]
 TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";" camera_basket_xyz[0]";" (encoderData).angle";" ((my_Alldir_Chassis_t).current_pos).xpos";" ((my_Alldir_Chassis_t).current_pos).ypos";" (( unitree_DunkMotor_t[5]).data).W";" (( unitree_DunkMotor_t[3]).data).W"], ColWidths=[100;100;100;100;100;100;100;100]
-TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[387;100;146;135;124;146;130;150;150]
-=======
-
-GraphedExpression="(( unitree_DunkMotor_t[5]).data).T", Color=#e56a6f, Show=0
-GraphedExpression="(( unitree_DunkMotor_t[3]).data).T", Color=#35792b, Show=0
-GraphedExpression="(encoderCalculateData).angle", DisplayFormat=DISPLAY_FORMAT_DEC, Color=#769dda
-OpenDocument="startup_stm32f427xx.s", FilePath="d:/Alex/Github/WTR2025_Mainboard_R1_v2.0/startup_stm32f427xx.s", Line=48
-OpenDocument="main.c", FilePath="d:/Alex/Github/WTR2025_Mainboard_R1_v2.0/Core/Src/main.c", Line=58
-OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=1, w=189, h=269, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=0, w=189, h=670, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=BOTTOM, x=0, y=0, w=1165, h=481, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Data Sampling", DockArea=BOTTOM, x=1, y=0, w=1394, h=481, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
-OpenWindow="Timeline", DockArea=LEFT, x=0, y=0, w=1129, h=940, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=1, DataPaneShown=1, PowerPaneShown=0, CodePaneShown=0, PinCursor="Cursor Movable", TimePerDiv="Fit Width", TimeStampFormat="Time", DataGraphDrawAsPoints=0, DataGraphLegendShown=1, DataGraphUniformSampleSpacing=0, DataGraphLegendPosition="0;0", DataGraphShowNamesAtCursor=0, PowerGraphDrawAsPoints=0, PowerGraphLegendShown=0, PowerGraphAvgFilterTime=Off, PowerGraphAvgFilterLen=Off, PowerGraphUniformSampleSpacing=0, PowerGraphLegendPosition="902;-69", CodeGraphLegendShown=0, CodeGraphLegendPosition="918;0"
-SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
-TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";" (( unitree_DunkMotor_t[5]).data).T";" (( unitree_DunkMotor_t[3]).data).T";" (encoderCalculateData).angle"], ColWidths=[100;100;100;100;100]
-TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[387;100;124;114;100;154;110;126;179]
->>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
+TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[387;100;100;100;100;110;130;150;217]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;144;294]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[248;314;100;477]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[100;144;244]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[248;314;100;503]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-<<<<<<< HEAD
-TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;366]
-=======
-TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[222;118;186;1322]
->>>>>>> 63c533e17ed30d9d71d05c24721749e9a4daca14
 WatchedExpression=" unitree_DunkMotor_t", RefreshRate=5, Window=Watched Data 1
 WatchedExpression="MyRemote_Data", RefreshRate=5, Window=Watched Data 1
 WatchedExpression="encoderData", RefreshRate=5, Window=Watched Data 1

@@ -26,6 +26,7 @@ enum Shoot_Status{
 
 typedef struct{
     enum Shoot_Status myshoot_status;
+    enum Shoot_Status mylastshoot_status;
     float target_throw_deg;//目标出手角度
     float target_throw_w;//目标出手角速度
     float Shootball_InitialPos[2];//投篮电机初始位置
@@ -40,7 +41,9 @@ typedef struct{
     float camera_aim_angle;
     bool camera_get_angle_flag;
     PID_t Encoder_SpeedPID_t; //投篮臂角编码器速度PID结构体
-    uint8_t shoot_count;
+    uint8_t shoot_count;//投篮总次数
+    float model_calc_degree;
+    float model_calc_KW;
     
 }Shoot_Task_T ;                                
 

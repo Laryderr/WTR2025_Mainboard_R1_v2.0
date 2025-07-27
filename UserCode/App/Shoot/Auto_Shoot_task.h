@@ -6,8 +6,10 @@ extern "C" {
 #endif
 
 #include "usermain.h"
+#include "math.h"
+#include "stdio.h"
 
-#define MIN_TRAIN_DISTANCE 1.9 //少0.6
+#define MIN_TRAIN_DISTANCE 3.1 
 #define MAX_TRAIN_DISTANCE 5
 
 
@@ -27,12 +29,16 @@ typedef struct Auto_Shoot_Task_T
     float KW001;
     float KW0001;
     float KW00001;
+    
 
 }Auto_Shoot_Task_T;
 
 extern Auto_Shoot_Task_T my_Auto_Shoot_Task_T;
 
 void Auto_Shoot_TaskStart(void);
+
+float Calc_Degree(float distance);
+double Calc_KW(double distance);
 
 #ifdef __cplusplus
 }

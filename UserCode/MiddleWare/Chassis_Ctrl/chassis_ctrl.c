@@ -190,7 +190,7 @@ void chassis_RePosToAbPos(float RePos_x, float RePos_y, float* AbPos_x, float* A
 {
     double r = sqrt(pow(RePos_x,2) + pow(RePos_y,2));
     double angle1 = atan(-RePos_x / RePos_y);
-    double angle2 = angle1 + ((PI/2)-(my_Alldir_Chassis_t.current_pos.yawpos - my_Alldir_Chassis_t.current_pos.yaw_offset)/180*PI);
+    double angle2 = angle1 + ((PI/2)+(my_Alldir_Chassis_t.current_pos.yawpos - my_Alldir_Chassis_t.current_pos.yaw_offset)/180*PI);
 
     *AbPos_x = r*cos(angle2);
     *AbPos_y = r*sin(angle2);
@@ -318,11 +318,11 @@ void my_Chassis_Init(void)
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vy_pid,my_Alldir_Chassis_t.target_v.vy,0,0,0);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0.2,0.000001,0.001);
     //底盘位置pid初始化
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,1.1,0.000001,0.4);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,1.1,0.000001,0.4);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,1.1,0.000001,0.35);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,1.1,0.000001,0.35);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.target_pos.yawpos,0.2,0,0.02);//0.02);
     //chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.46,0.00003,0.04);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.017,0.000001,0.015);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.016,0.000001,0.02);
     //底盘位置初始化
     my_Alldir_Chassis_t.current_pos.xpos = 0;
     my_Alldir_Chassis_t.current_pos.ypos = 0;
@@ -451,7 +451,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
             //遥控器目标速度获取
             if (my_Alldir_Chassis_t.chassis_calibrate_flag == 1)
             {
-                //Ball_Hold(0.1);
+                Ball_Hold(0.1);
 
                 my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*6.0f ;
                 my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*6.0f;
@@ -499,7 +499,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
 
         my_Alldir_Chassis_t.chassis_to_basket = sqrt((my_Alldir_Chassis_t.current_pos.xpos - BASKET_X)*(my_Alldir_Chassis_t.current_pos.xpos - BASKET_X) + 
                                                     (my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)*(my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)); 
-
+        
 
         osDelay(2);
     }

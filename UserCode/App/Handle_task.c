@@ -44,7 +44,12 @@ void my_handle_Task(void)
     my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
                                    MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
-    my_Alldir_Chassis_t.shoot_angle = 72.5 + MyRemote_Data.btn_RightCrossRight_press_count;
+    my_Alldir_Chassis_t.shoot_angle = 74 + MyRemote_Data.btn_RightCrossRight_press_count;
+    
+    //模型预测
+    // my_Shoot_Task_T.model_calc_KW     = Calc_KW(my_Alldir_Chassis_t.chassis_to_basket);
+    // my_Shoot_Task_T.model_calc_degree = Calc_Degree(my_Alldir_Chassis_t.chassis_to_basket);
+
 
     switch (myHandle_State)
     {
@@ -121,9 +126,9 @@ void my_handle_Task(void)
                 my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
                 break;
             case 2:
-                chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
-                //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-                my_Alldir_Chassis_t.chassis_Aim_at_Basket(4);
+                // chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
+                // //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+                 my_Alldir_Chassis_t.chassis_Aim_at_Basket(4);
 
                 break;
             case 3:

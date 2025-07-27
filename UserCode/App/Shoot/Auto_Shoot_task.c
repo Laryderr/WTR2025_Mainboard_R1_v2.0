@@ -37,6 +37,24 @@ void train_45dgree_equation()
 
 }
 
+// Degree计算（线性）
+float Calc_Degree(float distance){
+    return 7.5f * distance + 53.75f;
+}
+
+/**
+ * @brief 计算五次多项式函数值
+ * @param x 自变量x
+ * @return double 函数值y
+ */
+double Calc_KW(double distance) {
+    return -0.0264 * pow(distance, 5) + 
+            0.289 * pow(distance, 4) - 
+            1.2405 * pow(distance, 3) + 
+            2.6137 * pow(distance, 2) - 
+            2.6863 * distance + 
+            1.9659;
+}
 
 /**
  * @brief 单个投篮点位设置

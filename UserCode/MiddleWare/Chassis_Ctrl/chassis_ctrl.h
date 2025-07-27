@@ -22,7 +22,7 @@ extern "C" {
 #include "wtr_can.h"
 
 #define FORWARD_ANGLE -60
-#define BASKET_X    4.03
+#define BASKET_X    3.97
 #define BASKET_Y    0.996
 
 /**
