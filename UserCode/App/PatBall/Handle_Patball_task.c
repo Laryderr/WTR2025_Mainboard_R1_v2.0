@@ -64,54 +64,58 @@
             if (patballstate == PATBALL_PATING)
             {
             //上升
-                // unitree_DunkMotor_t[3].cmd.T = 0;
-                // unitree_DunkMotor_t[3].cmd.W = -0.7;
-                // unitree_DunkMotor_t[3].cmd.Pos = 0;
-                // unitree_DunkMotor_t[3].cmd.K_P = 0;
-                // unitree_DunkMotor_t[3].cmd.K_W = 0.916;
-                // unitree_DunkMotor_t[5].cmd.T = 0;
-                // unitree_DunkMotor_t[5].cmd.W = 0.7;
-                // unitree_DunkMotor_t[5].cmd.Pos = 0;
-                // unitree_DunkMotor_t[5].cmd.K_P = 0;
-                // unitree_DunkMotor_t[5].cmd.K_W = 0.916;
+                float x = my_Alldir_Chassis_t.current_pos.xpos;
+                float y = my_Alldir_Chassis_t.current_pos.ypos;
+                float yaw = my_Alldir_Chassis_t.current_pos.yawpos;
+                chassis_RePosToAbPos(0.2, 0, &target_x, &target_y);
+                unitree_DunkMotor_t[3].cmd.T = 0;
+                unitree_DunkMotor_t[3].cmd.W = -0.7;
+                unitree_DunkMotor_t[3].cmd.Pos = 0;
+                unitree_DunkMotor_t[3].cmd.K_P = 0;
+                unitree_DunkMotor_t[3].cmd.K_W = 0.916;
+                unitree_DunkMotor_t[5].cmd.T = 0;
+                unitree_DunkMotor_t[5].cmd.W = 0.7;
+                unitree_DunkMotor_t[5].cmd.Pos = 0;
+                unitree_DunkMotor_t[5].cmd.K_P = 0;
+                unitree_DunkMotor_t[5].cmd.K_W = 0.916;
                 // unitree_DunkMotor_t[3].cmd.T = 0;
                 // unitree_DunkMotor_t[3].cmd.W = -2;
                 // unitree_DunkMotor_t[3].cmd.Pos = Unitree_Patball_IniPos[0]-4;
                 // unitree_DunkMotor_t[3].cmd.K_P = 2.5;
                 // unitree_DunkMotor_t[3].cmd.K_W = 1.1;
-                unitree_DunkMotor_t[3].cmd.T = -3;
-                unitree_DunkMotor_t[3].cmd.W = 0;
-                unitree_DunkMotor_t[3].cmd.Pos = 0;
-                unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = 0;
-                unitree_DunkMotor_t[5].cmd.T = 3;
-                unitree_DunkMotor_t[5].cmd.W = 0;
-                unitree_DunkMotor_t[5].cmd.Pos = 0;
-                unitree_DunkMotor_t[5].cmd.K_P = 0;
-                unitree_DunkMotor_t[5].cmd.K_W = 0;
-                // while (encoderCalculateData.angle < 8750)
-                // {
-                //     osDelay(1);
-                // }
-                while (encoderCalculateData.angle < 8600)
+                // unitree_DunkMotor_t[3].cmd.T = -3.5;
+                // unitree_DunkMotor_t[3].cmd.W = 0;
+                // unitree_DunkMotor_t[3].cmd.Pos = 0;
+                // unitree_DunkMotor_t[3].cmd.K_P = 0;
+                // unitree_DunkMotor_t[3].cmd.K_W = 0;
+                // unitree_DunkMotor_t[5].cmd.T = 3.5;
+                // unitree_DunkMotor_t[5].cmd.W = 0;
+                // unitree_DunkMotor_t[5].cmd.Pos = 0;
+                // unitree_DunkMotor_t[5].cmd.K_P = 0;
+                // unitree_DunkMotor_t[5].cmd.K_W = 0;
+                while (encoderCalculateData.angle < 9000)
                 {
                     osDelay(1);
                 }
-                // Expansion_Up.contract();
-                // Expansion_Down.contract();
+                // while (encoderCalculateData.angle < 8500)
+                // {
+                //     osDelay(1);
+                // }
+                unitree_DunkMotor_t[3].cmd.T = 0;
+                unitree_DunkMotor_t[3].cmd.W = 0.7;
+                unitree_DunkMotor_t[3].cmd.Pos = 0;
+                unitree_DunkMotor_t[3].cmd.K_P = 0;
+                unitree_DunkMotor_t[3].cmd.K_W = 0.9;
+                unitree_DunkMotor_t[5].cmd.T = 0;
+                unitree_DunkMotor_t[5].cmd.W = -0.7;
+                unitree_DunkMotor_t[5].cmd.Pos = 0;
+                unitree_DunkMotor_t[5].cmd.K_P = 0;
+                unitree_DunkMotor_t[5].cmd.K_W = 0.9;
+                Expansion_Up.contract();
+                Expansion_Down.contract();
                 //回刹
-                while (encoderCalculateData.angle > 6200)
+                while (encoderCalculateData.angle > 7000)
                 {
-                    unitree_DunkMotor_t[3].cmd.T = 3;
-                    unitree_DunkMotor_t[3].cmd.W = 0;
-                    unitree_DunkMotor_t[3].cmd.Pos = 0;
-                    unitree_DunkMotor_t[3].cmd.K_P = 0;
-                    unitree_DunkMotor_t[3].cmd.K_W = 0;
-                    unitree_DunkMotor_t[5].cmd.T = -3;
-                    unitree_DunkMotor_t[5].cmd.W = 0;
-                    unitree_DunkMotor_t[5].cmd.Pos = 0;
-                    unitree_DunkMotor_t[5].cmd.K_P = 0;
-                    unitree_DunkMotor_t[5].cmd.K_W = 0;
                     osDelay(1);
                 }
                 //缓降
@@ -135,9 +139,24 @@
                 {
                 patballstate = PATBALL_IDLE;
                 }*/
-                
-                
-                osDelay(700);
+                unitree_DunkMotor_t[3].cmd.T = 0.6;
+                unitree_DunkMotor_t[3].cmd.W = 0;
+                unitree_DunkMotor_t[3].cmd.Pos = 0;
+                unitree_DunkMotor_t[3].cmd.K_P = 0;
+                unitree_DunkMotor_t[3].cmd.K_W = 0;
+                unitree_DunkMotor_t[5].cmd.T = -0.6;
+                unitree_DunkMotor_t[5].cmd.W = 0;
+                unitree_DunkMotor_t[5].cmd.Pos = 0;
+                unitree_DunkMotor_t[5].cmd.K_P = 0;
+                unitree_DunkMotor_t[5].cmd.K_W = 0;
+                for(int i = 0; i < 500; ++i)
+                {
+                    my_Alldir_Chassis_t.target_v.vx = -3;
+                    my_Alldir_Chassis_t.target_v.vy = 0;
+                    chassis_YAWPoseServo_calc(yaw);
+                    osDelay(1);
+                }
+                //osDelay(500);
                 unitree_DunkMotor_t[3].cmd.T = 0;
                 unitree_DunkMotor_t[3].cmd.W = 0;
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
@@ -147,7 +166,13 @@
                 unitree_DunkMotor_t[5].cmd.W = 0;
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
-                unitree_DunkMotor_t[5].cmd.K_W = 0.3;
+                unitree_DunkMotor_t[5].cmd.K_W = 0;
+                while (sqrt(pow((my_Alldir_Chassis_t.current_pos.xpos - (x+target_x)),2) + pow((my_Alldir_Chassis_t.current_pos.ypos - (y+target_y)),2)) > 0.05)
+                {
+                    chassis_XYPoseServo_calc(x + target_x, y + target_y);
+                    chassis_YAWPoseServo_calc(yaw);
+                    osDelay(1);
+                }
 
                 // float x = my_Alldir_Chassis_t.current_pos.xpos;
                 // float y = my_Alldir_Chassis_t.current_pos.ypos;
@@ -156,12 +181,12 @@
                 // chassis_RePosToAbPos(-0.8, 0.4, &target_x, &target_y);
                 // while (sqrt(pow((my_Alldir_Chassis_t.current_pos.xpos - (x+target_x)),2) + pow((my_Alldir_Chassis_t.current_pos.ypos - (y+target_y)),2)) > 0.7)
                 // {
-                //     my_Alldir_Chassis_t.target_v.vx = 2;
-                //     //my_Alldir_Chassis_t.target_v.vy = -4;
+                //     my_Alldir_Chassis_t.target_v.vx = 5;
+                //     my_Alldir_Chassis_t.target_v.vy = -2.5;
                 //     chassis_YAWPoseServo_calc(yaw);
                 //     osDelay(2);
                 // }
-                // while (myHandle_State == HANDLE_PATBALL_MODE)
+                // while (sqrt(pow((my_Alldir_Chassis_t.current_pos.xpos - (x+target_x)),2) + pow((my_Alldir_Chassis_t.current_pos.ypos - (y+target_y)),2)) > 0.05)
                 // {
                 //     chassis_XYPoseServo_calc(x + target_x, y + target_y);
                 //     chassis_YAWPoseServo_calc(yaw);
@@ -171,20 +196,21 @@
                 my_Alldir_Chassis_t.target_v.vy = 0;
                 my_Alldir_Chassis_t.target_v.vw = 0;
                 patballstate = PATBALL_IDLE;
-            }else if (patballstate == PATBALL_IDLE)
+            }
+            else if (patballstate == PATBALL_IDLE)
             {
-            Encoder_Pospid_Init(&my_Dunk_Task_t.Encoder_PosPID_t,Encoder_VertPos,0.25,0,0.01);//0.25,0,0.01
+            //Encoder_Pospid_Init(&my_Dunk_Task_t.Encoder_PosPID_t,Encoder_VertPos,0.25,0,0.01);//0.25,0,0.01
             unitree_DunkMotor_t[3].cmd.Pos = 0;
             unitree_DunkMotor_t[3].cmd.K_P = 0;
             unitree_DunkMotor_t[3].cmd.W = 0;
             unitree_DunkMotor_t[3].cmd.K_W = 0;
             unitree_DunkMotor_t[3].cmd.T = 0;
             //unitree_DunkMotor_t[3].cmd.T = -Encoder_PosServo(&my_Dunk_Task_t.Encoder_PosPID_t,encoderData.angle);
-            // unitree_DunkMotor_t[5].cmd.Pos = Unitree_Patball_IniPos[1]  + 0.8;
+            // unitree_DunkMotor_t[5].cmd.Pos = Unitree_Patball_IniPos[1]  + 1.5;
             // unitree_DunkMotor_t[5].cmd.K_P = 0.4;
             // unitree_DunkMotor_t[5].cmd.K_W = 0.15;
             // unitree_DunkMotor_t[5].cmd.W = 0.1;
-            unitree_DunkMotor_t[5].cmd.T = 0;
+            // unitree_DunkMotor_t[5].cmd.T = 0;
             unitree_DunkMotor_t[5].cmd.Pos = 0;
             unitree_DunkMotor_t[5].cmd.K_P = 0;
             unitree_DunkMotor_t[5].cmd.W = 0;
@@ -195,16 +221,16 @@
         }
         else
         {
-            unitree_DunkMotor_t[3].cmd.Pos = 0;
-            unitree_DunkMotor_t[3].cmd.K_P = 0;
-            unitree_DunkMotor_t[3].cmd.W = 0;
-            unitree_DunkMotor_t[3].cmd.K_W = 0;
-            unitree_DunkMotor_t[3].cmd.T = 0;
-            unitree_DunkMotor_t[5].cmd.Pos = 0;
-            unitree_DunkMotor_t[5].cmd.K_P = 0;
-            unitree_DunkMotor_t[5].cmd.W = 0;
-            unitree_DunkMotor_t[5].cmd.K_W = 0;
-            unitree_DunkMotor_t[5].cmd.T = 0;
+            // unitree_DunkMotor_t[3].cmd.Pos = 0;
+            // unitree_DunkMotor_t[3].cmd.K_P = 0;
+            // unitree_DunkMotor_t[3].cmd.W = 0;
+            // unitree_DunkMotor_t[3].cmd.K_W = 0;
+            // unitree_DunkMotor_t[3].cmd.T = 0;
+            // unitree_DunkMotor_t[5].cmd.Pos = 0;
+            // unitree_DunkMotor_t[5].cmd.K_P = 0;
+            // unitree_DunkMotor_t[5].cmd.W = 0;
+            // unitree_DunkMotor_t[5].cmd.K_W = 0;
+            // unitree_DunkMotor_t[5].cmd.T = 0;
             osDelay(10);
         }
     }

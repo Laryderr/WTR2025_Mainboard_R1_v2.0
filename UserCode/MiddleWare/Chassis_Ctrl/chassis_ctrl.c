@@ -451,7 +451,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
             //遥控器目标速度获取
             if (my_Alldir_Chassis_t.chassis_calibrate_flag == 1)
             {
-                Ball_Hold(0.1);
+                //Ball_Hold(0.1);
 
                 my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*6.0f ;
                 my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*6.0f;
@@ -468,7 +468,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 }
                 if (my_Alldir_Chassis_t.PreAim_Ctrl_flag == 1)
                 {
-                    Chassis_Pre_Aim();
+                    //Chassis_Pre_Aim();
                     //chassis_YAWPoseServo_calc(50);
                 }
                 
