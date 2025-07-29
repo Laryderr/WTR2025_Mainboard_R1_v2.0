@@ -39,12 +39,13 @@ void my_handle_Task(void)
         myHandle_State = HANDLE_IDLE_MODE;
     }
 
+    //模型训练
     my_Auto_Shoot_Task_T.now_train_distance = MIN_TRAIN_DISTANCE + MyRemote_Data.btn_LeftCrossRight_press_count*my_Auto_Shoot_Task_T.train_step - MyRemote_Data.btn_LeftCrossLeft_press_count*my_Auto_Shoot_Task_T.train_step;
     my_Auto_Shoot_Task_T.train_point[0] = BASKET_X - sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
                                    MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
-    my_Alldir_Chassis_t.shoot_angle = 74 + MyRemote_Data.btn_RightCrossRight_press_count;
+    my_Alldir_Chassis_t.shoot_angle = 68 + MyRemote_Data.btn_RightCrossRight_press_count*0.75;
     
     //模型预测
     // my_Shoot_Task_T.model_calc_KW     = Calc_KW(my_Alldir_Chassis_t.chassis_to_basket);

@@ -23,7 +23,7 @@ void OnProjectLoad (void) {
   // Dialog-generated settings
   //
   Project.SetDevice ("STM32F427II");
-  Project.SetHostIF ("USB", "601023581");
+  Project.SetHostIF ("USB", "69409487");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddPathSubstitute ("D:/embedded_about/WTR/25season/Mainboard_RX2.0", "$(ProjectDir)");

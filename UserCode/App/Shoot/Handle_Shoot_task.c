@@ -195,12 +195,12 @@ void Ball_Hold(float W)
 void Handle_Shoot_Task(void*argument)
 {
     my_Auto_Shoot_Task_T.now_train_distance = 0;
-    my_Auto_Shoot_Task_T.train_step = 0.2;
-    my_Auto_Shoot_Task_T.min_KW = 0.923;
+    my_Auto_Shoot_Task_T.train_step = 0.1;
+    my_Auto_Shoot_Task_T.min_KW = 0.9047;
     my_Auto_Shoot_Task_T.max_KW = 0.0f;
     if (Shootmotor_Init(&my_Shoot_Task_T) != HAL_OK)
     {
-        // Error_Handler();
+        Error_Handler();
     }
     
     Encoder_Pospid_Init(&my_Dunk_Task_t.Encoder_PosPID_t,Encoder_VertPos+10,0,0,0.);
@@ -260,15 +260,15 @@ void Handle_Shoot_Task(void*argument)
                 my_Shoot_Task_T.shoot_count++;
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                // unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                // unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[3].cmd.W = -1;
                 unitree_DunkMotor_t[3].cmd.T = 0;//-3.1
                 
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
-                // unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                // unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[5].cmd.W = 1;
                 unitree_DunkMotor_t[5].cmd.T = 0;//3.1
                 my_Shoot_Task_T.Shoot_Completed_Flag = 1;
@@ -279,15 +279,15 @@ void Handle_Shoot_Task(void*argument)
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                // unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                // unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[3].cmd.W = 1;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
-                // unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                // unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[5].cmd.W = -1;
                 unitree_DunkMotor_t[5].cmd.T = 0;
                 my_Shoot_Task_T.Shoot_Completed_Flag =2;
@@ -295,35 +295,30 @@ void Handle_Shoot_Task(void*argument)
             }
             
             //下降控制
-            if (encoderData.angle <= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle - 5 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
+            if (encoderData.angle <= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle - 4 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
                 if(my_Shoot_Task_T.shoot_count%2 == 0){    
                     unitree_DunkMotor_t[5].cmd.Pos = 0;
                     unitree_DunkMotor_t[5].cmd.K_P = 0;
-                    unitree_DunkMotor_t[5].cmd.K_W = 1.1;
-                    unitree_DunkMotor_t[5].cmd.W = -0.1;
+                    unitree_DunkMotor_t[5].cmd.K_W = 2;
+                    unitree_DunkMotor_t[5].cmd.W = -0.001;
                     unitree_DunkMotor_t[5].cmd.T = 0;
                     Unitree_motor_0Torque(3);
                 }else{
                     unitree_DunkMotor_t[3].cmd.Pos = 0;
                     unitree_DunkMotor_t[3].cmd.K_P = 0;
-                    unitree_DunkMotor_t[3].cmd.K_W = 1.1;
-                    unitree_DunkMotor_t[3].cmd.W = 0.1;
+                    unitree_DunkMotor_t[3].cmd.K_W = 2;
+                    unitree_DunkMotor_t[3].cmd.W = 0.001;
                     unitree_DunkMotor_t[3].cmd.T = 0;
                     Unitree_motor_0Torque(5);
                 }
 
-                my_Shoot_Task_T.camera_get_angle_flag = 0;
-                if(encoderData.angle <= Encoder_VertPos + 10)
+                // my_Shoot_Task_T.camera_get_angle_flag = 0;
+                if(encoderData.angle <= Encoder_VertPos + 3)
                 {
                     my_Shoot_Task_T.Shoot_Completed_Flag = 3;
-                    unitree_DunkMotor_t[5].cmd.Pos = 0;
-                    unitree_DunkMotor_t[5].cmd.K_P = 0;
-                    unitree_DunkMotor_t[5].cmd.K_W = 1;
-                    unitree_DunkMotor_t[5].cmd.W = -0.05;
-                    unitree_DunkMotor_t[5].cmd.T = 0;
-
-                    Unitree_motor_0Torque(3);
+                    // Unitree_motor_0Torque(5);
+                    // Unitree_motor_0Torque(3);
                 }
 
             }
@@ -331,8 +326,8 @@ void Handle_Shoot_Task(void*argument)
             if(my_Shoot_Task_T.Shoot_Completed_Flag == 3&&encoderData.angle <= Encoder_VertPos + 1)
             {
                 //Ball_Hold(-0.1);
-                Unitree_motor_0Torque(5);
-                Unitree_motor_0Torque(3);
+                // Unitree_motor_0Torque(5);
+                // Unitree_motor_0Torque(3);
                 my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
             }
             osDelay(1);

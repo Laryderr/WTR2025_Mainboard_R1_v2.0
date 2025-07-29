@@ -67,7 +67,8 @@
                 float x = my_Alldir_Chassis_t.current_pos.xpos;
                 float y = my_Alldir_Chassis_t.current_pos.ypos;
                 float yaw = my_Alldir_Chassis_t.current_pos.yawpos;
-                chassis_RePosToAbPos(0.2, 0, &target_x, &target_y);
+                float target_x, target_y;
+                chassis_RePosToAbPos(-0.1, 0.1, &target_x, &target_y);
                 unitree_DunkMotor_t[3].cmd.T = 0;
                 unitree_DunkMotor_t[3].cmd.W = -0.7;
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
@@ -93,7 +94,7 @@
                 // unitree_DunkMotor_t[5].cmd.Pos = 0;
                 // unitree_DunkMotor_t[5].cmd.K_P = 0;
                 // unitree_DunkMotor_t[5].cmd.K_W = 0;
-                while (encoderCalculateData.angle < 9000)
+                while (encoderData.angle < 87.00)
                 {
                     osDelay(1);
                 }
@@ -111,10 +112,10 @@
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
                 unitree_DunkMotor_t[5].cmd.K_W = 0.9;
-                Expansion_Up.contract();
-                Expansion_Down.contract();
+                // Expansion_Up.contract();
+                // Expansion_Down.contract();
                 //回刹
-                while (encoderCalculateData.angle > 7000)
+                while (encoderData.angle > 70.00)
                 {
                     osDelay(1);
                 }
@@ -151,8 +152,8 @@
                 unitree_DunkMotor_t[5].cmd.K_W = 0;
                 for(int i = 0; i < 500; ++i)
                 {
-                    my_Alldir_Chassis_t.target_v.vx = -3;
-                    my_Alldir_Chassis_t.target_v.vy = 0;
+                    my_Alldir_Chassis_t.target_v.vx = -6;
+                    my_Alldir_Chassis_t.target_v.vy = -1.5;
                     chassis_YAWPoseServo_calc(yaw);
                     osDelay(1);
                 }
@@ -167,9 +168,16 @@
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
                 unitree_DunkMotor_t[5].cmd.K_W = 0;
+                for(int i = 0; i < 650; ++i)
+                {
+                    my_Alldir_Chassis_t.target_v.vx = 7;
+                    my_Alldir_Chassis_t.target_v.vy = 0;
+                    chassis_YAWPoseServo_calc(yaw);
+                    osDelay(1);
+                }
                 while (sqrt(pow((my_Alldir_Chassis_t.current_pos.xpos - (x+target_x)),2) + pow((my_Alldir_Chassis_t.current_pos.ypos - (y+target_y)),2)) > 0.05)
                 {
-                    chassis_XYPoseServo_calc(x + target_x, y + target_y);
+                    chassis_XYPoseServo_calc(x+target_x, y+target_y);
                     chassis_YAWPoseServo_calc(yaw);
                     osDelay(1);
                 }

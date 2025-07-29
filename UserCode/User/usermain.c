@@ -47,7 +47,7 @@ void StartDefaultTask(void *arguement)
 
     //开启动作线程
     //Handle_Dunk_TaskStart();
-    Patball_TaskStart();
+    //Patball_TaskStart();
     Handle_Shoot_TaskStart();
     //Auto_Shoot_TaskStart();
     //my_debug_TaskStart();               //调试线程
@@ -76,7 +76,7 @@ void StartDefaultTask(void *arguement)
         //JoystickSwitchMsg(10, debug_msg, &mav_dir_choose_msg);
         Laser_Buffer_Decode();
         //SendCurrentPos_ToNUC();
-        HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
+        //HAL_GPIO_WritePin(POWER4_GPIO_Port,POWER4_Pin,GPIO_PIN_SET);
         /*if (MyRemote_Data.left_switch == 0)
         {
             BufferOn();

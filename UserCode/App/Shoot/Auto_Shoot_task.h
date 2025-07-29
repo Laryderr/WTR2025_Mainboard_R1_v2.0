@@ -9,7 +9,7 @@ extern "C" {
 #include "math.h"
 #include "stdio.h"
 
-#define MIN_TRAIN_DISTANCE 3.1 
+#define MIN_TRAIN_DISTANCE 1.3 
 #define MAX_TRAIN_DISTANCE 5
 
 
