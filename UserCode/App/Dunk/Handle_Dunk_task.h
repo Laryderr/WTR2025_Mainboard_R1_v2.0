@@ -9,7 +9,7 @@ extern "C" {
 
 #define Max_Extension_Angle 16  //轮腿电机从抬腿到伸腿的最大正转弧度
 #define Max_ThrowBall_Angle 18.9 //投球电机旋转总角度（已乘减速比）
-#define Encoder_VertPos 57.5      ////投篮臂垂直时编码器角度
+#define Encoder_VertPos 54      ////投篮臂垂直时编码器角度
 #define DegreetoRad     6.283
 
 

@@ -88,11 +88,11 @@ void my_Unitree_UART_Message_Task(void *argument)
         osDelay(2);
         Unitree_UART_tranANDrev(&unitree_DunkMotor_t[2], 2, 1, unitree_DunkMotor_t[2].cmd.T,unitree_DunkMotor_t[2].cmd.W * UNITREE_REDUCTION_RATE, unitree_DunkMotor_t[2].cmd.Pos * UNITREE_REDUCTION_RATE, unitree_DunkMotor_t[2].cmd.K_P, unitree_DunkMotor_t[2].cmd.K_W);
         osDelay(2);
-        Unitree_UART_tranANDrev(&unitree_DunkMotor_t[3], 3, 1, unitree_DunkMotor_t[3].cmd.T,unitree_DunkMotor_t[3].cmd.W * UNITREE_REDUCTION_RATE , unitree_DunkMotor_t[3].cmd.Pos , unitree_DunkMotor_t[3].cmd.K_P, unitree_DunkMotor_t[3].cmd.K_W);
+        Unitree_UART_tranANDrev(&unitree_DunkMotor_t[3], 3, 1, unitree_DunkMotor_t[3].cmd.T,unitree_DunkMotor_t[3].cmd.W * UNITREE_REDUCTION_RATE  , unitree_DunkMotor_t[3].cmd.Pos , unitree_DunkMotor_t[3].cmd.K_P, unitree_DunkMotor_t[3].cmd.K_W);
         osDelay(2);
         //Unitree_UART_tranANDrev(&unitree_DunkMotor_t[4], 4, 1, unitree_DunkMotor_t[4].cmd.T,unitree_DunkMotor_t[4].cmd.W , unitree_DunkMotor_t[4].cmd.Pos , unitree_DunkMotor_t[4].cmd.K_P, unitree_DunkMotor_t[4].cmd.K_W);
         //osDelay(2);
-        Unitree_UART_tranANDrev(&unitree_DunkMotor_t[5], 5, 1, unitree_DunkMotor_t[5].cmd.T,unitree_DunkMotor_t[5].cmd.W * UNITREE_REDUCTION_RATE , unitree_DunkMotor_t[5].cmd.Pos , unitree_DunkMotor_t[5].cmd.K_P, unitree_DunkMotor_t[5].cmd.K_W);
+        Unitree_UART_tranANDrev(&unitree_DunkMotor_t[5], 5, 1, unitree_DunkMotor_t[5].cmd.T,unitree_DunkMotor_t[5].cmd.W * UNITREE_REDUCTION_RATE  , unitree_DunkMotor_t[5].cmd.Pos , unitree_DunkMotor_t[5].cmd.K_P, unitree_DunkMotor_t[5].cmd.K_W);
 
     }
 }

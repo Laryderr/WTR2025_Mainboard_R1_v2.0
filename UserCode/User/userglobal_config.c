@@ -50,6 +50,7 @@ char status_running_msg[20] = "Running";
 char status_ready_msg[20] = "Ready";
 char status_stop_msg[20] = "Stop";
 char status_reset_msg[20] = "Reset";
+char status_setpoint_msg[20] = "SetPoint";
 char status_error_msg[20] = "Error";
 
 mavlink_joystick_air_dashboard_set_title_t mav_posx_title;
@@ -61,3 +62,22 @@ mavlink_joystick_air_dashboard_set_title_t mav_posy_title;
 mavlink_joystick_air_dashboard_set_msg_t mav_posy_msg;
 char posy_title[20]      = "PositionY";
 char posy_msg[20]         ;  
+
+mavlink_joystick_air_dashboard_set_title_t mav_shoot_point_title;
+mavlink_joystick_air_dashboard_set_msg_t mav_shoot_point_msg;
+char shoot_point_title[20]      = "Shoot Point";
+char shoot_point_msg0[1]         = "0";
+char shoot_point_msg1[1]         = "1";
+char shoot_point_msg2[1]         = "2";
+char shoot_point_msg3[1]         = "3";
+char shoot_point_msg4[1]         = "4";
+char shoot_point_msg5[1]         = "5";
+char shoot_point_msg6[1]         = "6";
+char shoot_point_msg7[1]         = "7";
+
+
+mavlink_joystick_air_dashboard_set_title_t mav_shoot_ready_title;
+mavlink_joystick_air_dashboard_set_msg_t mav_shoot_ready_msg;
+char shoot_ready_title[20]      = "Fire?";
+char shoot_ready_msg[20]             = "Ready";
+char shoot_notready_msg[20]             = "Not_Ready";

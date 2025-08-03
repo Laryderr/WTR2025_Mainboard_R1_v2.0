@@ -28,6 +28,7 @@ typedef struct
     uint32_t btn_RightCrossRight_press_count;
     uint32_t btn_JoystickL_press_count;
     uint32_t btn_JoystickR_press_count;
+    uint32_t btn_KnobR_press_count;
 
     bool btn_LeftCrossDown;
     bool btn_LeftCrossLeft;

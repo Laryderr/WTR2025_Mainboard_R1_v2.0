@@ -14,17 +14,21 @@
 #include "stdio.h"
 
 //近点远点真实距离（/m）和原始数据 
-const float MIN_DISTANCE0=0.506;
-const float MIN_DISTANCE1=0.499;
-const float MAX_DISTANCE=4.5;
-const float DISTANCE_DIFF0=(MAX_DISTANCE-MIN_DISTANCE0);
-const float DISTANCE_DIFF1=(MAX_DISTANCE-MIN_DISTANCE1);
+const float MIN_DISTANCE0=0.4;
+const float MIN_DISTANCE1=0.4;
+const float MAX_DISTANCE0=7.4;
+const float MAX_DISTANCE1=7.4;
+const float DISTANCE_DIFF0=(MAX_DISTANCE0-MIN_DISTANCE0);
+const float DISTANCE_DIFF1=(MAX_DISTANCE0-MIN_DISTANCE1);
 
-const float MIN_RAWDATA0=603000;
-const float MIN_RAWDATA1=585000;
-const float MAX_RAWDATA=6428000;
-const float RAWDATA_DIFF1=(MAX_RAWDATA-MIN_RAWDATA1);
-const float RAWDATA_DIFF0=(MAX_RAWDATA-MIN_RAWDATA0);
+// const float MIN_RAWDATA0=104800;
+// const float MIN_RAWDATA1=103300;
+const float MIN_RAWDATA0=200130;
+const float MIN_RAWDATA1=198900;
+const float MAX_RAWDATA0=6452000;
+const float MAX_RAWDATA1=6447500;
+const float RAWDATA_DIFF1=(MAX_RAWDATA0-MIN_RAWDATA1);
+const float RAWDATA_DIFF0=(MAX_RAWDATA0-MIN_RAWDATA0);
 
 static uint32_t Laser_rawdata[4] = {0};
 float Laser_x = 0;
@@ -114,8 +118,8 @@ void Laser_Buffer_Decode()
         }
 
         // 数据转换
-        Laser_x = ((float)(Laser_rawdata[0] - MIN_RAWDATA0)) / RAWDATA_DIFF0 * DISTANCE_DIFF0 + MIN_DISTANCE0 ;
-        Laser_y = ((float)(Laser_rawdata[1] - MIN_RAWDATA1)) / RAWDATA_DIFF1 * DISTANCE_DIFF1 + MIN_DISTANCE1 ;
+        Laser_x = ((float)(Laser_rawdata[0] - MIN_RAWDATA0)) / RAWDATA_DIFF0 * DISTANCE_DIFF0*0.92593 + MIN_DISTANCE0 ;
+        Laser_y = ((float)(Laser_rawdata[1] - MIN_RAWDATA1)) / RAWDATA_DIFF1 * DISTANCE_DIFF1*0.92783 + MIN_DISTANCE1 ;
         Laser_correct = 1;
 
         Msg_AddReadIndex(24);  // 消费这一帧

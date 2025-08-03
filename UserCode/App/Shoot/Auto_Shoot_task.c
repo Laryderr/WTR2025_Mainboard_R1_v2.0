@@ -37,10 +37,48 @@ void train_45dgree_equation()
 
 }
 
-// Degree计算（线性）
-float Calc_Degree(float distance){
-    return 7.5f * distance + 53.75f;
+// // Degree计算（线性）
+// float Calc_Degree(float distance){
+//     return 7.5f * distance + 53.75f;
+// }
+
+/**
+ * @brief 
+ * 
+ * @param distance 
+ * @return double 
+ */
+double Calc_Degree(double distance) {
+    // 定义数据点（按distance升序排列）
+    struct DataPoint {
+        double distance;
+        double degree;
+    } points[] = {
+        {1.3, 62.0}, {1.4, 62.75}, {1.5, 63.5}, {1.6, 64.25}, 
+        {1.7, 65.0}, {1.8, 65.75}, {1.9, 66.5}, {2.0, 67.25},
+        {2.1, 68.0}, {2.2, 68.75}, {2.3, 69.5}, {2.4, 69.6},
+        {2.5, 69.8}, {2.6, 68.0}, {2.7, 67.5}, {2.8, 67.0},
+        {2.9, 68.0}, {3.0, 69.0}, {3.1, 70.0}, {3.2, 71.0}
+    };
+    const int num_points = sizeof(points) / sizeof(points[0]);
+
+    // 边界检查
+    if (distance <= points[0].distance) return points[0].degree;
+    if (distance >= points[num_points-1].distance) return points[num_points-1].degree;
+
+    // 查找最近的区间
+    for (int i = 0; i < num_points - 1; i++) {
+        if (distance >= points[i].distance && distance <= points[i+1].distance) {
+            // 线性插值
+            double ratio = (distance - points[i].distance) / 
+                          (points[i+1].distance - points[i].distance);
+            return points[i].degree + ratio * (points[i+1].degree - points[i].degree);
+        }
+    }
+
+    return 0.0; 
 }
+
 
 /**
  * @brief 计算五次多项式函数值
@@ -48,12 +86,7 @@ float Calc_Degree(float distance){
  * @return double 函数值y
  */
 double Calc_KW(double distance) {
-    return -0.0264 * pow(distance, 5) + 
-            0.289 * pow(distance, 4) - 
-            1.2405 * pow(distance, 3) + 
-            2.6137 * pow(distance, 2) - 
-            2.6863 * distance + 
-            1.9659;
+    return (((((0.0432 * distance - 0.5174) * distance + 2.5375) * distance - 6.5249) * distance + 9.2914) * distance - 6.9473) * distance + 3.0128;
 }
 
 /**

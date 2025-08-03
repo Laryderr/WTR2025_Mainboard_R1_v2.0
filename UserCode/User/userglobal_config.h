@@ -32,6 +32,8 @@ extern "C"{
 #define ID_RST              6
 #define ID_POSITIONX        7
 #define ID_POSITIONY        8
+#define ID_SHOOT_POINT      9
+#define ID_SHOOT_READY      10
 
 
 #define chassis_R           (152 * 0.001) // 全向轮半径
@@ -78,6 +80,7 @@ extern char status_running_msg[20];
 extern char status_ready_msg[20];
 extern char status_stop_msg[20];
 extern char status_reset_msg[20];
+extern char status_setpoint_msg[20];
 extern char status_error_msg[20];
 
 extern mavlink_joystick_air_dashboard_set_title_t mav_posx_title;
@@ -89,6 +92,25 @@ extern mavlink_joystick_air_dashboard_set_title_t mav_posy_title;
 extern mavlink_joystick_air_dashboard_set_msg_t mav_posy_msg;
 extern char posy_title[20];
 extern char posy_msg[20]; 
+
+extern mavlink_joystick_air_dashboard_set_title_t mav_shoot_point_title;
+extern mavlink_joystick_air_dashboard_set_msg_t mav_shoot_point_msg;
+extern char shoot_point_title[20];
+extern char shoot_point_msg0[1];
+extern char shoot_point_msg1[1]         ;
+extern char shoot_point_msg2[1]         ;
+extern char shoot_point_msg3[1]         ;
+extern char shoot_point_msg4[1]         ;
+extern char shoot_point_msg5[1]         ;
+extern char shoot_point_msg6[1]         ;
+extern char shoot_point_msg7[1]         ;
+
+extern mavlink_joystick_air_dashboard_set_title_t mav_shoot_ready_title;
+extern mavlink_joystick_air_dashboard_set_msg_t mav_shoot_ready_msg;
+extern char shoot_ready_title[20];
+extern char shoot_ready_msg[20];
+extern char shoot_notready_msg[20];
+
 
 
 

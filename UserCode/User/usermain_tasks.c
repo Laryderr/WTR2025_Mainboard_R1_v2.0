@@ -90,7 +90,7 @@ void my_main_Task(void *arguement)
             my_Alldir_Chassis_t.state = CHASSIS_RESET;
                 break;
             case -4:
-            my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
+            my_Alldir_Chassis_t.state = CHASSIS_SET_POINT;
                 break;
             
             default:
@@ -109,6 +109,7 @@ void my_main_Task(void *arguement)
         {
             my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
         }
+
         
         
         //底盘状态
@@ -151,6 +152,8 @@ void my_main_Task(void *arguement)
 
             JoystickSwitchTitle(ID_STATUS, status_title, &mav_status_title);
             JoystickSwitchMsg(ID_STATUS, status_running_msg, &mav_status_msg);
+
+           
             break;
         case CHASSIS_STOP :
             my_Alldir_Chassis_t.target_v.vx = 0;
@@ -169,6 +172,13 @@ void my_main_Task(void *arguement)
 
             JoystickSwitchTitle(ID_STATUS, status_title, &mav_status_title);
             JoystickSwitchMsg(ID_STATUS, status_reset_msg, &mav_status_msg);
+            break;
+        case CHASSIS_SET_POINT:
+            JoystickSwitchTitle(ID_RUN, run_title, &mav_run_title);
+            JoystickSwitchMsg(ID_RUN, run_handle_msg, &mav_run_msg);
+
+            JoystickSwitchTitle(ID_STATUS, status_title, &mav_status_title);
+            JoystickSwitchMsg(ID_STATUS, status_setpoint_msg, &mav_status_msg);
             break;
             
         case CHASSIS_ERROR:

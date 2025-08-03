@@ -186,6 +186,28 @@ void chassis_XYPoseServo_calc(float refx,float refy)
 
 }
 
+/**
+ * @brief 计算车身指向目标点的速度向量（车身坐标系）
+ * @param AbPos_x, AbPos_y 目标点绝对坐标
+ * @param my_x, my_y 车身绝对坐标
+ * @param vx, vy 输出参数（车身坐标系下的速度向量）
+ */
+void Calc_V_To_Point(float AbPos_x, float AbPos_y, float my_x, float my_y, float* vx, float* vy) 
+{
+    // 1. 计算目标点相对于车的位移向量（全局坐标系）
+    float dx = AbPos_x - my_x;
+    float dy = AbPos_y - my_y;
+    
+    // 2. 计算当前车身总旋转角度（弧度制）
+    float theta = (my_Alldir_Chassis_t.current_pos.yawpos - 
+                  my_Alldir_Chassis_t.current_pos.yaw_offset) * PI / 180.0f;
+    
+    // 3. 通过旋转矩阵转换到车身坐标系
+    *vx =  -(dx * cosf(theta) + dy * sinf(theta))*0.8;  // 车身前方为X正方向
+    *vy = -(-dx * sinf(theta) + dy * cosf(theta))*0.8; // 车身左侧为Y正方向（逆时针为正）
+}
+
+
 void chassis_RePosToAbPos(float RePos_x, float RePos_y, float* AbPos_x, float* AbPos_y)
 {
     double r = sqrt(pow(RePos_x,2) + pow(RePos_y,2));
@@ -193,7 +215,7 @@ void chassis_RePosToAbPos(float RePos_x, float RePos_y, float* AbPos_x, float* A
     double angle2 = angle1 + ((PI/2)+(my_Alldir_Chassis_t.current_pos.yawpos - my_Alldir_Chassis_t.current_pos.yaw_offset)/180*PI);
 
     *AbPos_x = r*cos(angle2);
-    *AbPos_y = r*sin(angle2);
+    *AbPos_y = r*sin(angle2);   
 }
 
 void chassis_YAWPoseServo_calc(float ref)
@@ -316,13 +338,13 @@ void my_Chassis_Init(void)
     //底盘速度pid初始化
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vx_pid,my_Alldir_Chassis_t.target_v.vx,0,0,0);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_vy_pid,my_Alldir_Chassis_t.target_v.vy,0,0,0);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0.2,0.000001,0.001);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.target_v.vw,0.1,0.000001,0.01);
     //底盘位置pid初始化
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_xpos_pid,my_Alldir_Chassis_t.target_pos.xpos,1.1,0.000001,0.35);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_ypos_pid,my_Alldir_Chassis_t.target_pos.ypos,1.1,0.000001,0.35);
     chassis_pid_init(&my_Alldir_Chassis_t.chassis_yawpos_pid,my_Alldir_Chassis_t.target_pos.yawpos,0.2,0,0.02);//0.02);
     //chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.46,0.00003,0.04);
-    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.016,0.000001,0.028);
+    chassis_pid_init(&my_Alldir_Chassis_t.chassis_aim_pid,0,0.016,0.000001,0.035);
     //底盘位置初始化
     my_Alldir_Chassis_t.current_pos.xpos = 0;
     my_Alldir_Chassis_t.current_pos.ypos = 0;
@@ -336,6 +358,9 @@ void my_Chassis_Init(void)
     my_Alldir_Chassis_t.count_start_time = 0;
     
     my_Alldir_Chassis_t.PreAim_Ctrl_flag = 0;
+    my_Alldir_Chassis_t.Set_point_flag = 0;
+    my_Alldir_Chassis_t.this_point_id = 0 ;
+    my_Alldir_Chassis_t.last_point_id = 0;
 }
 
 /***************************************************************
@@ -397,8 +422,21 @@ void my_Chassis_Ctrl_Task(void *arguement)
             my_Alldir_Chassis_t.current_pos.yawpos = chassis_yaw;
         }else{
             //激光雷达里程计
-            my_Alldir_Chassis_t.current_pos.xpos = my_Alldir_Chassis_t.init_x_pos - Lidar_pose[0];
-            my_Alldir_Chassis_t.current_pos.ypos = my_Alldir_Chassis_t.init_y_pos - Lidar_pose[1];
+            if(my_Shoot_Task_T.on_shoot_point == 0 ){
+                my_Alldir_Chassis_t.current_pos.xpos = my_Alldir_Chassis_t.init_x_pos - Lidar_pose[0];
+                my_Alldir_Chassis_t.current_pos.ypos = my_Alldir_Chassis_t.init_y_pos - Lidar_pose[1];
+            }/*else{
+                //在投篮点重新进行里程计去偏置
+                my_Alldir_Chassis_t.current_pos.xpos = my_Alldir_Chassis_t.init_x_pos - Lidar_pose[0] 
+                - my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].X_offset 
+                + my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].actual_xpos;
+
+                my_Alldir_Chassis_t.current_pos.ypos = my_Alldir_Chassis_t.init_y_pos - Lidar_pose[1]
+                - my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].Y_offset 
+                + my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].actual_ypos;
+            }*/
+            // my_Alldir_Chassis_t.current_pos.xpos = Laser_x + 0.361;
+            // my_Alldir_Chassis_t.current_pos.ypos = Laser_y + 0.0755;
             my_Alldir_Chassis_t.current_pos.yawpos = chassis_yaw;
 
             
@@ -422,6 +460,8 @@ void my_Chassis_Ctrl_Task(void *arguement)
             hDJI[8].speedPID.output = 0;
             Unitree_motor_0Torque(3);
             Unitree_motor_0Torque(5);
+            my_Shoot_Task_T.on_shoot_point = 0;
+
         }else if(my_Alldir_Chassis_t.state == CHASSIS_HANDLE_RUNNING)
         {
             /****************初始化位置校准*****************************************************************/
@@ -439,12 +479,19 @@ void my_Chassis_Ctrl_Task(void *arguement)
                     {
                         //注意加入遥控器反馈
                         my_Alldir_Chassis_t.chassis_calibrate_flag = 1;
-                        my_Alldir_Chassis_t.init_x_pos = Laser_x + 0.37103;
+                        // my_Alldir_Chassis_t.init_x_pos = Laser_x + 0.37103;
+                        my_Alldir_Chassis_t.init_x_pos = Laser_x + 0.361;
                         my_Alldir_Chassis_t.init_y_pos = Laser_y + 0.0755;
                         my_Alldir_Chassis_t.count_start_time = 0;
                     }
                 }
             }
+
+            if (MyRemote_Data.right_switch == 0&&my_Alldir_Chassis_t.DT35_cali_yawpos==0)
+            {
+                my_Alldir_Chassis_t.DT35_cali_yawpos = my_Alldir_Chassis_t.current_pos.yawpos;
+            }
+            
             /****************初始化位置校准******************************************************************/
 
             //850->3m/s
@@ -459,7 +506,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 my_Alldir_Chassis_t.chassis_vw_pid.ref = my_Alldir_Chassis_t.target_v.vw;
                 chassis_pid_calc(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.current_v.vw);
                 //是否启动预瞄
-                if (BtnScan_Press(MyRemote_Data.btn_JoystickR))
+                if (BtnScan_Press(MyRemote_Data.btn_KnobR))
                 {
                     my_Alldir_Chassis_t.PreAim_Ctrl_flag = 1;
                 }else if (my_Alldir_Chassis_t.target_v.vw != 0)
@@ -468,8 +515,8 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 }
                 if (my_Alldir_Chassis_t.PreAim_Ctrl_flag == 1)
                 {
-                    Chassis_Pre_Aim();
-                    //chassis_YAWPoseServo_calc(50);
+                    // Chassis_Pre_Aim();
+                    my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset - 90)
                 }
                 
                 
@@ -489,6 +536,38 @@ void my_Chassis_Ctrl_Task(void *arguement)
             chassis_XYPoseServo_calc(1,0.7);
             my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
             myHandle_State = HANDLE_IDLE_MODE;
+        }else if (my_Alldir_Chassis_t.state == CHASSIS_SET_POINT)
+        {
+            // my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.DT35_cali_yawpos);
+            // my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*6.0f ;
+            // my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*6.0f;
+            
+            hDJI[0].speedPID.output = 0;
+            hDJI[1].speedPID.output = 0;
+            hDJI[2].speedPID.output = 0;
+            hDJI[3].speedPID.output = 0;
+            if(my_Alldir_Chassis_t.Set_point_flag == 1)
+            {
+                static float X_sum,Y_sum = 0;
+                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos = Laser_x + 0.361;
+                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos = Laser_y + 0.0755;
+                // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].xpos = my_Alldir_Chassis_t.current_pos.xpos;
+                // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].ypos = my_Alldir_Chassis_t.current_pos.ypos;
+                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].distance = 
+                    sqrt((my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X)*
+                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X) + 
+                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y)*
+                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y));
+                for (uint8_t i = 0; i < 5; i++)
+                {
+                    X_sum += my_Alldir_Chassis_t.current_pos.xpos;
+                    Y_sum += my_Alldir_Chassis_t.current_pos.ypos;
+                }
+                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].X_offset = my_Alldir_Chassis_t.current_pos.xpos;
+                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].Y_offset = my_Alldir_Chassis_t.current_pos.ypos;
+
+                my_Alldir_Chassis_t.Set_point_flag = 0;
+            }
         }
 
         //底盘运动学逆解算
@@ -499,6 +578,8 @@ void my_Chassis_Ctrl_Task(void *arguement)
 
         my_Alldir_Chassis_t.chassis_to_basket = sqrt((my_Alldir_Chassis_t.current_pos.xpos - BASKET_X)*(my_Alldir_Chassis_t.current_pos.xpos - BASKET_X) + 
                                                     (my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)*(my_Alldir_Chassis_t.current_pos.ypos - BASKET_Y)); 
+        // my_Alldir_Chassis_t.chassis_to_basket = sqrt((Laser_x - BASKET_X)*(Laser_x - BASKET_X) + 
+        //                                     (Laser_y - BASKET_Y)*(Laser_y - BASKET_Y)); 
         
 
         osDelay(2);

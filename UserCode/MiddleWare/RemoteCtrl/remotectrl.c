@@ -185,6 +185,37 @@ void BtnPress_Once7(bool this_btn)
     }
     
 }
+void BtnPress_Once8(bool this_btn)
+{
+    if(MyRemote_Data.btn_KnobR == 1)
+    {
+        while (MyRemote_Data.btn_KnobR == 1)
+        {
+            MyRemote_Data.btn_KnobR = ReadJoystickButtons(&msg_joystick_air, Btn_KnobR);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_KnobR_press_count++;
+        my_Alldir_Chassis_t.Set_point_flag = 1;
+    }
+    
+}
+void BtnPress_Once9(bool this_btn)
+{
+    if(MyRemote_Data.btn_JoystickR == 1)
+    {
+        while (MyRemote_Data.btn_JoystickR == 1)
+        {
+            MyRemote_Data.btn_JoystickR = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickR);
+            osDelay(2);
+        }
+        MyRemote_Data.btn_JoystickR_press_count++;
+        if(MyRemote_Data.btn_JoystickR_press_count/7 >= 1&&MyRemote_Data.btn_JoystickR_press_count%7 == 0)
+        {
+            my_Shoot_Task_T.shoot_point = 7;   
+        }else my_Shoot_Task_T.shoot_point = MyRemote_Data.btn_JoystickR_press_count%7;
+    }
+    
+}
 /*****************************************************************************
  * @brief 以下是线程函数定义
  * 
@@ -214,6 +245,8 @@ void my_Remotectrl_Task(void *arguement)
         BtnPress_Once5(1);
         BtnPress_Once6(1);
         BtnPress_Once7(1);
+        BtnPress_Once8(1);
+        BtnPress_Once9(1);
         MyRemote_Data.KW01 = (float)MyRemote_Data.btn_LeftCrossDown_press_count/10.0f;
         MyRemote_Data.KW001 = (float)MyRemote_Data.btn_LeftCrossMid_press_count /100.0f;
         MyRemote_Data.KW0001 = (float)MyRemote_Data.btn_LeftCrossUp_press_count /1000.0f;

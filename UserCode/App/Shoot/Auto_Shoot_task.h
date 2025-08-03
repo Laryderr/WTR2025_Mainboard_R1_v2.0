@@ -18,7 +18,7 @@ extern "C" {
 
 typedef struct Auto_Shoot_Task_T
 {
-    float Auto_shoot_point[10][2]; //投篮点位 点位id + XY坐标
+    float Auto_shoot_point[10][3]; //投篮点位 点位id(从1开始) + 1X 2Y坐标、3离篮筐距离
     float test_KW;
     float now_train_distance;
     float train_step;
@@ -37,7 +37,7 @@ extern Auto_Shoot_Task_T my_Auto_Shoot_Task_T;
 
 void Auto_Shoot_TaskStart(void);
 
-float Calc_Degree(float distance);
+double Calc_Degree(double distance);
 double Calc_KW(double distance);
 
 #ifdef __cplusplus

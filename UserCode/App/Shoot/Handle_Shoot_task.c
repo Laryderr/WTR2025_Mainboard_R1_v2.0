@@ -17,7 +17,7 @@
 osThreadId_t unitree_shoot_ctrl_TaskHandle;
 const osThreadAttr_t unitree_shoot_ctrl_Task_attributes = {
     .name       = "unitree_shoot_ctrl_Task",
-    .stack_size = 128*4,
+    .stack_size = 128*8,
     .priority   = (osPriority_t)osPriorityNormal,
 };
 void Handle_Shoot_Task(void *argument);
@@ -84,10 +84,10 @@ float Encoder_SpeedServo(PID_t *upid, float ref, float Feedback_value)
 
 void Back_to_init()
 {
-    unitree_DunkMotor_t[3].cmd.Pos = my_Shoot_Task_T.Shootball_InitialPos[0];
-    unitree_DunkMotor_t[3].cmd.K_P = 0.3;
-    unitree_DunkMotor_t[3].cmd.K_W = 0.6;
-    unitree_DunkMotor_t[3].cmd.W = 0.2;
+    unitree_DunkMotor_t[3].cmd.Pos = 0;
+    unitree_DunkMotor_t[3].cmd.K_P = 0;
+    unitree_DunkMotor_t[3].cmd.K_W = 0.1;
+    unitree_DunkMotor_t[3].cmd.W = 1.5;
     unitree_DunkMotor_t[3].cmd.T = 0;
 }
 
@@ -149,9 +149,14 @@ HAL_StatusTypeDef Shootmotor_Init(Shoot_Task_T * my_T)
     my_T->target_throw_w   = 0;
     my_T->Shoot_Completed_Flag =0;
     my_T->shoot_point = 0;
+    my_T->last_shoot_point = 0 ;
     my_T->camera_aim_flag = 0;
     my_T->camera_get_angle_flag = 0;
     my_T->shoot_count = 0;
+    my_T->on_shoot_point = 0;
+
+    my_T->Auto_shoot_point[0].actual_xpos = 0.861;
+    my_T->Auto_shoot_point[0].actual_ypos = 0.5755;
 
     if(encoderData.angle == 0)
     {
@@ -196,11 +201,11 @@ void Handle_Shoot_Task(void*argument)
 {
     my_Auto_Shoot_Task_T.now_train_distance = 0;
     my_Auto_Shoot_Task_T.train_step = 0.1;
-    my_Auto_Shoot_Task_T.min_KW = 0.9047;
+    my_Auto_Shoot_Task_T.min_KW = 0.9086;
     my_Auto_Shoot_Task_T.max_KW = 0.0f;
     if (Shootmotor_Init(&my_Shoot_Task_T) != HAL_OK)
     {
-        Error_Handler();
+        // Error_Handler();
     }
     
     Encoder_Pospid_Init(&my_Dunk_Task_t.Encoder_PosPID_t,Encoder_VertPos+10,0,0,0.);
@@ -221,24 +226,110 @@ void Handle_Shoot_Task(void*argument)
         {
             my_Shoot_Task_T.myshoot_status = SHOOT_ING;
         }
-        if (BtnScan_Press(MyRemote_Data.btn_KnobL))
+        if(BtnScan_Press(MyRemote_Data.btn_KnobL))
         {
             my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
         }
+        if(BtnScan_Press(MyRemote_Data.btn_RightCrossDown))
+        {
+            my_Shoot_Task_T.myshoot_status = SHOOT_BACK_TO_INIT;   
+        }
+
+/******************************************************挑战赛点位控制******************************************************************************/
+        if(BtnScan_Press(MyRemote_Data.btn_LeftCrossLeft))
+        {
+            
+            my_Shoot_Task_T.shoot_point = 1;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_LeftCrossMid))
+        {
+            my_Shoot_Task_T.shoot_point = 2;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_LeftCrossRight))
+        {
+            my_Shoot_Task_T.shoot_point = 3;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_LeftCrossUp))
+        {
+            my_Shoot_Task_T.shoot_point = 4;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_LeftCrossDown))
+        {
+            my_Shoot_Task_T.shoot_point = 5;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_RightCrossMid))
+        {
+            my_Shoot_Task_T.shoot_point = 8;
+        }else if (BtnScan_Press(MyRemote_Data.btn_Btn0))
+        {
+            my_Shoot_Task_T.shoot_point = 6;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if (BtnScan_Press(MyRemote_Data.btn_Btn1))
+        {
+            my_Shoot_Task_T.shoot_point = 7;
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }else if(BtnScan_Press(MyRemote_Data.btn_JoystickR))
+        {
+            my_Shoot_Task_T.on_shoot_point = 0;
+        }
+
+        my_Shoot_Task_T.dx = my_Alldir_Chassis_t.current_pos.xpos - my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].X_offset;
+        my_Shoot_Task_T.dy = my_Alldir_Chassis_t.current_pos.ypos - my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].Y_offset;
+
+        
+        if(my_Shoot_Task_T.shoot_point != 8)
+        {
+            if(my_Shoot_Task_T.dx<=0.01&&my_Shoot_Task_T.dx>=-0.01&&my_Shoot_Task_T.dy<=0.01&&my_Shoot_Task_T.dy>=-0.01)
+            {
+                //覆盖投篮点位
+                my_Shoot_Task_T.on_shoot_point = 1;
+            }
+
+            if(my_Shoot_Task_T.on_shoot_point == 0) 
+            {
+                //未覆盖投篮点位,但是已接近点位
+                chassis_XYPoseServo_calc(my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].X_offset,
+                                    my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].Y_offset);
+                my_Shoot_Task_T.last_shoot_point = my_Shoot_Task_T.shoot_point;
+                my_Alldir_Chassis_t.chassis_Aim_at_Basket(5.8);
+            }else {
+                //停止位置伺服，精瞄
+                my_Alldir_Chassis_t.chassis_Aim_at_Basket(5.8);
+                my_Alldir_Chassis_t.chassis_xpos_pid.output = 0;
+                my_Alldir_Chassis_t.chassis_ypos_pid.output = 0;
+                my_Alldir_Chassis_t.target_v.vx = 0;
+                my_Alldir_Chassis_t.target_v.vy = 0;
+            }
+        }else my_Alldir_Chassis_t.chassis_Aim_at_Basket(5.8);
+/************************************************************************************************************************************/
+
         
         //升降机构固定在中部
         /*Expansion_Up.contract();
         Expansion_Down.contract();*/
         
-        //计算篮球出手点距离篮筐中心水平距离
-        my_Shoot_Task_T.HorizontalDist_to_Basket = my_Alldir_Chassis_t.chassis_to_basket + 
-            Motor_to_Chassis_L + cos(encoderData.angle-Encoder_VertPos-90+Deg_Ball_to_Arm)*Rotation_r_Of_Ball;
-        //计算篮球中心出手离地高度
-        my_Shoot_Task_T.ShotTime_Ball_Heigh = Motor_HeightMedium + sin(encoderData.angle-Encoder_VertPos-90+Deg_Ball_to_Arm)*Rotation_r_Of_Ball;
+        //不用
+        // //计算篮球出手点距离篮筐中心水平距离
+        // my_Shoot_Task_T.HorizontalDist_to_Basket = my_Alldir_Chassis_t.chassis_to_basket + 
+        //     Motor_to_Chassis_L + cos(encoderData.angle-Encoder_VertPos-90+Deg_Ball_to_Arm)*Rotation_r_Of_Ball;
+        // //计算篮球中心出手离地高度
+        // my_Shoot_Task_T.ShotTime_Ball_Heigh = Motor_HeightMedium + sin(encoderData.angle-Encoder_VertPos-90+Deg_Ball_to_Arm)*Rotation_r_Of_Ball;
         
         //模型预测
-        my_Shoot_Task_T.model_calc_KW     = Calc_KW(my_Alldir_Chassis_t.chassis_to_basket);
-        my_Shoot_Task_T.model_calc_degree = Calc_Degree(my_Alldir_Chassis_t.chassis_to_basket);
+        if(my_Shoot_Task_T.shoot_point == 7)
+        {
+            my_Shoot_Task_T.model_calc_KW = Calc_KW(my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].distance)
+                                         + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
+            my_Shoot_Task_T.model_calc_degree = Calc_Degree(my_Shoot_Task_T.Auto_shoot_point[my_Shoot_Task_T.shoot_point].distance)
+                                             - MyRemote_Data.btn_RightCrossRight_press_count*0.5;
+        }else {
+            my_Shoot_Task_T.model_calc_KW = 0.88;
+            my_Shoot_Task_T.model_calc_degree = 65;
+        }
+        
+        
+        // my_Shoot_Task_T.model_calc_KW = Calc_KW(my_Alldir_Chassis_t.chassis_to_basket) + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
+        // my_Shoot_Task_T.model_calc_degree = Calc_Degree(my_Alldir_Chassis_t.chassis_to_basket) - MyRemote_Data.btn_RightCrossRight_press_count*0.5;
 
         switch (my_Shoot_Task_T.myshoot_status)
         {
@@ -251,43 +342,56 @@ void Handle_Shoot_Task(void*argument)
                 Unitree_motor_0Torque(5);
                 Unitree_motor_0Torque(3);
                 osDelay(1);
+                if(encoderData.angle >= 270)
+                {
+                    my_Shoot_Task_T.myshoot_status = SHOOT_BACK_TO_INIT;
+                }
+            }
+            break;
+        case SHOOT_BACK_TO_INIT:
+            Back_to_init();
+            Unitree_motor_0Torque(5);
+            if(encoderData.angle <= 80)
+            {
+                my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
             }
             break;
         case SHOOT_ING:
             //投篮控制
             if (my_Shoot_Task_T.Shoot_Completed_Flag == 0)
             {
+                my_Shoot_Task_T.on_shoot_point = 0;
                 my_Shoot_Task_T.shoot_count++;
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                // unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
-                unitree_DunkMotor_t[3].cmd.W = -1;
+                // unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                unitree_DunkMotor_t[3].cmd.W = -1;//-1
                 unitree_DunkMotor_t[3].cmd.T = 0;//-3.1
                 
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
-                unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                // unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                // unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[5].cmd.W = 1;
                 unitree_DunkMotor_t[5].cmd.T = 0;//3.1
                 my_Shoot_Task_T.Shoot_Completed_Flag = 1;
             }
 
             //刹停力矩
-            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle )
+            if(my_Shoot_Task_T.Shoot_Completed_Flag==1 && encoderData.angle >= Encoder_VertPos + my_Shoot_Task_T.model_calc_degree )
             {
                 unitree_DunkMotor_t[3].cmd.Pos = 0;
                 unitree_DunkMotor_t[3].cmd.K_P = 0;
-                unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                // unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                // unitree_DunkMotor_t[3].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                unitree_DunkMotor_t[3].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[3].cmd.W = 1;
                 unitree_DunkMotor_t[3].cmd.T = 0;
 
                 unitree_DunkMotor_t[5].cmd.Pos = 0;
                 unitree_DunkMotor_t[5].cmd.K_P = 0;
-                unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
-                // unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
+                // unitree_DunkMotor_t[5].cmd.K_W = my_Alldir_Chassis_t.test_KW;
+                unitree_DunkMotor_t[5].cmd.K_W = my_Shoot_Task_T.model_calc_KW;
                 unitree_DunkMotor_t[5].cmd.W = -1;
                 unitree_DunkMotor_t[5].cmd.T = 0;
                 my_Shoot_Task_T.Shoot_Completed_Flag =2;
@@ -295,7 +399,7 @@ void Handle_Shoot_Task(void*argument)
             }
             
             //下降控制
-            if (encoderData.angle <= Encoder_VertPos + my_Alldir_Chassis_t.shoot_angle - 4 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
+            if (encoderData.angle <= Encoder_VertPos + my_Shoot_Task_T.model_calc_degree - 4 && my_Shoot_Task_T.Shoot_Completed_Flag == 2 )
             {
                 if(my_Shoot_Task_T.shoot_count%2 == 0){    
                     unitree_DunkMotor_t[5].cmd.Pos = 0;

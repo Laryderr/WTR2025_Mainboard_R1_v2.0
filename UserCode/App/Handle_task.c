@@ -22,12 +22,16 @@ void my_handle_Task(void)
 {
     if (BtnScan_Press(MyRemote_Data.btn_Btn0))
     {
-        myHandle_State = HANDLE_IDLE_MODE;
+        // myHandle_State = HANDLE_IDLE_MODE;
     }else if (BtnScan_Press(MyRemote_Data.btn_Btn1))
     {
         myHandle_State = HANDLE_DUNK_MODE;   
-    }else if (BtnScan_Press(MyRemote_Data.btn_Btn4)||BtnScan_Press(MyRemote_Data.btn_RightCrossUp)
-              ||BtnScan_Press(MyRemote_Data.btn_RightCrossMid)||BtnScan_Press(MyRemote_Data.btn_RightCrossDown))
+    }else if (BtnScan_Press(MyRemote_Data.btn_Btn4)
+            ||BtnScan_Press(MyRemote_Data.btn_LeftCrossLeft)||BtnScan_Press(MyRemote_Data.btn_LeftCrossMid)
+            ||BtnScan_Press(MyRemote_Data.btn_LeftCrossUp)||BtnScan_Press(MyRemote_Data.btn_LeftCrossDown)
+            ||BtnScan_Press(MyRemote_Data.btn_RightCrossMid)||BtnScan_Press(MyRemote_Data.btn_LeftCrossRight)
+            ||BtnScan_Press(MyRemote_Data.btn_Btn0)||BtnScan_Press(MyRemote_Data.btn_Btn1)
+            ||BtnScan_Press(MyRemote_Data.btn_JoystickR))
     {
         myHandle_State = HANDLE_SHOOT_MODE;
     }else if (BtnScan_Press(MyRemote_Data.btn_Btn5))
@@ -45,11 +49,16 @@ void my_handle_Task(void)
     my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
     my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
                                    MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
-    my_Alldir_Chassis_t.shoot_angle = 68 + MyRemote_Data.btn_RightCrossRight_press_count*0.75;
+    my_Alldir_Chassis_t.shoot_angle = 66 + MyRemote_Data.btn_RightCrossRight_press_count*0.75;
     
     //模型预测
-    // my_Shoot_Task_T.model_calc_KW     = Calc_KW(my_Alldir_Chassis_t.chassis_to_basket);
-    // my_Shoot_Task_T.model_calc_degree = Calc_Degree(my_Alldir_Chassis_t.chassis_to_basket);
+    // my_Shoot_Task_T.model_calc_KW     = Calc_KW(2.7);
+    // my_Shoot_Task_T.model_calc_degree = Calc_Degree(1.65);
+    JoystickSwitchTitle(ID_SHOOT_READY, shoot_ready_title, &mav_shoot_ready_title);
+    if(my_Shoot_Task_T.on_shoot_point == 1)
+    {
+        JoystickSwitchMsg(ID_SHOOT_READY, shoot_ready_msg, &mav_shoot_ready_msg);
+    }else JoystickSwitchMsg(ID_SHOOT_READY, shoot_notready_msg, &mav_shoot_ready_msg);
 
 
     switch (myHandle_State)
@@ -64,6 +73,11 @@ void my_handle_Task(void)
         JoystickDelete(ID_HANDLE_SHOOT, &mav_joystick_del);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
         JoystickSwitchMsg(ID_MODE, mode_idle_msg, &mav_mode_msg);
+
+        if(my_Shoot_Task_T.shoot_point == 0)
+        {
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg0, &mav_shoot_point_msg);
+        }
         
         my_Alldir_Chassis_t.now_mark_flag = 0;
         my_Alldir_Chassis_t.Now_marked_pos.xpos = 0;
@@ -98,46 +112,41 @@ void my_handle_Task(void)
         osThreadResume(unitree_shoot_ctrl_TaskHandle);
         JoystickSwitchTitle(ID_MODE, mode_title, &mav_mode_title);
         JoystickSwitchMsg(ID_MODE, mode_shoot_msg, &mav_mode_msg);
-        if (BtnScan_Press(MyRemote_Data.btn_RightCrossLeft))
-        {
-            my_Shoot_Task_T.camera_aim_flag = 1;
-        }
-        if (BtnScan_Press(MyRemote_Data.btn_RightCrossRight))
-        {
-            my_Shoot_Task_T.camera_aim_flag = 0;
-        }
-        
-        
-        //↓测试用
-        if(BtnScan_Press(MyRemote_Data.btn_RightCrossUp))
-        {
-            my_Shoot_Task_T.shoot_point = 1;
-        }else if (BtnScan_Press(MyRemote_Data.btn_RightCrossMid))
-        {
-            my_Shoot_Task_T.shoot_point = 2;
-        }else if (BtnScan_Press(MyRemote_Data.btn_RightCrossDown))
-        {
-            my_Shoot_Task_T.shoot_point = 3;
-        }
-        
+
+        JoystickSwitchTitle(ID_SHOOT_POINT, shoot_point_title, &mav_shoot_point_title);
+    
         switch (my_Shoot_Task_T.shoot_point)
         {
-            case 1:
-                chassis_XYPoseServo_calc(2,2);
-                my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-                break;
-            case 2:
-                // chassis_XYPoseServo_calc(my_Auto_Shoot_Task_T.train_point[0],my_Auto_Shoot_Task_T.train_point[1]);
-                // //my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
-                 my_Alldir_Chassis_t.chassis_Aim_at_Basket(4);
-
-                break;
-            case 3:
-                break;
-            default:
-                break;
+        case 0:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg0, &mav_shoot_point_msg);
+            break;
+        case 1:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg1, &mav_shoot_point_msg);
+            break;
+        case 2:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg2, &mav_shoot_point_msg);
+            break;
+        case 3:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg3, &mav_shoot_point_msg);
+            break;
+        case 4:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg4, &mav_shoot_point_msg);
+            break;
+        case 5:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg5, &mav_shoot_point_msg);
+            break;
+        case 6:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg6, &mav_shoot_point_msg);
+            break;
+        case 7:
+            JoystickSwitchMsg(ID_SHOOT_POINT, shoot_point_msg7, &mav_shoot_point_msg);
+            break;
+        
+        default:
+            break;
         }
 
+        
         //自动定位 篮筐瞄准
         my_Alldir_Chassis_t.state = CHASSIS_AUTO_RUNNING;
         //Now_Pose_Servo();

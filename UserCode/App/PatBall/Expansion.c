@@ -179,18 +179,18 @@ void Expansion_Executor_Task(void* argument)
     {
         if (MyRemote_Data.btn_LeftCrossUp == 1)
         {
-            Expansion_Up.expandhighly();
-            Expansion_Down.expandhighly();
+            // Expansion_Up.expandhighly();
+            // Expansion_Down.expandhighly();
         }
         else if (MyRemote_Data.btn_LeftCrossMid == 1)
         {
-            Expansion_Up.expand();
-            Expansion_Down.expand();
+            // Expansion_Up.expand();
+            // Expansion_Down.expand();
         }
         else if (MyRemote_Data.btn_LeftCrossDown == 1)
         {
-            Expansion_Up.contract();
-            Expansion_Down.contract();
+            // Expansion_Up.contract();
+            // Expansion_Down.contract();
         }
         /* 此处代码留作可添加部分，可以按照下面这个方法写，也可以直接将for(;;)前面的部分复制到这里 */
         // else if (按某一个按键再次进行升降机构的初始位置校准)

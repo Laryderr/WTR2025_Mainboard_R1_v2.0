@@ -22,7 +22,17 @@ enum Shoot_Status{
     SHOOT_STOP,//达到球所需出手角度
     SHOOT_FINISH,//完成投球
     DUNK_SHOOT, //配合扣篮
+    SHOOT_BACK_TO_INIT,//回转
 };
+typedef struct 
+{
+    float actual_xpos;
+    float actual_ypos;
+    float distance;
+    float X_offset;
+    float Y_offset;
+}Auto_Shoot_Point;
+
 
 typedef struct{
     enum Shoot_Status myshoot_status;
@@ -35,7 +45,8 @@ typedef struct{
 
     float HorizontalDist_to_Basket;//篮球出手点距离篮筐中心水平距离
     float ShotTime_Ball_Heigh;//篮球中心出手离地高度
-    uint8_t shoot_point;
+    uint8_t shoot_point; //出手点id
+    uint8_t last_shoot_point;//上一出手点id
 
     bool camera_aim_flag;
     float camera_aim_angle;
@@ -44,6 +55,12 @@ typedef struct{
     uint8_t shoot_count;//投篮总次数
     float model_calc_degree;
     float model_calc_KW;
+
+    Auto_Shoot_Point Auto_shoot_point[8]; //七个点
+    bool on_shoot_point;//是否覆盖在投篮点标志
+    float dx; //车身点距离投篮点的x差
+    float dy; //车身点距离投篮点的y差
+
     
 }Shoot_Task_T ;                                
 

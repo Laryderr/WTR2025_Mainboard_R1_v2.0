@@ -36,7 +36,8 @@ typedef enum{
     CHASSIS_READY,
     CHASSIS_ERROR,
     CHASSIS_NULL,
-    CHASSIS_RESET}Chassis_state_e;  
+    CHASSIS_RESET,
+    CHASSIS_SET_POINT}Chassis_state_e;  
 
 /**
  * @brief 全向轮状态机
@@ -147,6 +148,11 @@ typedef struct
     float PreAim_angle; //预瞄角度
     bool PreAim_Ctrl_flag;//预瞄控制标置
 
+    bool Set_point_flag;
+    uint8_t this_point_id;
+    uint8_t last_point_id;
+    float DT35_cali_yawpos;
+    Chassis_pos_t repose; //目标点相对车身坐标系的
 
     Chassis_state_e state;
     Alldir_wheel_t my_wheel[3];
@@ -181,6 +187,7 @@ void chassis_XYPoseServo_calc(float refx,float refy);
 void chassis_YAWPoseServo_calc(float ref);
 
 void chassis_RePosToAbPos(float RePos_x, float RePos_y, float* AbPos_x, float* AbPos_y);
+void Calc_V_To_Point(float AbPos_x, float AbPos_y, float my_x, float my_y, float* vx, float* vy);
 
 void Chassis_Pre_Aim(void);
 void Now_Pose_Servo(void);
