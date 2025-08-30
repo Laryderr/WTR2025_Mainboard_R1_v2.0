@@ -49,7 +49,6 @@ typedef struct{
     uint8_t last_shoot_point;//上一出手点id
 
     bool camera_aim_flag;
-    float camera_aim_angle;
     bool camera_get_angle_flag;
     PID_t Encoder_SpeedPID_t; //投篮臂角编码器速度PID结构体
     uint8_t shoot_count;//投篮总次数
@@ -60,6 +59,7 @@ typedef struct{
     bool on_shoot_point;//是否覆盖在投篮点标志
     float dx; //车身点距离投篮点的x差
     float dy; //车身点距离投篮点的y差
+    float camera_yaw_turning;//相机对准微调
 
     
 }Shoot_Task_T ;                                
@@ -69,6 +69,7 @@ extern Shoot_Task_T my_Shoot_Task_T;
 
 void Handle_Shoot_TaskStart(void);
 void Ball_Hold(float W);
+HAL_StatusTypeDef Shootmotor_Init(Shoot_Task_T * my_T);
 
 #ifdef __cplusplus
 }

@@ -32,7 +32,11 @@ void StartDefaultTask(void *arguement)
     m_Chassis_Gyro_Init(); //陀螺仪初始化
     //m_Chassis_Odom_Init(); //码盘初始化
     Expansion_Init();      //升降机构初始化
-    osDelay(200);
+    if(Shootmotor_Init(&my_Shoot_Task_T) != HAL_OK)
+    {
+        // Error_Handler();
+    }
+    
 
     //  Tasks Start
     my_RemoteCtrl_Task_Start();         //开启遥控器线程

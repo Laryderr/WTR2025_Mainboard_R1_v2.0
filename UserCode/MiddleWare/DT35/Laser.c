@@ -2,6 +2,7 @@
  * @file Laser.c
  * @author Lary (you@domain.com)
  * @brief  注意转接板2pin输出端AB线接反了
+ *         使用了两个DT35
  * @version 0.1
  * @date 2025-04-26
  * 
@@ -14,6 +15,7 @@
 #include "stdio.h"
 
 //近点远点真实距离（/m）和原始数据 
+//DT35设置的实际近点是0.3m，远点是7.5m
 const float MIN_DISTANCE0=0.4;
 const float MIN_DISTANCE1=0.4;
 const float MAX_DISTANCE0=7.4;
@@ -21,8 +23,6 @@ const float MAX_DISTANCE1=7.4;
 const float DISTANCE_DIFF0=(MAX_DISTANCE0-MIN_DISTANCE0);
 const float DISTANCE_DIFF1=(MAX_DISTANCE0-MIN_DISTANCE1);
 
-// const float MIN_RAWDATA0=104800;
-// const float MIN_RAWDATA1=103300;
 const float MIN_RAWDATA0=200130;
 const float MIN_RAWDATA1=198900;
 const float MAX_RAWDATA0=6452000;
@@ -40,7 +40,6 @@ uint8_t Laser_correct = 0;
 void Laser_rev_Init()
 {
     HAL_UART_Receive_IT(&LASER_DATA_UART_HANDLE, &Laser_rev_byte, 1);
-    //HAL_UART_Receive_IT(&LASER_DATA_UART_HANDLE, (uint8_t*)&Laser_rev_buffer, sizeof(Laser_rev_buffer));
 }
 
 

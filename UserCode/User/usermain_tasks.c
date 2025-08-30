@@ -87,7 +87,7 @@ void my_main_Task(void *arguement)
             my_Alldir_Chassis_t.state = CHASSIS_HANDLE_RUNNING;
                 break;
             case 8:
-            my_Alldir_Chassis_t.state = CHASSIS_RESET;
+            // my_Alldir_Chassis_t.state = CHASSIS_RESET;
                 break;
             case -4:
             my_Alldir_Chassis_t.state = CHASSIS_SET_POINT;

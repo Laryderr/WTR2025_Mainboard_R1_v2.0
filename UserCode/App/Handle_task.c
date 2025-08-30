@@ -20,23 +20,20 @@ enum Handle_State myHandle_State;   //手动模式状态
  */
 void my_handle_Task(void)
 {
-    if (BtnScan_Press(MyRemote_Data.btn_Btn0))
+    if (BtnScan_Press(MyRemote_Data.btn_Btn5))
     {
-        // myHandle_State = HANDLE_IDLE_MODE;
+        my_Shoot_Task_T.myshoot_status = SHOOT_IDLE;
+        myHandle_State = HANDLE_IDLE_MODE;
+        my_Shoot_Task_T.Shoot_Completed_Flag = 0;
     }else if (BtnScan_Press(MyRemote_Data.btn_Btn1))
     {
-        myHandle_State = HANDLE_DUNK_MODE;   
-    }else if (BtnScan_Press(MyRemote_Data.btn_Btn4)
-            ||BtnScan_Press(MyRemote_Data.btn_LeftCrossLeft)||BtnScan_Press(MyRemote_Data.btn_LeftCrossMid)
-            ||BtnScan_Press(MyRemote_Data.btn_LeftCrossUp)||BtnScan_Press(MyRemote_Data.btn_LeftCrossDown)
-            ||BtnScan_Press(MyRemote_Data.btn_RightCrossMid)||BtnScan_Press(MyRemote_Data.btn_LeftCrossRight)
-            ||BtnScan_Press(MyRemote_Data.btn_Btn0)||BtnScan_Press(MyRemote_Data.btn_Btn1)
-            ||BtnScan_Press(MyRemote_Data.btn_JoystickR))
+        // myHandle_State = HANDLE_DUNK_MODE;   
+    }else if (BtnScan_Press(MyRemote_Data.btn_Btn1)||BtnScan_Press(MyRemote_Data.btn_JoystickR)||BtnScan_Press(MyRemote_Data.btn_RightCrossUp))
     {
         myHandle_State = HANDLE_SHOOT_MODE;
     }else if (BtnScan_Press(MyRemote_Data.btn_Btn5))
     {
-        myHandle_State = HANDLE_PATBALL_MODE;
+        // myHandle_State = HANDLE_PATBALL_MODE;
     }
     if(MyRemote_Data.left_switch == 0)
     {
@@ -44,12 +41,12 @@ void my_handle_Task(void)
     }
 
     //模型训练
-    my_Auto_Shoot_Task_T.now_train_distance = MIN_TRAIN_DISTANCE + MyRemote_Data.btn_LeftCrossRight_press_count*my_Auto_Shoot_Task_T.train_step - MyRemote_Data.btn_LeftCrossLeft_press_count*my_Auto_Shoot_Task_T.train_step;
-    my_Auto_Shoot_Task_T.train_point[0] = BASKET_X - sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
-    my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
-    my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
-                                   MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
-    my_Alldir_Chassis_t.shoot_angle = 66 + MyRemote_Data.btn_RightCrossRight_press_count*0.75;
+    // my_Auto_Shoot_Task_T.now_train_distance = MIN_TRAIN_DISTANCE + MyRemote_Data.btn_LeftCrossRight_press_count*my_Auto_Shoot_Task_T.train_step - MyRemote_Data.btn_LeftCrossLeft_press_count*my_Auto_Shoot_Task_T.train_step;
+    // my_Auto_Shoot_Task_T.train_point[0] = BASKET_X - sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
+    // my_Auto_Shoot_Task_T.train_point[1] = BASKET_Y + sin(PI/4)*my_Auto_Shoot_Task_T.now_train_distance;
+    // my_Alldir_Chassis_t.test_KW = my_Auto_Shoot_Task_T.min_KW + MyRemote_Data.KW01 + MyRemote_Data.KW001 +
+    //                                MyRemote_Data.KW0001 + MyRemote_Data.KW00001 + MyRemote_Data.KW_00001;
+    // my_Alldir_Chassis_t.shoot_angle = 66 + MyRemote_Data.btn_RightCrossRight_press_count*0.75;
     
     //模型预测
     // my_Shoot_Task_T.model_calc_KW     = Calc_KW(2.7);
@@ -157,4 +154,5 @@ void my_handle_Task(void)
         break;
     }
     osDelay(1);
+    
 }

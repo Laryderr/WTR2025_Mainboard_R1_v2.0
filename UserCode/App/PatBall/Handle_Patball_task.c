@@ -56,7 +56,7 @@
     {
         if (myHandle_State == HANDLE_PATBALL_MODE)
         { 
-            if (MyRemote_Data.btn_KnobR == 1 && patballstate == PATBALL_IDLE)
+            if (MyRemote_Data.btn_KnobR == 888 && patballstate == PATBALL_IDLE)
             {
                 patballstate = PATBALL_PATING;
             }

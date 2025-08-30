@@ -9,7 +9,6 @@
  * 
  */
 
-
 #include "remotectrl.h"
 
 Remote_Data MyRemote_Data;      
@@ -72,150 +71,23 @@ bool BtnScan_Press(bool this_status)
     }
     return false;
 }
-
-
-
-void BtnPress_Once(bool this_btn)
-{
-    if(MyRemote_Data.btn_LeftCrossUp == 1)
-    {
-        while (MyRemote_Data.btn_LeftCrossUp == 1)
-        {
-            MyRemote_Data.btn_LeftCrossUp = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossUp);
+/**
+ * @brief 检测遥控器按下次数
+ * 
+ * @param button_state 
+ * @param press_count 
+ * @param button_id 
+ */
+void BtnPress_Count(bool* button_state, uint32_t* press_count, uint8_t button_id) {
+    if(*button_state == 1) {
+        while (*button_state == 1) {
+            *button_state = ReadJoystickButtons(&msg_joystick_air, button_id);
             osDelay(2);
         }
-        MyRemote_Data.btn_LeftCrossUp_press_count++;
+        (*press_count)++;
     }
-    
 }
 
-void BtnPress_Once1(bool this_btn)
-{
-    if(MyRemote_Data.btn_LeftCrossMid == 1)
-    {
-        while (MyRemote_Data.btn_LeftCrossMid == 1)
-        {
-            MyRemote_Data.btn_LeftCrossMid = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossMid);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_LeftCrossMid_press_count++;
-    }
-    
-}
-
-void BtnPress_Once2(bool this_btn)
-{
-    if(MyRemote_Data.btn_LeftCrossDown == 1)
-    {
-        while (MyRemote_Data.btn_LeftCrossDown == 1)
-        {
-            MyRemote_Data.btn_LeftCrossDown = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossDown);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_LeftCrossDown_press_count++;
-    }
-    
-}
-
-void BtnPress_Once3(bool this_btn)
-{
-    if(MyRemote_Data.btn_LeftCrossRight == 1)
-    {
-        while (MyRemote_Data.btn_LeftCrossRight == 1)
-        {
-            MyRemote_Data.btn_LeftCrossRight = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossRight);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_LeftCrossRight_press_count++;
-    }
-    
-}
-
-void BtnPress_Once4(bool this_btn)
-{
-    if(MyRemote_Data.btn_LeftCrossLeft == 1)
-    {
-        while (MyRemote_Data.btn_LeftCrossLeft == 1)
-        {
-            MyRemote_Data.btn_LeftCrossLeft = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossLeft);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_LeftCrossLeft_press_count++;
-    }
-    
-}
-
-void BtnPress_Once5(bool this_btn)
-{
-    if(MyRemote_Data.btn_RightCrossLeft == 1)
-    {
-        while (MyRemote_Data.btn_RightCrossLeft == 1)
-        {
-            MyRemote_Data.btn_RightCrossLeft = ReadJoystickButtons(&msg_joystick_air, Btn_RightCrossLeft);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_RightCrossLeft_press_count++;
-    }
-    
-}
-
-void BtnPress_Once6(bool this_btn)
-{
-    if(MyRemote_Data.btn_RightCrossRight == 1)
-    {
-        while (MyRemote_Data.btn_RightCrossRight == 1)
-        {
-            MyRemote_Data.btn_RightCrossRight = ReadJoystickButtons(&msg_joystick_air, Btn_RightCrossRight);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_RightCrossRight_press_count++;
-    }
-    
-}
-void BtnPress_Once7(bool this_btn)
-{
-    if(MyRemote_Data.btn_JoystickL == 1)
-    {
-        while (MyRemote_Data.btn_JoystickL == 1)
-        {
-            MyRemote_Data.btn_JoystickL = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickL);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_JoystickL_press_count++;
-    }
-    
-}
-void BtnPress_Once8(bool this_btn)
-{
-    if(MyRemote_Data.btn_KnobR == 1)
-    {
-        while (MyRemote_Data.btn_KnobR == 1)
-        {
-            MyRemote_Data.btn_KnobR = ReadJoystickButtons(&msg_joystick_air, Btn_KnobR);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_KnobR_press_count++;
-        my_Alldir_Chassis_t.Set_point_flag = 1;
-    }
-    
-}
-void BtnPress_Once9(bool this_btn)
-{
-    if(MyRemote_Data.btn_JoystickR == 1)
-    {
-        while (MyRemote_Data.btn_JoystickR == 1)
-        {
-            MyRemote_Data.btn_JoystickR = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickR);
-            osDelay(2);
-        }
-        MyRemote_Data.btn_JoystickR_press_count++;
-        if(MyRemote_Data.btn_JoystickR_press_count/7 >= 1&&MyRemote_Data.btn_JoystickR_press_count%7 == 0)
-        {
-            my_Shoot_Task_T.shoot_point = 7;   
-        }else my_Shoot_Task_T.shoot_point = MyRemote_Data.btn_JoystickR_press_count%7;
-    }
-    
-}
 /*****************************************************************************
  * @brief 以下是线程函数定义
  * 
@@ -236,45 +108,34 @@ void my_Remotectrl_Task(void *arguement)
     knob_offset[0] = MyRemote_Data.left_knob;
     knob_offset[1] = MyRemote_Data.right_knob;
     for (;;) {
+        if(MyRemote_Data.btn_RightCrossMid == 1)
+        {
+            
+            myHandle_State = HANDLE_SHOOT_MODE;
+            my_Shoot_Task_T.myshoot_status = SHOOT_ING;
+            my_Shoot_Task_T.Shoot_Completed_Flag = 0;
+        }
 
-        BtnPress_Once(1);
-        BtnPress_Once1(1);
-        BtnPress_Once2(1);
-        BtnPress_Once3(1);
-        BtnPress_Once4(1);
-        BtnPress_Once5(1);
-        BtnPress_Once6(1);
-        BtnPress_Once7(1);
-        BtnPress_Once8(1);
-        BtnPress_Once9(1);
+        if(MyRemote_Data.btn_RightCrossUp == 1)
+        {
+            my_Shoot_Task_T.shoot_point = 1;
+        }
+
+        BtnPress_Count(&MyRemote_Data.btn_LeftCrossRight, &MyRemote_Data.btn_LeftCrossRight_press_count, Btn_LeftCrossRight);
+        BtnPress_Count(&MyRemote_Data.btn_LeftCrossLeft, &MyRemote_Data.btn_LeftCrossLeft_press_count, Btn_LeftCrossLeft);
+        BtnPress_Count(&MyRemote_Data.btn_RightCrossLeft, &MyRemote_Data.btn_RightCrossLeft_press_count, Btn_RightCrossLeft);
+        BtnPress_Count(&MyRemote_Data.btn_RightCrossRight, &MyRemote_Data.btn_RightCrossRight_press_count, Btn_RightCrossRight);
+        BtnPress_Count(&MyRemote_Data.btn_JoystickL, &MyRemote_Data.btn_JoystickL_press_count, Btn_JoystickL);
+        BtnPress_Count(&MyRemote_Data.btn_KnobR, &MyRemote_Data.btn_KnobR_press_count, Btn_KnobR);
+        BtnPress_Count(&MyRemote_Data.btn_JoystickR, &MyRemote_Data.btn_JoystickR_press_count, Btn_JoystickR);
+        BtnPress_Count(&MyRemote_Data.btn_RightCrossDown, &MyRemote_Data.btn_RightCrossDown_press_count, Btn_RightCrossDown);
+        BtnPress_Count(&MyRemote_Data.btn_Btn2, &MyRemote_Data.btn_Btn2_press_count, Btn_Btn2);
+        
         MyRemote_Data.KW01 = (float)MyRemote_Data.btn_LeftCrossDown_press_count/10.0f;
         MyRemote_Data.KW001 = (float)MyRemote_Data.btn_LeftCrossMid_press_count /100.0f;
         MyRemote_Data.KW0001 = (float)MyRemote_Data.btn_LeftCrossUp_press_count /1000.0f;
         MyRemote_Data.KW00001 = (float)MyRemote_Data.btn_RightCrossLeft_press_count/10000.0f;
         MyRemote_Data.KW_00001 = -(float)MyRemote_Data.btn_JoystickL_press_count/10000.0f;
-        //数据处理
-        /*MyLastRemote_Data.btn_LeftCrossUp     = MyRemote_Data.btn_LeftCrossUp;
-        MyLastRemote_Data.btn_LeftCrossDown   = MyRemote_Data.btn_LeftCrossDown;
-        MyLastRemote_Data.btn_LeftCrossLeft   = MyRemote_Data.btn_LeftCrossLeft;
-        MyLastRemote_Data.btn_LeftCrossRight  = MyRemote_Data.btn_LeftCrossRight;
-        MyLastRemote_Data.btn_LeftCrossMid    = MyRemote_Data.btn_LeftCrossMid;
-        MyLastRemote_Data.btn_RightCrossUp    = MyRemote_Data.btn_RightCrossUp;
-        MyLastRemote_Data.btn_RightCrossDown  = MyRemote_Data.btn_RightCrossDown;
-        MyLastRemote_Data.btn_RightCrossLeft  = MyRemote_Data.btn_RightCrossLeft;
-        MyLastRemote_Data.btn_RightCrossRight = MyRemote_Data.btn_RightCrossRight;
-        MyLastRemote_Data.btn_RightCrossMid   = MyRemote_Data.btn_RightCrossMid;
-        MyLastRemote_Data.btn_Btn0            = MyRemote_Data.btn_Btn0;
-        MyLastRemote_Data.btn_Btn1            = ReadJoystickButtons(&msg_joystick_air, Btn_Btn1);
-        MyLastRemote_Data.btn_Btn2            = ReadJoystickButtons(&msg_joystick_air, Btn_Btn2);
-        MyLastRemote_Data.btn_Btn3            = ReadJoystickButtons(&msg_joystick_air, Btn_Btn3);
-        MyLastRemote_Data.btn_Btn4            = ReadJoystickButtons(&msg_joystick_air, Btn_Btn4);
-        MyLastRemote_Data.btn_Btn5            = ReadJoystickButtons(&msg_joystick_air, Btn_Btn5);
-        MyLastRemote_Data.btn_JoystickL       = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickL);
-        MyLastRemote_Data.btn_JoystickR       = ReadJoystickButtons(&msg_joystick_air, Btn_JoystickR);
-        MyLastRemote_Data.btn_KnobL           = ReadJoystickButtons(&msg_joystick_air, Btn_KnobL);
-        MyLastRemote_Data.btn_KnobR           = ReadJoystickButtons(&msg_joystick_air, Btn_KnobR);
-        MyLastRemote_Data.left_knob           = ReadJoystickKnobsLeft(&msg_joystick_air);
-        MyLastRemote_Data.right_knob          = ReadJoystickKnobsRight(&msg_joystick_air);*/
 
         MyRemote_Data.btn_LeftCrossUp     = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossUp);
         MyRemote_Data.btn_LeftCrossDown   = ReadJoystickButtons(&msg_joystick_air, Btn_LeftCrossDown);
@@ -346,7 +207,6 @@ void my_Remotectrl_Task(void *arguement)
             MyRemote_Data.usr_right_knob = 0;
         }        
 
-        //JoystickSwitchLED(1,0.5,0,10,2000,&msg_joystick_air_led);
         JoystickSwitchTitle(ID_RUN, run_title, &mav_run_title);
         osDelay(1);
     }

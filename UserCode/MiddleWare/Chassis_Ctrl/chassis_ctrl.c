@@ -453,14 +453,15 @@ void my_Chassis_Ctrl_Task(void *arguement)
             hDJI[1].speedPID.output = 0;
             hDJI[2].speedPID.output = 0;
             hDJI[3].speedPID.output = 0;
-            hDJI[4].speedPID.output = 0;
-            hDJI[5].speedPID.output = 0;
-            hDJI[6].speedPID.output = 0;
-            hDJI[7].speedPID.output = 0;
-            hDJI[8].speedPID.output = 0;
+            // hDJI[4].speedPID.output = 0;
+            // hDJI[5].speedPID.output = 0;
+            // hDJI[6].speedPID.output = 0;
+            // hDJI[7].speedPID.output = 0;
+            // hDJI[8].speedPID.output = 0;
             Unitree_motor_0Torque(3);
             Unitree_motor_0Torque(5);
             my_Shoot_Task_T.on_shoot_point = 0;
+            my_Shoot_Task_T.shoot_point = 0;
 
         }else if(my_Alldir_Chassis_t.state == CHASSIS_HANDLE_RUNNING)
         {
@@ -487,10 +488,6 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 }
             }
 
-            if (MyRemote_Data.right_switch == 0&&my_Alldir_Chassis_t.DT35_cali_yawpos==0)
-            {
-                my_Alldir_Chassis_t.DT35_cali_yawpos = my_Alldir_Chassis_t.current_pos.yawpos;
-            }
             
             /****************初始化位置校准******************************************************************/
 
@@ -506,7 +503,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 my_Alldir_Chassis_t.chassis_vw_pid.ref = my_Alldir_Chassis_t.target_v.vw;
                 chassis_pid_calc(&my_Alldir_Chassis_t.chassis_vw_pid,my_Alldir_Chassis_t.current_v.vw);
                 //是否启动预瞄
-                if (BtnScan_Press(MyRemote_Data.btn_KnobR))
+                if (BtnScan_Press(MyRemote_Data.btn_Btn4))
                 {
                     my_Alldir_Chassis_t.PreAim_Ctrl_flag = 1;
                 }else if (my_Alldir_Chassis_t.target_v.vw != 0)
@@ -516,7 +513,7 @@ void my_Chassis_Ctrl_Task(void *arguement)
                 if (my_Alldir_Chassis_t.PreAim_Ctrl_flag == 1)
                 {
                     // Chassis_Pre_Aim();
-                    my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset - 90)
+                    my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset - 90);
                 }
                 
                 
@@ -532,39 +529,52 @@ void my_Chassis_Ctrl_Task(void *arguement)
             //my_Alldir_Chassis_t.chassis_Aim_at_Basket(0.1);
         }else if (my_Alldir_Chassis_t.state == CHASSIS_RESET)
         {
-            Ball_Hold(0.1);
-            chassis_XYPoseServo_calc(1,0.7);
-            my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
+            // Ball_Hold(0.1);
+            // chassis_XYPoseServo_calc(1,0.7);
+            // my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset);
             myHandle_State = HANDLE_IDLE_MODE;
         }else if (my_Alldir_Chassis_t.state == CHASSIS_SET_POINT)
         {
-            // my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.DT35_cali_yawpos);
             // my_Alldir_Chassis_t.target_v.vy = ((float)MyRemote_Data.usr_left_x)/283.3f*6.0f ;
             // my_Alldir_Chassis_t.target_v.vx = ((float)MyRemote_Data.usr_left_y)/283.3f * (-1.0f)*6.0f;
+            // my_Alldir_Chassis_t.YAWPosServo(my_Alldir_Chassis_t.current_pos.yaw_offset - 119.3);
             
             hDJI[0].speedPID.output = 0;
             hDJI[1].speedPID.output = 0;
             hDJI[2].speedPID.output = 0;
             hDJI[3].speedPID.output = 0;
+            // if(my_Alldir_Chassis_t.Set_point_flag == 1)
+            // {
+            //     static float X_sum,Y_sum = 0;
+            //     my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos = Laser_x + 0.361;
+            //     my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos = Laser_y + 0.0755;
+            //     // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].xpos = my_Alldir_Chassis_t.current_pos.xpos;
+            //     // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].ypos = my_Alldir_Chassis_t.current_pos.ypos;
+            //     my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].distance = 
+            //         sqrt((my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X)*
+            //         (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X) + 
+            //         (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y)*
+            //         (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y));
+
+            //     my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].X_offset = my_Alldir_Chassis_t.current_pos.xpos;
+            //     my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].Y_offset = my_Alldir_Chassis_t.current_pos.ypos;
+
+            //     my_Alldir_Chassis_t.Set_point_flag = 0;
+            // }
             if(my_Alldir_Chassis_t.Set_point_flag == 1)
             {
-                static float X_sum,Y_sum = 0;
-                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos = Laser_x + 0.361;
-                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos = Laser_y + 0.0755;
+                my_Shoot_Task_T.Auto_shoot_point[7].actual_xpos = Laser_x + 0.361;
+                my_Shoot_Task_T.Auto_shoot_point[7].actual_ypos = Laser_y + 0.0755;
                 // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].xpos = my_Alldir_Chassis_t.current_pos.xpos;
                 // my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].ypos = my_Alldir_Chassis_t.current_pos.ypos;
-                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].distance = 
-                    sqrt((my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X)*
-                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_xpos - BASKET_X) + 
-                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y)*
-                    (my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].actual_ypos - BASKET_Y));
-                for (uint8_t i = 0; i < 5; i++)
-                {
-                    X_sum += my_Alldir_Chassis_t.current_pos.xpos;
-                    Y_sum += my_Alldir_Chassis_t.current_pos.ypos;
-                }
-                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].X_offset = my_Alldir_Chassis_t.current_pos.xpos;
-                my_Shoot_Task_T.Auto_shoot_point[MyRemote_Data.btn_KnobR_press_count].Y_offset = my_Alldir_Chassis_t.current_pos.ypos;
+                my_Shoot_Task_T.Auto_shoot_point[7].distance = 2; //
+                    // sqrt((my_Shoot_Task_T.Auto_shoot_point[7].actual_xpos - BASKET_X)*
+                    // (my_Shoot_Task_T.Auto_shoot_point[7].actual_xpos - BASKET_X) + 
+                    // (my_Shoot_Task_T.Auto_shoot_point[7].actual_ypos - BASKET_Y)*
+                    // (my_Shoot_Task_T.Auto_shoot_point[7].actual_ypos - BASKET_Y));
+                    
+                my_Shoot_Task_T.Auto_shoot_point[7].X_offset = my_Alldir_Chassis_t.current_pos.xpos;
+                my_Shoot_Task_T.Auto_shoot_point[7].Y_offset = my_Alldir_Chassis_t.current_pos.ypos;
 
                 my_Alldir_Chassis_t.Set_point_flag = 0;
             }

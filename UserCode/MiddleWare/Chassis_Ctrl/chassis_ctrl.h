@@ -151,7 +151,6 @@ typedef struct
     bool Set_point_flag;
     uint8_t this_point_id;
     uint8_t last_point_id;
-    float DT35_cali_yawpos;
     Chassis_pos_t repose; //目标点相对车身坐标系的
 
     Chassis_state_e state;

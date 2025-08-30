@@ -1,3 +1,13 @@
+/**
+ * @file NUC_msg.c
+ * @author Lary (you@domain.com)
+ * @brief  上位机NUC消息接收处理
+ * @version 0.1
+ * @date 2025-08-21
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include "NUC_msg.h"
 
 static uint8_t nuc_rev_buffer[PACKET_SIZE] = {0};
@@ -14,6 +24,11 @@ static float raw_lidar[3];
 static float lidar_offset[3] = {0};
 static float lidar_offset_sum[3] = {0};
 static uint8_t lidar_offset_count = 0;
+//雷达数据滑动窗口滤波
+#define LIDAR_FILTER_WINDOW 10
+static float lidar_buffer[3][LIDAR_FILTER_WINDOW];
+static uint8_t lidar_index = 0;
+static bool lidar_buffer_full = false;
 
 //相机相关
 #define CAMERA_FILTER_WINDOW 5
@@ -22,11 +37,7 @@ static float camera_buffer[3][CAMERA_FILTER_WINDOW] = {0};
 static uint8_t camera_index = 0;
 static bool camera_buffer_full = false;
 
-//雷达相关
-#define LIDAR_FILTER_WINDOW 10
-static float lidar_buffer[3][LIDAR_FILTER_WINDOW];
-static uint8_t lidar_index = 0;
-static bool lidar_buffer_full = false;
+
 
 /**
  * @brief NUC接收初始化
@@ -77,7 +88,7 @@ void NUC_Msg_Decode() {
             if (rx_index >= PACKET_SIZE) {
                 rx_index = 0;
 
-                // CRC校验（完全未改动）
+                // CRC校验
                 uint16_t received_crc;
                 memcpy(&received_crc, nuc_rev_buffer + 26, 2);
                 uint16_t computed_crc = ComputeCRC16(nuc_rev_buffer, 26);
@@ -85,12 +96,12 @@ void NUC_Msg_Decode() {
                 if (received_crc == computed_crc) {
                     packet_valid = true;
 
-                    // 雷达原始数据接收（完全未改动）
+                    // 雷达原始数据接收
                     memcpy(&raw_lidar[0], nuc_rev_buffer + 2, 4);
                     memcpy(&raw_lidar[1], nuc_rev_buffer + 6, 4);
                     memcpy(&raw_lidar[2], nuc_rev_buffer + 10, 4);
 
-                    // ========== 新增的雷达滤波处理 ==========
+                    // ========== 雷达滤波处理 ==========
                     // 更新雷达数据缓存
                     for (int i = 0; i < 3; i++) {
                         lidar_buffer[i][lidar_index] = raw_lidar[i];
